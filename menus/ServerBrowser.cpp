@@ -594,7 +594,7 @@ void CMenuGameListModel::AddServerToList( netadr_t adr, const char *info, bool i
 
 	for( i = 0; i < servers.Count(); i++ )
 	{
-		if( !EngFuncs::NET_CompareAdr( &servers[i].adr, &adr ))
+		if( EngFuncs::NET_CompareAdr( &servers[i].adr, &adr ))
 		{
 			pos = i;
 			break;
