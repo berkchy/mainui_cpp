@@ -528,6 +528,7 @@ void CMenuTouchButtons::_Init( void )
 	command.szName = L( "Command:" );
 	command.iMaxLength = 255;
 	command.onChanged = VoidCb( &CMenuTouchButtons::UpdateCommandFlags );
+	command.eTextAlignment = QM_RIGHT;
 
 	texture.szName = L( "Texture:" );
 	texture.iMaxLength = 255;
