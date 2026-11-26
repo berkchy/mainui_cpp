@@ -528,12 +528,12 @@ void CMenuTouchButtons::_Init( void )
 	command.szName = L( "Command:" );
 	command.iMaxLength = 255;
 	command.onChanged = VoidCb( &CMenuTouchButtons::UpdateCommandFlags );
-	command.eTextAlignment = QM_RIGHT;
+	command.eTextAlignment = QM_CENTER;
 
 	texture.szName = L( "Texture:" );
 	texture.iMaxLength = 255;
 	texture.onChanged = VoidCb( &CMenuTouchButtons::UpdateTexture );
-	texture.eTextAlignment = QM_RIGHT;
+	texture.eTextAlignment = QM_CENTER;
 
 	reset.SetNameAndStatus( L( "Reset" ), L( "Reset touch to default state" ) );
 	reset.SetPicture( PC_TOUCH_RESET );
