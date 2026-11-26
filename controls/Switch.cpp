@@ -40,6 +40,7 @@ CMenuSwitch::CMenuSwitch( ) : BaseClass( )
 	m_switches.RemoveAll();
 
 	bChangeOnPressed = false;
+	bModernTabs = false;
 }
 
 void CMenuSwitch::AddSwitch( const char *text, bool hidden )
@@ -248,8 +249,10 @@ void CMenuSwitch::Draw( void )
 			uint tempflags = textflags;
 			tempflags |= ETF_FORCECOL;
 
-			UI_FillRect( m_switches[i].pt, sz, selectColor );
-			UI_DrawString( font, pt, sz, m_switches[i].name, iFgTextColor, m_scChSize, eTextAlignment, tempflags );
+			UI_FillRect( m_switches[i].pt, sz, bModernTabs ? (uint)iBackgroundColor : selectColor );
+			UI_DrawString( font, pt, sz, m_switches[i].name,
+				bModernTabs ? (uint)iSelectColor : (uint)iFgTextColor,
+				m_scChSize, eTextAlignment, tempflags );
 		}
 		else
 		{
@@ -269,8 +272,25 @@ void CMenuSwitch::Draw( void )
 		}
 	}
 
-	// draw rectangle
-	UI_DrawRectangle( m_scPos, m_scSize, uiInputFgColor );
+	if( bModernTabs )
+	{
+		const int indicatorH = Q_max( 2, (int)(3 * uiStatic.scaleY) );
+
+		UI_FillRect( m_scPos.x, m_scPos.y + m_scSize.h - indicatorH, m_scSize.w, indicatorH, iBackgroundColor );
+
+		for( int i = 0; i < m_switches.Count(); i++ )
+		{
+			if( m_switches[i].hidden || i != m_iState )
+				continue;
+
+			UI_FillRect( m_switches[i].pt.x, m_scPos.y + m_scSize.h - indicatorH,
+				m_switches[i].sz.w, indicatorH, iSelectColor );
+		}
+	}
+	else
+	{
+		UI_DrawRectangle( m_scPos, m_scSize, uiInputFgColor );
+	}
 }
 
 void CMenuSwitch::UpdateEditable()

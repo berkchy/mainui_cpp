@@ -41,6 +41,8 @@ CMenuTable::CMenuTable() : BaseClass(),
 	eFocusAnimation = QM_HIGHLIGHTIFFOCUS;
 	SetCharSize( QM_SMALLFONT );
 	bDrawStroke = true;
+	iSelectedColor = PackRGB( 80, 56, 24 );
+	iSelectedAccent = PackRGB( 240, 150, 40 );
 }
 
 void CMenuTable::VidInit()
@@ -605,7 +607,7 @@ void CMenuTable::DrawLine( Point p, int line, uint textColor, bool forceCol, uin
 void CMenuTable::Draw()
 {
 	int i, y;
-	int selColor = PackRGB( 80, 56, 24 );
+	int selColor = iSelectedColor;
 	int upFocus, downFocus, scrollbarFocus;
 
 	// HACKHACK: recalc iNumRows, to be not greater than iNumItems
@@ -771,6 +773,9 @@ void CMenuTable::Draw()
 				fillColor = 0x80383838;
 			}
 		}
+
+		if( i == iCurItem && !(iFlags & (QMF_GRAYED|QMF_INACTIVE)) )
+			UI_FillRect( boxPos.x, y, Q_max( 2, (int)(4 * uiStatic.scaleX) ), m_scChSize, iSelectedAccent );
 
 		DrawLine( Point( boxPos.x, y ), i, color, forceCol, fillColor );
 	}
