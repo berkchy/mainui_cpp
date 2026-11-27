@@ -444,7 +444,6 @@ public:
 
 	CMenuAction backdrop;
 	CMenuAction tabBarBg;
-	CMenuAction sidebarBg[7];
 	CMenuPicButton *joinGame;
 	CMenuPicButton *createGame;
 	CMenuPicButton *refresh;
@@ -1246,21 +1245,6 @@ void CMenuServerBrowser::_Init( void )
 	tabBarBg.iFlags |= QMF_INACTIVE;
 	AddItem( tabBarBg );
 
-	for( int i = 0; i < V_ARRAYSIZE( sidebarBg ); i++ )
-	{
-		sidebarBg[i].SetNameAndStatus( NULL, NULL );
-		sidebarBg[i].SetBackground( PackRGBA( 30, 34, 40, 230 ), PackRGBA( 30, 34, 40, 230 ) );
-		sidebarBg[i].bDrawStroke = true;
-		sidebarBg[i].colorStroke = PackRGB( 58, 66, 78 );
-		sidebarBg[i].iStrokeWidth = 1;
-		sidebarBg[i].eFocusAnimation = QM_NOFOCUSANIMATION;
-		sidebarBg[i].iFlags |= QMF_INACTIVE;
-		AddItem( sidebarBg[i] );
-	}
-
-	sidebarBg[0].SetBackground( PackRGBA( 52, 38, 24, 235 ), PackRGBA( 52, 38, 24, 235 ) );
-	sidebarBg[0].colorStroke = PackRGB( 255, 150, 40 );
-
 	joinGame = AddButton( L( "Join game" ), nullptr, PC_JOIN_GAME, VoidCb( &CMenuServerBrowser::JoinGame ), QMF_GRAYED );
 	joinGame->onReleasedClActive = msgBox.MakeOpenEvent();
 
@@ -1544,15 +1528,11 @@ void CMenuServerBrowser::LayoutControls()
 	int y = 190;
 	for( int i = 0; i < V_ARRAYSIZE( sidebar ); i++ )
 	{
-		sidebarBg[i].SetRect( sidebarX - 6, y - 4, buttonW + 12, buttonH + 8 );
-		sidebarBg[i].CalcPosition();
 		sidebar[i]->SetRect( sidebarX, y, buttonW, buttonH );
 		sidebar[i]->CalcPosition();
 		y += buttonH + gap;
 	}
 
-	sidebarBg[6].SetRect( sidebarX - 6, 680, buttonW + 12, buttonH + 8 );
-	sidebarBg[6].CalcPosition();
 	done->SetRect( sidebarX, 684, buttonW, buttonH );
 	done->CalcPosition();
 
@@ -1610,8 +1590,6 @@ void CMenuServerBrowser::Show()
 		banner.SetPicture( ART_BANNER_LAN );
 		favorite->Hide();
 		addServer->Hide();
-		sidebarBg[3].Hide();
-		sidebarBg[5].Hide();
 		tabSwitch.Hide();
 		tabBarBg.Hide();
 		filterProtocol.Hide();
@@ -1622,8 +1600,6 @@ void CMenuServerBrowser::Show()
 		banner.SetPicture( ART_BANNER_INET );
 		favorite->Show();
 		addServer->Show();
-		sidebarBg[3].Show();
-		sidebarBg[5].Show();
 		tabSwitch.Show();
 		tabBarBg.Show();
 		filterProtocol.Show();
