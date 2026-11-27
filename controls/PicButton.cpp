@@ -115,7 +115,6 @@ CMenuPicButton::CMenuPicButton() : BaseClass()
 	iOldState = BUTTON_NOFOCUS;
 	m_iLastFocusTime = -512;
 	bPulse = false;
-	bButtonBox = true;
 
 	size = uiStatic.buttons_draw_size;
 
@@ -240,23 +239,6 @@ void CMenuPicButton::Draw( )
 
 	if( iOldState == BUTTON_NOFOCUS && state != BUTTON_NOFOCUS )
 		iFocusStartTime = uiStatic.realTime;
-
-	if( bButtonBox )
-	{
-		bool focused = m_pParent && m_pParent->ItemAtCursor() == this;
-		uint boxBg = focused ? PackRGBA( 30, 36, 44, 248 ) : PackRGBA( 18, 22, 28, 238 );
-		uint boxStroke = focused ? PackRGB( 255, 185, 85 ) : PackRGB( 48, 56, 68 );
-
-		UI_FillRect( m_scPos, m_scSize, boxBg );
-		UI_DrawRectangleExt( m_scPos, m_scSize, boxStroke, focused ? 2 : 1 );
-
-		if( focused )
-		{
-			int accent = Q_max( 2, (int)(3 * uiStatic.scaleX) );
-			UI_FillRect( m_scPos.x, m_scPos.y, accent, m_scSize.h, boxStroke );
-			UI_FillRect( m_scPos.x, m_scPos.y + m_scSize.h - accent, m_scSize.w, accent, boxStroke );
-		}
-	}
 
 	if( !UI_HIDE_STATUS_TEXT && szStatusText && FBitSet( iFlags, QMF_NOTIFY ) && !FBitSet( gMenu.m_gameinfo.flags, GFL_NOSKILLS ))
 	{

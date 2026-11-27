@@ -444,7 +444,6 @@ public:
 
 	CMenuAction backdrop;
 	CMenuAction tabBarBg;
-	CMenuAction sidebarBg[7];
 	CMenuPicButton *joinGame;
 	CMenuPicButton *createGame;
 	CMenuPicButton *refresh;
@@ -1181,35 +1180,7 @@ void CMenuServerBrowser::Draw( void )
 	gameList.iBackgroundColor = surfaceColor;
 	tabSwitch.iBackgroundColor = PackRGBA( 16, 20, 26, 248 );
 
-	CMenuPicButton *sidebarButtons[7] = { joinGame, createGame, viewGameInfo, favorite, refresh, addServer, done };
-	bool sidebarFocus[7];
-	for( int i = 0; i < 7; i++ )
-	{
-		sidebarFocus[i] = ItemAtCursor() == sidebarButtons[i];
-		uint bg = sidebarFocus[i] ? PackRGBA( 30, 36, 44, 250 )
-			: ( i == 0 ? PackRGBA( 34, 28, 23, 246 ) : PackRGBA( 18, 22, 28, 240 ) );
-		uint stroke = sidebarFocus[i] ? PackRGB( 255, 185, 85 )
-			: ( i == 0 ? PackRGB( 255, 150, 40 ) : PackRGB( 48, 56, 68 ) );
-
-		sidebarBg[i].SetBackground( bg, bg );
-		sidebarBg[i].colorStroke = stroke;
-		sidebarBg[i].iStrokeWidth = ( sidebarFocus[i] || i == 0 ) ? 2 : 1;
-	}
-
 	CMenuFramework::Draw();
-
-	for( int i = 0; i < 7; i++ )
-	{
-		if( !sidebarFocus[i] && i != 0 )
-			continue;
-
-		Point p = sidebarBg[i].GetRenderPosition();
-		Size s = sidebarBg[i].GetRenderSize();
-		uint accent = sidebarFocus[i] ? PackRGB( 255, 195, 95 ) : PackRGB( 255, 150, 40 );
-		UI_FillRect( p.x, p.y, Q_max( 2, (int)(3 * uiStatic.scaleX) ), s.h, accent );
-		UI_FillRect( p.x, p.y + s.h - Q_max( 2, (int)(3 * uiStatic.scaleY) ), s.w,
-			Q_max( 2, (int)(3 * uiStatic.scaleY) ), accent );
-	}
 
 	struct
 	{
@@ -1273,18 +1244,6 @@ void CMenuServerBrowser::_Init( void )
 	backdrop.iFlags |= QMF_INACTIVE;
 	AddItem( backdrop );
 
-	for( int i = 0; i < 7; i++ )
-	{
-		sidebarBg[i].SetNameAndStatus( NULL, NULL );
-		sidebarBg[i].SetBackground( PackRGBA( 18, 22, 28, 240 ), PackRGBA( 18, 22, 28, 240 ) );
-		sidebarBg[i].bDrawStroke = true;
-		sidebarBg[i].colorStroke = PackRGB( 48, 56, 68 );
-		sidebarBg[i].iStrokeWidth = 1;
-		sidebarBg[i].eFocusAnimation = QM_NOFOCUSANIMATION;
-		sidebarBg[i].iFlags |= QMF_INACTIVE;
-		AddItem( sidebarBg[i] );
-	}
-
 	AddItem( banner );
 
 	tabBarBg.SetNameAndStatus( NULL, NULL );
@@ -1325,10 +1284,6 @@ void CMenuServerBrowser::_Init( void )
 	refresh->colorFocus = PackRGB( 170, 235, 250 );
 	addServer->colorBase = PackRGB( 190, 200, 215 );
 	done->colorBase = PackRGB( 150, 160, 175 );
-
-	CMenuPicButton *sidebarButtons[] = { joinGame, createGame, viewGameInfo, favorite, refresh, addServer, done };
-	for( int i = 0; i < V_ARRAYSIZE( sidebarButtons ); i++ )
-		sidebarButtons[i]->bButtonBox = false;
 
 	msgBox.SetMessage( L( "Join a network game will exit any current game, OK to exit?" ) );
 	msgBox.SetPositiveButton( L( "GameUI_OK" ), PC_OK );
@@ -1586,15 +1541,11 @@ void CMenuServerBrowser::LayoutControls()
 	int y = 184;
 	for( int i = 0; i < V_ARRAYSIZE( sidebar ); i++ )
 	{
-		sidebarBg[i].SetRect( sidebarX, y, buttonW, buttonH );
-		sidebarBg[i].CalcPosition();
 		sidebar[i]->SetRect( sidebarX, y, buttonW, buttonH );
 		sidebar[i]->CalcPosition();
 		y += buttonH + gap;
 	}
 
-	sidebarBg[6].SetRect( sidebarX, 684, buttonW, buttonH );
-	sidebarBg[6].CalcPosition();
 	done->SetRect( sidebarX, 684, buttonW, buttonH );
 	done->CalcPosition();
 
@@ -1647,8 +1598,6 @@ void CMenuServerBrowser::Show()
 		banner.SetPicture( ART_BANNER_LAN );
 		favorite->Hide();
 		addServer->Hide();
-		sidebarBg[3].Hide();
-		sidebarBg[5].Hide();
 		tabSwitch.Hide();
 		tabBarBg.Hide();
 		filterProtocol.Hide();
@@ -1659,8 +1608,6 @@ void CMenuServerBrowser::Show()
 		banner.SetPicture( ART_BANNER_INET );
 		favorite->Show();
 		addServer->Show();
-		sidebarBg[3].Show();
-		sidebarBg[5].Show();
 		tabSwitch.Show();
 		tabBarBg.Show();
 		filterProtocol.Show();
