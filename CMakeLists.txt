@@ -34,7 +34,7 @@ if(NOT XASH_SDK)
 endif()
 
 file(GLOB MAINUI_CONTROLS_SOURCES "controls/*.cpp")
-file(GLOB MAINUI_MENUS_SOURCES "menus/*.cpp" "menus/dynamic/*.cpp")
+file(GLOB MAINUI_MENUS_SOURCES "menus/*.cpp" "menus/dynamic/*.cpp" "menus/client/*.cpp")
 file(GLOB MAINUI_FONT_RENDER_SOURCES "font/*.cpp")
 file(GLOB MAINUI_SOURCES "miniutl/*.cpp" "*.cpp")
 

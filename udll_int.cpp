@@ -30,6 +30,17 @@ ui_globalvars_t	*gpGlobals;
 IGameClientExports *g_pClient;
 CMenu gMenu;
 
+extern void UI_JoinGame_Show( int param1, int param2 );
+extern void UI_JoinClassT_Show( int param1, int param2 );
+extern void UI_JoinClassCT_Show( int param1, int param2 );
+extern void UI_BuyMenu_Show( int param1, int param2 );
+extern void UI_BuyMenu_Pistol_Show( int param1, int param2 );
+extern void UI_BuyMenu_Shotgun_Show( int param1, int param2 );
+extern void UI_BuyMenu_Submachine_Show( int param1, int param2 );
+extern void UI_BuyMenu_Rifle_Show( int param1, int param2 );
+extern void UI_BuyMenu_Machinegun_Show( int param1, int param2 );
+extern void UI_BuyMenu_Item_Show( int param1, int param2 );
+
 static UI_FUNCTIONS gFunctionTable = 
 {
 	UI_VidInit,
@@ -218,51 +229,27 @@ public:
 
 	void ShowVGUIMenu( int menuType, int param1, int param2 ) override
 	{
-		const char *cmd = NULL;
-		bool terrorist = g_pClient && g_pClient->GetLocalPlayerTeam() == TEAM_TERRORIST;
+		EngFuncs::KEY_ClearStates();
 
 		switch( menuType )
 		{
-		case MENU_TEAM:
-			cmd = "exec touch/chooseteam.cfg";
-			break;
-		case MENU_CLASS_T:
-			cmd = "exec touch/chooseteam_tr.cfg";
-			break;
-		case MENU_CLASS_CT:
-			cmd = "exec touch/chooseteam_ct.cfg";
-			break;
-		case MENU_BUY:
-			cmd = "exec touch/buy.cfg";
-			break;
-		case MENU_BUY_PISTOL:
-			cmd = terrorist ? "exec touch/buy_pistol_t.cfg" : "exec touch/buy_pistol_ct.cfg";
-			break;
-		case MENU_BUY_SHOTGUN:
-			cmd = terrorist ? "exec touch/buy_shotgun_t.cfg" : "exec touch/buy_shotgun_ct.cfg";
-			break;
-		case MENU_BUY_SUBMACHINEGUN:
-			cmd = terrorist ? "exec touch/buy_submachinegun_t.cfg" : "exec touch/buy_submachinegun_ct.cfg";
-			break;
-		case MENU_BUY_RIFLE:
-			cmd = terrorist ? "exec touch/buy_rifle_t.cfg" : "exec touch/buy_rifle_ct.cfg";
-			break;
-		case MENU_BUY_MACHINEGUN:
-			cmd = terrorist ? "exec touch/buy_machinegun_t.cfg" : "exec touch/buy_machinegun_ct.cfg";
-			break;
-		case MENU_BUY_ITEM:
-			cmd = terrorist ? "exec touch/buy_item_t.cfg" : "exec touch/buy_item_ct.cfg";
-			break;
-		default:
-			break;
+		case MENU_TEAM: UI_JoinGame_Show( param1, param2 ); break;
+		case MENU_CLASS_T: UI_JoinClassT_Show( param1, param2 ); break;
+		case MENU_CLASS_CT: UI_JoinClassCT_Show( param1, param2 ); break;
+		case MENU_BUY: UI_BuyMenu_Show( param1, param2 ); break;
+		case MENU_BUY_PISTOL: UI_BuyMenu_Pistol_Show( param1, param2 ); break;
+		case MENU_BUY_SHOTGUN: UI_BuyMenu_Shotgun_Show( param1, param2 ); break;
+		case MENU_BUY_SUBMACHINEGUN: UI_BuyMenu_Submachine_Show( param1, param2 ); break;
+		case MENU_BUY_RIFLE: UI_BuyMenu_Rifle_Show( param1, param2 ); break;
+		case MENU_BUY_MACHINEGUN: UI_BuyMenu_Machinegun_Show( param1, param2 ); break;
+		case MENU_BUY_ITEM: UI_BuyMenu_Item_Show( param1, param2 ); break;
+		default: break;
 		}
-
-		if( cmd )
-			EngFuncs::ClientCmd( false, cmd );
 	}
 
 	void HideVGUIMenu() override
 	{
+		UI_CloseClientMenu();
 	}
 } s_Menu;
 
