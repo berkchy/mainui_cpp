@@ -1596,6 +1596,7 @@ void CMenuServerBrowser::Show()
 	if( m_bLanOnly )
 	{
 		banner.SetPicture( ART_BANNER_LAN );
+		banner.szName = L( "LAN games" );
 		favorite->Hide();
 		addServer->Hide();
 		tabSwitch.Hide();
@@ -1606,6 +1607,7 @@ void CMenuServerBrowser::Show()
 	else
 	{
 		banner.SetPicture( ART_BANNER_INET );
+		banner.szName = L( "Internet games" );
 		favorite->Show();
 		addServer->Show();
 		tabSwitch.Show();

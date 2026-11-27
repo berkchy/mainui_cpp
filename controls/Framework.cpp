@@ -40,6 +40,9 @@ CMenuFramework::~CMenuFramework()
 
 void CMenuFramework::Show()
 {
+	if( !banner.szName || !banner.szName[0] )
+		banner.szName = szName;
+
 	BaseClass::Show();
 }
 
@@ -231,16 +234,10 @@ void CMenuFramework::CMenuBannerBitmap::SetPicture(const char *pic)
 
 void CMenuFramework::CMenuBannerBitmap::Draw( Point pt, Size sz )
 {
-	if( image.IsValid() )
+	if( szName && szName[0] )
 	{
-		UI_DrawPic( pt, sz, uiColorWhite, image, QM_DRAWNORMAL );
-	}
-	else
-	{
-		UI_DrawString( uiStatic.hDefaultFont, pt,
-			sz,
-			szName,
-			uiPromptTextColor, m_scChSize,
+		UI_DrawString( uiStatic.hDefaultFont, pt, sz, szName,
+			uiPromptTextColor, UI_MED_CHAR_HEIGHT * uiStatic.scaleY,
 			QM_LEFT, ETF_NOSIZELIMIT | ETF_FORCECOL );
 	}
 }
