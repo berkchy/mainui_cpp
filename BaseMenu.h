@@ -15,6 +15,8 @@ GNU General Public License for more details.
 
 #ifndef BASEMENU_H
 #define BASEMENU_H
+
+#define UI_HIDE_STATUS_TEXT 1
 #include "cl_dll/IGameClientExports.h"
 #include "cl_dll/IGameMenuExports.h"
 #include "enginecallback_menu.h"

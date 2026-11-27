@@ -114,7 +114,7 @@ void CMenuCheckBox::Draw( void )
 
 	UI_DrawString( font, m_scTextPos, m_scTextSize, szName, colorText, m_scChSize, eTextAlignment, textflags );
 
-	if( szStatusText && iFlags & QMF_NOTIFY )
+	if( !UI_HIDE_STATUS_TEXT && szStatusText && iFlags & QMF_NOTIFY )
 	{
 		Point coord;
 

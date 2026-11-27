@@ -127,7 +127,7 @@ void CMenuSpinControl::Draw( void )
 	Size scCenterBox;
 	uint textflags = ( iFlags & QMF_DROPSHADOW ) ? ETF_SHADOW : 0;
 
-	if( szStatusText && iFlags & QMF_NOTIFY )
+	if( !UI_HIDE_STATUS_TEXT && szStatusText && iFlags & QMF_NOTIFY )
 	{
 		Point coord;
 

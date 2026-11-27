@@ -151,7 +151,7 @@ void CMenuAction::Draw( )
 		}
 	}
 
-	if( szStatusText && iFlags & QMF_NOTIFY )
+	if( !UI_HIDE_STATUS_TEXT && szStatusText && iFlags & QMF_NOTIFY )
 	{
 		Point coord;
 
