@@ -141,6 +141,7 @@ extern uiStatic_t		uiStatic;
 #define DLG_X ((uiStatic.width - 640) / 2 - 192) // Dialogs are 640px in width
 
 extern unsigned int	uiColorHelp;
+extern unsigned int	uiMenuBgColor;
 extern unsigned int	uiPromptBgColor;
 extern unsigned int	uiPromptTextColor;
 extern unsigned int	uiPromptFocusColor;
@@ -153,6 +154,7 @@ extern unsigned int	uiColorBlack;
 
 // TODO: Move it under namespace?
 
+void UI_RefreshMenuBgColor( void );
 void UI_ScaleCoords( int *x, int *y, int *w, int *h );
 void UI_ScaleCoords( int &x, int &y, int &w, int &h );
 void UI_ScaleCoords( int &x, int &y );
