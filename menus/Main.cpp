@@ -303,24 +303,12 @@ void CMenuMain::_Init( void )
 	if( UI_IsCZDS( ))
 		AddItem( worldMap );
 
-	if ( bShowHazardCourse )
-		AddItem( hazardCourse );
-
 	AddItem( configuration );
-
-	if ( bShowSaveRestore )
-		AddItem( saveRestore );
 
 	AddItem( multiPlayer );
 
-	if ( bCustomGame )
-		AddItem( customGame );
-
-	AddItem( readme );
 	AddItem( previews );
 	AddItem( quit );
-	AddItem( minimizeBtn );
-	AddItem( quitButton );
 }
 
 /*
@@ -348,34 +336,13 @@ void CMenuMain::VidInit( bool connected )
 	// let's start calculating positions
 	int yoffset = previews_voffset - ygap;
 
-	readme.SetCoord( hoffset, yoffset );
-	yoffset -= ygap;
-
-	if( bCustomGame )
-	{
-		customGame.SetCoord( hoffset, yoffset );
-		yoffset -= ygap;
-	}
-
 	multiPlayer.SetCoord( hoffset, yoffset );
 	yoffset -= ygap;
 
 	bool single = gpGlobals->maxClients < 2;
 
-	if( bShowSaveRestore )
-	{
-		saveRestore.SetCoord( hoffset, yoffset );
-		yoffset -= ygap;
-	}
-
 	configuration.SetCoord( hoffset, yoffset );
 	yoffset -= ygap;
-
-	if( bShowHazardCourse )
-	{
-		hazardCourse.SetCoord( hoffset, yoffset );
-		yoffset -= ygap;
-	}
 
 	if( UI_IsCZDS( ))
 	{
