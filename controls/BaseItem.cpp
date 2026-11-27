@@ -105,7 +105,7 @@ void CMenuBaseItem::SetCharSize( EFontSizes fs )
 	{
 	case QM_DEFAULTFONT:
 	case QM_BOLDFONT:
-		charSize = UI_MED_CHAR_HEIGHT;
+		charSize = UI_MED_CHAR_HEIGHT * 2 / 3;
 		break;
 	case QM_SMALLFONT:
 		charSize = UI_SMALL_CHAR_HEIGHT;
