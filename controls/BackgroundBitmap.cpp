@@ -114,6 +114,7 @@ void CMenuBackgroundBitmap::Draw()
 {
 	if( bForceColor )
 	{
+		colorBase = uiMenuBgColor;
 		DrawColor();
 		return;
 	}

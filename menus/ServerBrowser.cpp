@@ -1131,6 +1131,14 @@ UI_Background_Ownerdraw
 */
 void CMenuServerBrowser::Draw( void )
 {
+	gameList.iBackgroundColor = uiMenuBgColor;
+	tabSwitch.iBackgroundColor = uiMenuBgColor;
+	filterPing.iBackgroundColor = uiMenuBgColor;
+	filterEmpty.iBackgroundColor = uiMenuBgColor;
+	filterFull.iBackgroundColor = uiMenuBgColor;
+	filterMap.iBackgroundColor = uiMenuBgColor;
+	filterProtocol.iBackgroundColor = uiMenuBgColor;
+
 	CMenuFramework::Draw();
 
 	if( uiStatic.realTime > refreshTime )
