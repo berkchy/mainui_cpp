@@ -261,17 +261,10 @@ void CMenuMain::_Init( void )
 	// 	hazardCourse.SetGrayed( true );
 	// }
 
-	// too short execute string - not a real command
-	if( strlen( MenuStrings[IDS_MEDIA_PREVIEWURL] ) <= 3 )
-	{
-		previews.SetGrayed( true );
-	}
-
 	// server.dll needs for reading savefiles or startup newgame
 	if( !EngFuncs::CheckGameDll( ))
 	{
 		saveRestore.SetGrayed( true );
-		hazardCourse.SetGrayed( true );
 		newGame.SetGrayed( true );
 	}
 
@@ -292,19 +285,9 @@ void CMenuMain::_Init( void )
 	AddItem( disconnect );
 	AddItem( resumeGame );
 	AddItem( newGame );
-
-	if ( bTrainMap )
-		AddItem( hazardCourse );
-
 	AddItem( configuration );
 	AddItem( saveRestore );
 	AddItem( multiPlayer );
-
-	if ( bCustomGame )
-		AddItem( customGame );
-
-	AddItem( readme );
-	AddItem( previews );
 	AddItem( quit );
 	AddItem( minimizeBtn );
 	AddItem( quitButton );
@@ -319,35 +302,20 @@ void CMenuMain::VidInit( bool connected )
 {
 	int hoffset = ( 70 / 640.0 ) * 1024.0;
 
-	// in original menu Previews is located at specific point
-	int previews_voffset = ( 404 / 480.0 ) * 768.0;
-
 	// no visible console button gap
 	int ygap = (( 404 - 373 ) / 480.0 ) * 768.0;
+	int quit_voffset = ( 404 / 480.0 ) * 768.0 + ygap;
 
 	// statically positioned items
 	minimizeBtn.SetRect( uiStatic.width - 72, 13, 32, 32 );
 	quitButton.SetRect( uiStatic.width - 36, 13, 32, 32 );
 
-	previews.SetCoord( hoffset, previews_voffset );
-	quit.SetCoord( hoffset, previews_voffset + ygap );
+	quit.SetCoord( hoffset, quit_voffset );
 
 	// let's start calculating positions
-	int yoffset = previews_voffset - ygap;
-
-	readme.SetCoord( hoffset, yoffset );
-	yoffset -= ygap;
-
-	if( bCustomGame )
-	{
-		customGame.SetCoord( hoffset, yoffset );
-		yoffset -= ygap;
-	}
-
+	int yoffset = quit_voffset - ygap;
 	multiPlayer.SetCoord( hoffset, yoffset );
 	yoffset -= ygap;
-
-	bool single = gpGlobals->maxClients < 2;
 
 	saveRestore.SetCoord( hoffset, yoffset );
 	yoffset -= ygap;
@@ -355,11 +323,7 @@ void CMenuMain::VidInit( bool connected )
 	configuration.SetCoord( hoffset, yoffset );
 	yoffset -= ygap;
 
-	if( bTrainMap )
-	{
-		hazardCourse.SetCoord( hoffset, yoffset );
-		yoffset -= ygap;
-	}
+	bool single = gpGlobals->maxClients < 2;
 
 	newGame.SetCoord( hoffset, yoffset );
 	yoffset -= ygap;
