@@ -114,7 +114,7 @@ void CMenuCheckBox::Draw( void )
 
 	UI_DrawString( font, m_scTextPos, m_scTextSize, szName, colorText, m_scChSize, eTextAlignment, textflags );
 
-	if( !UI_HIDE_STATUS_TEXT && szStatusText && iFlags & QMF_NOTIFY )
+	if( szStatusText && iFlags & QMF_NOTIFY )
 	{
 		Point coord;
 
@@ -123,13 +123,10 @@ void CMenuCheckBox::Draw( void )
 		else
 			coord.x = m_scSize.w + 16 * uiStatic.scaleX;
 		coord.x += m_scPos.x;
-		coord.y = m_scPos.y + m_scSize.h / 2 - EngFuncs::ConsoleCharacterHeight() / 2;
+		coord.y = m_scPos.y + m_scSize.h / 2 - (int)(13 * uiStatic.scaleY) / 2;
 
-		int	r, g, b;
-
-		UnpackRGB( r, g, b, uiColorHelp );
-		EngFuncs::DrawSetTextColor( r, g, b );
-		EngFuncs::DrawConsoleString( coord, szStatusText );
+		UI_DrawString( font, coord.x, coord.y, ScreenWidth - coord.x, 13 * uiStatic.scaleY,
+			szStatusText, uiColorHelp, 13 * uiStatic.scaleY, QM_LEFT, ETF_NOSIZELIMIT | ETF_FORCECOL );
 	}
 
 	if( iFlags & QMF_GRAYED )

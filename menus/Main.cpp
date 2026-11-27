@@ -286,7 +286,6 @@ void CMenuMain::_Init( void )
 	AddItem( resumeGame );
 	AddItem( newGame );
 	AddItem( configuration );
-	AddItem( saveRestore );
 	AddItem( multiPlayer );
 	AddItem( quit );
 	AddItem( minimizeBtn );
@@ -315,9 +314,6 @@ void CMenuMain::VidInit( bool connected )
 	// let's start calculating positions
 	int yoffset = quit_voffset - ygap;
 	multiPlayer.SetCoord( hoffset, yoffset );
-	yoffset -= ygap;
-
-	saveRestore.SetCoord( hoffset, yoffset );
 	yoffset -= ygap;
 
 	configuration.SetCoord( hoffset, yoffset );
