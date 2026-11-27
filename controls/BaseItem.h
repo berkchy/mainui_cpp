@@ -154,6 +154,7 @@ public:
 	inline Size  GetRenderSize()     const { return m_scSize; }
 
 	void SetCharSize( EFontSizes fs );
+	int GetCharSize() const;
 
 	inline void SetNameAndStatus( const char *name, const char *status, const char *tag = NULL )
 	{
@@ -187,6 +188,7 @@ public:
 	Point pos;
 	Size size;
 	int charSize;
+	EFontSizes fontEnum;
 
 	const char *szName;
 	const char *szStatusText;

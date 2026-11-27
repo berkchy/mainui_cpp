@@ -66,6 +66,7 @@ extern cvar_t	*ui_borderclip;
 extern cvar_t	*ui_prefer_won_background;
 extern cvar_t	*ui_background_stretch;
 extern cvar_t	*ui_logohorizontal;
+extern cvar_t	*menu_fontsize;
 
 enum EUISounds
 {
