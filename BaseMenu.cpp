@@ -1222,7 +1222,7 @@ void UI_Init( void )
 
 	gMenu.m_gameinfo = *gi;
 
-	uiStatic.renderPicbuttonText = gMenu.m_gameinfo.flags & GFL_RENDER_PICBUTTON_TEXT;
+	uiStatic.renderPicbuttonText = true;
 
 	// trying to load colors.lst
 	UI_ApplyCustomColors ();
