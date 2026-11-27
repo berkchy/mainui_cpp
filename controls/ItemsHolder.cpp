@@ -342,6 +342,7 @@ void CMenuItemsHolder::Draw( )
 		if( !item->IsVisible() )
 			continue;
 
+		item->RefreshCharSize();
 		item->Draw();
 
 		if( ui_borderclip->value )

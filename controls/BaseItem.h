@@ -155,6 +155,7 @@ public:
 
 	void SetCharSize( EFontSizes fs );
 	int GetCharSize() const;
+	void RefreshCharSize();
 
 	inline void SetNameAndStatus( const char *name, const char *status, const char *tag = NULL )
 	{

@@ -137,6 +137,13 @@ int CMenuBaseItem::GetCharSize() const
 	return charSize;
 }
 
+void CMenuBaseItem::RefreshCharSize()
+{
+	m_scChSize = GetCharSize();
+	if( !(iFlags & QMF_DISABLESCAILING) )
+		m_scChSize *= uiStatic.scaleY;
+}
+
 void CMenuBaseItem::_Event( int ev )
 {
 	CEventCallback callback;
@@ -204,7 +211,7 @@ void CMenuBaseItem::CalcPosition()
 
 void CMenuBaseItem::CalcSizes()
 {
-	m_scChSize = GetCharSize();
+	RefreshCharSize();
 	if( iFlags & QMF_DISABLESCAILING )
 	{
 		m_scSize = size;
@@ -212,7 +219,6 @@ void CMenuBaseItem::CalcSizes()
 	else
 	{
 		m_scSize = size.Scale();
-		m_scChSize *= uiStatic.scaleY;
 	}
 
 	if( m_scSize.w < 0 )
