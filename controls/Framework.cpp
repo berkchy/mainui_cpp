@@ -40,9 +40,6 @@ CMenuFramework::~CMenuFramework()
 
 void CMenuFramework::Show()
 {
-	if( !banner.szName || !banner.szName[0] )
-		banner.szName = szName;
-
 	BaseClass::Show();
 }
 

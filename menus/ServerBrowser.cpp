@@ -1291,7 +1291,7 @@ void CMenuServerBrowser::_Init( void )
 	msgBox.onPositive = VoidCb( &CMenuServerBrowser::JoinGame );
 	msgBox.Link( this );
 
-	gameList.SetCharSize( QM_SMALLFONT );
+	gameList.SetCharSize( QM_DEFAULTFONT );
 	gameList.iBackgroundColor = PackRGBA( 13, 16, 21, 244 );
 	gameList.iHeaderColor = PackRGB( 255, 190, 95 );
 	gameList.colorStroke = PackRGB( 58, 68, 82 );
@@ -1400,7 +1400,7 @@ void CMenuServerBrowser::_Init( void )
 	filterPing.bDropUp = true;
 	filterPing.eTextAlignment = QM_LEFT;
 	filterPing.iFgTextColor = uiInputFgColor - 0x00151515;
-	filterPing.SetCharSize( QM_SMALLFONT );
+	filterPing.SetCharSize( QM_DEFAULTFONT );
 	filterPing.SetSize( 70, 30 );
 	SET_EVENT_MULTI( filterPing.onChanged,
 	{
@@ -1419,7 +1419,7 @@ void CMenuServerBrowser::_Init( void )
 	filterEmpty.bDropUp = true;
 	filterEmpty.eTextAlignment = QM_LEFT;
 	filterEmpty.iFgTextColor = uiInputFgColor - 0x00151515;
-	filterEmpty.SetCharSize( QM_SMALLFONT );
+	filterEmpty.SetCharSize( QM_DEFAULTFONT );
 	filterEmpty.SetSize( 120, 30 );
 	SET_EVENT_MULTI( filterEmpty.onChanged,
 	{
@@ -1438,7 +1438,7 @@ void CMenuServerBrowser::_Init( void )
 	filterFull.bDropUp = true;
 	filterFull.eTextAlignment = QM_LEFT;
 	filterFull.iFgTextColor = uiInputFgColor - 0x00151515;
-	filterFull.SetCharSize( QM_SMALLFONT );
+	filterFull.SetCharSize( QM_DEFAULTFONT );
 	filterFull.SetSize( 120, 30 );
 	SET_EVENT_MULTI( filterFull.onChanged,
 	{
@@ -1454,7 +1454,7 @@ void CMenuServerBrowser::_Init( void )
 	filterMap.bDropUp = true;
 	filterMap.eTextAlignment = QM_LEFT;
 	filterMap.iFgTextColor = uiInputFgColor - 0x00151515;
-	filterMap.SetCharSize( QM_SMALLFONT );
+	filterMap.SetCharSize( QM_DEFAULTFONT );
 	filterMap.SetSize( 200, 30 );
 	SET_EVENT_MULTI( filterMap.onChanged,
 	{
@@ -1473,7 +1473,7 @@ void CMenuServerBrowser::_Init( void )
 	filterProtocol.bDropUp = true;
 	filterProtocol.eTextAlignment = QM_LEFT;
 	filterProtocol.iFgTextColor = uiInputFgColor - 0x00151515;
-	filterProtocol.SetCharSize( QM_SMALLFONT );
+	filterProtocol.SetCharSize( QM_DEFAULTFONT );
 	filterProtocol.SetSize( 130, 30 );
 	SET_EVENT_MULTI( filterProtocol.onChanged,
 	{
@@ -1494,7 +1494,7 @@ void CMenuServerBrowser::_Init( void )
 		filterBoxes[i]->bDrawStroke = true;
 		filterBoxes[i]->colorStroke = PackRGB( 45, 52, 63 );
 		filterBoxes[i]->iStrokeWidth = 1;
-		filterBoxes[i]->SetCharSize( QM_SMALLFONT );
+		filterBoxes[i]->SetCharSize( QM_DEFAULTFONT );
 	}
 
 	AddItem( gameList );
