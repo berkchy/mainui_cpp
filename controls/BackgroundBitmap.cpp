@@ -128,6 +128,7 @@ void CMenuBackgroundBitmap::Draw()
 	if( szPic )
 	{
 		UI_DrawPic( m_scPos, m_scSize, uiColorWhite, szPic );
+		UI_FillRect( m_scPos, m_scSize, uiMenuBgColor );
 		return;
 	}
 
@@ -146,6 +147,7 @@ void CMenuBackgroundBitmap::Draw()
 
 	if( s_state == DRAW_COLOR )
 	{
+		colorBase = uiMenuBgColor;
 		DrawColor();
 		return;
 	}
@@ -211,6 +213,8 @@ void CMenuBackgroundBitmap::Draw()
 		DrawBackgroundPiece( s_WONBackground, p, xOffset, yOffset, xScale, yScale );
 	else
 		DrawSteamBackgroundLayout( p, xOffset, yOffset, xScale, yScale );
+
+	UI_FillRect( m_scPos, m_scSize, uiMenuBgColor );
 
 	// print CS16Client version
 	char version[32];
