@@ -15,10 +15,6 @@ GNU General Public License for more details.
 
 #ifndef BASEMENU_H
 #define BASEMENU_H
-
-#define UI_HIDE_STATUS_TEXT 1
-#include "cl_dll/IGameClientExports.h"
-#include "cl_dll/IGameMenuExports.h"
 #include "enginecallback_menu.h"
 #include "keydefs.h"
 #include "Primitive.h"
@@ -59,16 +55,13 @@ GNU General Public License for more details.
 // =====================================================================
 // Main menu interface
 
-extern IGameClientExports *g_pClient;
 extern cvar_t	*ui_precache;
 extern cvar_t	*ui_showmodels;
-extern cvar_t	*ui_showclassmodels;
 extern cvar_t   *ui_show_window_stack;
 extern cvar_t	*ui_borderclip;
 extern cvar_t	*ui_prefer_won_background;
 extern cvar_t	*ui_background_stretch;
 extern cvar_t	*ui_logohorizontal;
-extern cvar_t	*menu_fontsize;
 
 enum EUISounds
 {
@@ -98,8 +91,6 @@ typedef struct
 
 	HFont hDefaultFont;
 	HFont hSmallFont;
-	HFont hSmallerFont;
-	HFont hTinyFont;
 	HFont hBigFont;
 	HFont hConsoleFont;
 	HFont hBoldFont;
@@ -135,6 +126,8 @@ typedef struct
 	bool needMapListUpdate;
 	bool nextFrameActive;
 	bool renderPicbuttonText;
+	bool hideBanners;
+	bool backgroundTopLeft;
 
 	int lowmemory;
 
@@ -148,7 +141,6 @@ extern uiStatic_t		uiStatic;
 #define DLG_X ((uiStatic.width - 640) / 2 - 192) // Dialogs are 640px in width
 
 extern unsigned int	uiColorHelp;
-extern unsigned int	uiMenuBgColor;
 extern unsigned int	uiPromptBgColor;
 extern unsigned int	uiPromptTextColor;
 extern unsigned int	uiPromptFocusColor;
@@ -161,7 +153,6 @@ extern unsigned int	uiColorBlack;
 
 // TODO: Move it under namespace?
 
-void UI_RefreshMenuBgColor( void );
 void UI_ScaleCoords( int *x, int *y, int *w, int *h );
 void UI_ScaleCoords( int &x, int &y, int &w, int &h );
 void UI_ScaleCoords( int &x, int &y );
@@ -232,7 +223,7 @@ int UI_CreditsActive( void );
 void UI_DrawFinalCredits( void );
 
 void UI_CloseMenu( void );
-void UI_CloseClientMenu( void );
+void UI_PrepareSingleplayerGame( int skill );
 
 // SCR support
 void UI_LoadScriptConfig( void );
@@ -282,6 +273,7 @@ public:
 // Menus
 void UI_Main_Menu( void );
 void UI_NewGame_Menu( void );
+void UI_WorldMap_Menu( void ); // WorldMap.cpp
 void UI_LoadGame_Menu( void );
 void UI_SaveGame_Menu( void );
 void UI_SaveLoad_Menu( void );
@@ -321,8 +313,6 @@ void UI_InputDevices_Menu( void );
 
 void UI_OpenUpdatePage(bool engine , bool preferstore);
 
-void UI_Crosshair_Menu( void );
-
 //
 //-----------------------------------------------------
 //
@@ -346,5 +336,11 @@ typedef struct
 extern uiFileDialogGlobal_t uiFileDialogGlobal;
 
 extern CMenu gMenu;
+
+// Condition Zero: Deleted Scenes (game folder czeror): the menu has its own look and a world map
+inline bool UI_IsCZDS( void )
+{
+	return !stricmp( gMenu.m_gameinfo.gamefolder, "czeror" );
+}
 
 #endif // BASEMENU_H

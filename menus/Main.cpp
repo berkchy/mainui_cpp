@@ -69,9 +69,9 @@ private:
 	CMenuPicButton	hazardCourse;
 	CMenuPicButton	configuration;
 	CMenuPicButton	saveRestore;
+	CMenuPicButton	worldMap;  // CZ:DS
 	CMenuPicButton	multiPlayer;
 	CMenuPicButton	customGame;
-	CMenuPicButton	readme;
 	CMenuPicButton	previews;
 	CMenuPicButton	quit;
 
@@ -84,6 +84,11 @@ private:
 
 	bool bTrainMap;
 	bool bCustomGame;
+
+	// visibility of singleplayer-related buttons
+	bool bShowNewGame;
+	bool bShowHazardCourse;
+	bool bShowSaveRestore;
 };
 
 void CMenuMain::QuitDialogCb()
@@ -150,17 +155,7 @@ UI_Main_HazardCourse
 */
 void CMenuMain::HazardCourseCb()
 {
-	if( EngFuncs::GetCvarFloat( "host_serverstate" ) && EngFuncs::GetCvarFloat( "maxplayers" ) > 1 )
-		EngFuncs::HostEndGame( "end of the game" );
-
-	EngFuncs::CvarSetValue( "skill", 1.0f );
-	EngFuncs::CvarSetValue( "deathmatch", 0.0f );
-	EngFuncs::CvarSetValue( "teamplay", 0.0f );
-	EngFuncs::CvarSetValue( "pausable", 1.0f ); // singleplayer is always allowing pause
-	EngFuncs::CvarSetValue( "coop", 0.0f );
-	EngFuncs::CvarSetValue( "maxplayers", 1.0f ); // singleplayer
-
-	EngFuncs::PlayBackgroundTrack( NULL, NULL );
+	UI_PrepareSingleplayerGame( 1 );
 
 	EngFuncs::ClientCmd( false, "hazardcourse\n" );
 }
@@ -176,7 +171,7 @@ void CMenuMain::_Init( void )
 	else bCustomGame = false;
 
 	// console
-	console.SetNameAndStatus( L( "GameUI_Console" ), NULL );
+	console.SetNameAndStatus( L( "GameUI_Console" ), L( "Show console" ) );
 	console.iFlags |= QMF_NOTIFY;
 	console.SetPicture( PC_CONSOLE );
 	console.SetVisibility( gpGlobals->developer );
@@ -191,7 +186,7 @@ void CMenuMain::_Init( void )
 	resumeGame.iFlags |= QMF_NOTIFY;
 	resumeGame.onReleased = UI_CloseMenu;
 
-	disconnect.SetNameAndStatus( L( "GameUI_GameMenu_Disconnect" ), L( "Disconnect from server." ) );
+	disconnect.SetNameAndStatus( L( "GameUI_GameMenu_Disconnect" ), L( "Disconnect from server" ) );
 	disconnect.SetPicture( PC_DISCONNECT );
 	disconnect.iFlags |= QMF_NOTIFY;
 	disconnect.onReleased = VoidCb( &CMenuMain::DisconnectDialogCb );
@@ -219,15 +214,17 @@ void CMenuMain::_Init( void )
 
 	saveRestore.iFlags |= QMF_NOTIFY;
 
+	if( UI_IsCZDS( ))
+	{
+		worldMap.SetNameAndStatus( L_GAME( "CZERO_WorldMap" ), L( "Choose a mission" ) );
+		worldMap.iFlags |= QMF_NOTIFY;
+		worldMap.onReleased = UI_WorldMap_Menu;
+	}
+
 	customGame.SetNameAndStatus( L( "GameUI_ChangeGame" ), L( "StringsList_530" ) );
 	customGame.SetPicture( PC_CUSTOM_GAME );
 	customGame.iFlags |= QMF_NOTIFY;
 	customGame.onReleased = UI_CustomGame_Menu;
-
-	// TODO: add readme screen later
-	readme.SetNameAndStatus( L("View Readme"), L( "StringsList_194" ) );
-	readme.SetPicture( PC_VIEW_README );
-	readme.iFlags |= QMF_NOTIFY;
 
 	previews.SetNameAndStatus( L( "Previews" ), L( "StringsList_400" ) );
 	previews.SetPicture( PC_PREVIEWS );
@@ -249,28 +246,37 @@ void CMenuMain::_Init( void )
 	minimizeBtn.eFocusAnimation = QM_HIGHLIGHTIFFOCUS;
 	minimizeBtn.onReleased.SetCommand( false, "minimize\n" );
 
-	if ( gMenu.m_gameinfo.gamemode == GAME_MULTIPLAYER_ONLY || gMenu.m_gameinfo.startmap[0] == 0 )
-		newGame.SetGrayed( true );
+	const bool mpOnly = gMenu.m_gameinfo.gamemode == GAME_MULTIPLAYER_ONLY;
+	const bool hasStartMap = gMenu.m_gameinfo.startmap[0] != 0;
+
+	// singleplayer-related buttons are not added to the menu at all
+	// when they can't be used, so they don't take any space
+	bShowNewGame = !mpOnly && hasStartMap;
+
+	// Counter-Strike may define a training map despite being marked as GAME_MULTIPLAYER_ONLY
+	bShowHazardCourse = bTrainMap;
+	bShowSaveRestore = !mpOnly || bTrainMap;
 
 	if ( gMenu.m_gameinfo.gamemode == GAME_SINGLEPLAYER_ONLY )
 		multiPlayer.SetGrayed( true );
 
-	// if ( gMenu.m_gameinfo.gamemode == GAME_MULTIPLAYER_ONLY )
-	// {
-	// 	saveRestore.SetGrayed( true );
-	// 	hazardCourse.SetGrayed( true );
-	// }
+	// too short execute string - not a real command
+	if( strlen( MenuStrings[IDS_MEDIA_PREVIEWURL] ) <= 3 )
+	{
+		previews.SetGrayed( true );
+	}
 
 	// server.dll needs for reading savefiles or startup newgame
 	if( !EngFuncs::CheckGameDll( ))
 	{
 		saveRestore.SetGrayed( true );
+		hazardCourse.SetGrayed( true );
 		newGame.SetGrayed( true );
 	}
 
 	if( FBitSet( gMenu.m_gameinfo.flags, GFL_ANIMATED_TITLE ))
 	{
-		if( animatedBanner.TryLoad())
+		if( !uiStatic.lowmemory && animatedBanner.TryLoad())
 			AddItem( animatedBanner );
 	}
 	else
@@ -284,9 +290,27 @@ void CMenuMain::_Init( void )
 	AddItem( console );
 	AddItem( disconnect );
 	AddItem( resumeGame );
-	AddItem( newGame );
+
+	if ( bShowNewGame )
+		AddItem( newGame );
+
+	if( UI_IsCZDS( ))
+		AddItem( worldMap );
+
+	if ( bShowHazardCourse )
+		AddItem( hazardCourse );
+
 	AddItem( configuration );
+
+	if ( bShowSaveRestore )
+		AddItem( saveRestore );
+
 	AddItem( multiPlayer );
+
+	if ( bCustomGame )
+		AddItem( customGame );
+
+	AddItem( previews );
 	AddItem( quit );
 	AddItem( minimizeBtn );
 	AddItem( quitButton );
@@ -301,28 +325,59 @@ void CMenuMain::VidInit( bool connected )
 {
 	int hoffset = ( 70 / 640.0 ) * 1024.0;
 
+	// in original menu Previews is located at specific point
+	int previews_voffset = ( 404 / 480.0 ) * 768.0;
+
 	// no visible console button gap
 	int ygap = (( 404 - 373 ) / 480.0 ) * 768.0;
-	int quit_voffset = ( 404 / 480.0 ) * 768.0 + ygap;
 
 	// statically positioned items
 	minimizeBtn.SetRect( uiStatic.width - 72, 13, 32, 32 );
 	quitButton.SetRect( uiStatic.width - 36, 13, 32, 32 );
 
-	quit.SetCoord( hoffset, quit_voffset );
+	previews.SetCoord( hoffset, previews_voffset );
+	quit.SetCoord( hoffset, previews_voffset + ygap );
 
 	// let's start calculating positions
-	int yoffset = quit_voffset - ygap;
-	multiPlayer.SetCoord( hoffset, yoffset );
-	yoffset -= ygap;
+	int yoffset = previews_voffset - ygap;
 
-	configuration.SetCoord( hoffset, yoffset );
+	if( bCustomGame )
+	{
+		customGame.SetCoord( hoffset, yoffset );
+		yoffset -= ygap;
+	}
+
+	multiPlayer.SetCoord( hoffset, yoffset );
 	yoffset -= ygap;
 
 	bool single = gpGlobals->maxClients < 2;
 
-	newGame.SetCoord( hoffset, yoffset );
+	if( bShowSaveRestore )
+	{
+		saveRestore.SetCoord( hoffset, yoffset );
+		yoffset -= ygap;
+	}
+
+	configuration.SetCoord( hoffset, yoffset );
 	yoffset -= ygap;
+
+	if( bShowHazardCourse )
+	{
+		hazardCourse.SetCoord( hoffset, yoffset );
+		yoffset -= ygap;
+	}
+
+	if( UI_IsCZDS( ))
+	{
+		worldMap.SetCoord( hoffset, yoffset );
+		yoffset -= ygap;
+	}
+
+	if( bShowNewGame )
+	{
+		newGame.SetCoord( hoffset, yoffset );
+		yoffset -= ygap;
+	}
 
 	if( connected )
 	{
@@ -342,9 +397,6 @@ void CMenuMain::VidInit( bool connected )
 	// now figure out what's visible
 	resumeGame.SetVisibility( connected );
 	disconnect.SetVisibility( connected && !single );
-
-	// they exist in the original and can be mistakenly clicked
-	newGame.SetVisibility( false );
 
 	if( connected && single )
 	{

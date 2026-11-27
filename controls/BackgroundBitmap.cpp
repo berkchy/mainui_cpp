@@ -78,16 +78,24 @@ void CMenuBackgroundBitmap::DrawColor()
 	UI_FillRect( m_scPos, m_scSize, colorBase );
 }
 
+/*
+=================
+CMenuBackgroundBitmap::DrawBackgroundPiece
+
+Fades with the window it's drawn in. UI_UpdateMenu draws the menu background with the alpha factor disabled.
+Pieces that touch share their scaled edge, so they don't overlap: overlapped pixels get blended twice while fading.
+=================
+*/
 void CMenuBackgroundBitmap::DrawBackgroundPiece( const bimage_t &image, Point p, int xOffset, int yOffset, float xScale, float yScale )
 {
-	EngFuncs::PIC_Set( image.hImage, 255, 255, 255, 255 );
+	CImage pic( image.hImage );
 
 	int dx = (int)ceil( image.coord.x * xScale );
 	int dy = (int)ceil( image.coord.y * yScale );
-	int dw = (int)ceil( image.size.w * xScale );
-	int dt = (int)ceil( image.size.h * yScale );
+	int dw = (int)ceil(( image.coord.x + image.size.w ) * xScale ) - dx;
+	int dt = (int)ceil(( image.coord.y + image.size.h ) * yScale ) - dy;
 
-	EngFuncs::PIC_Draw( p.x + dx + xOffset, p.y + dy + yOffset, dw, dt );
+	UI_DrawPic( p.x + dx + xOffset, p.y + dy + yOffset, dw, dt, uiColorWhite, pic );
 }
 
 void CMenuBackgroundBitmap::DrawSteamBackgroundLayout( Point p, int xOffset, int yOffset, float xScale, float yScale )
@@ -106,7 +114,6 @@ void CMenuBackgroundBitmap::Draw()
 {
 	if( bForceColor )
 	{
-		colorBase = uiPromptBgColor;
 		DrawColor();
 		return;
 	}
@@ -128,7 +135,6 @@ void CMenuBackgroundBitmap::Draw()
 	if( szPic )
 	{
 		UI_DrawPic( m_scPos, m_scSize, uiColorWhite, szPic );
-		UI_FillRect( m_scPos, m_scSize, uiMenuBgColor );
 		return;
 	}
 
@@ -147,7 +153,6 @@ void CMenuBackgroundBitmap::Draw()
 
 	if( s_state == DRAW_COLOR )
 	{
-		colorBase = uiMenuBgColor;
 		DrawColor();
 		return;
 	}
@@ -200,7 +205,7 @@ void CMenuBackgroundBitmap::Draw()
 #endif
 
 	int xOffset = 0, yOffset = 0;
-	if( !ui_background_stretch->value )
+	if( !ui_background_stretch->value && !uiStatic.backgroundTopLeft )
 	{
 		// center wide background (for example if background is wider than our window)
 		if( s.w * xScale > ScreenWidth )
@@ -213,18 +218,6 @@ void CMenuBackgroundBitmap::Draw()
 		DrawBackgroundPiece( s_WONBackground, p, xOffset, yOffset, xScale, yScale );
 	else
 		DrawSteamBackgroundLayout( p, xOffset, yOffset, xScale, yScale );
-
-	UI_FillRect( m_scPos, m_scSize, uiMenuBgColor );
-
-	// print CS16Client version
-	char version[32];
-	int stringLen, charH;
-
-	snprintf( version, 32, "cs16-client build %s", EngFuncs::GetCvarString( "cscl_ver" ) );
-
-	EngFuncs::engfuncs.pfnDrawConsoleStringLen( version, &stringLen, &charH );
-	EngFuncs::engfuncs.pfnDrawConsoleString( stringLen * 0.05f, ScreenHeight - charH * 1.05f, version );
-
 }
 
 bool CMenuBackgroundBitmap::LoadSteamBackground( bool gamedirOnly )

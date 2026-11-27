@@ -240,7 +240,7 @@ void CMenuPicButton::Draw( )
 	if( iOldState == BUTTON_NOFOCUS && state != BUTTON_NOFOCUS )
 		iFocusStartTime = uiStatic.realTime;
 
-	if( !UI_HIDE_STATUS_TEXT && szStatusText && FBitSet( iFlags, QMF_NOTIFY ) && !FBitSet( gMenu.m_gameinfo.flags, GFL_NOSKILLS ))
+	if( szStatusText && FBitSet( iFlags, QMF_NOTIFY ) && !FBitSet( gMenu.m_gameinfo.flags, GFL_NOSKILLS ))
 	{
 		Point coord;
 
@@ -308,7 +308,7 @@ void CMenuPicButton::Draw( )
 			DrawButton( r, g, b, 255, rects, state );
 		}
 	}
-	else if( false )
+	else if( !uiStatic.lowmemory )
 	{
 		const uint heavy_blur_flags = ETF_NOSIZELIMIT | ETF_FORCECOL;
 		const uint light_blur_flags = ETF_NOSIZELIMIT | ETF_FORCECOL | ETF_ADDITIVE;
@@ -393,8 +393,10 @@ void CMenuPicButton::SetPicture( EDefaultBtns ID )
 
 void CMenuPicButton::SetPicture( const char *filename, int hk )
 {
-	hPic = EngFuncs::PIC_Load( filename );
 	hotkey = hk;
+
+	if( !uiStatic.lowmemory )
+		hPic = EngFuncs::PIC_Load( filename );
 }
 
 bool CMenuPicButton::HotKey( int key )

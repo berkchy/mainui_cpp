@@ -46,7 +46,6 @@ public:
 	bool bMouseToggle;
 	bool bKeepToggleWidth;
 	bool bChangeOnPressed;
-	bool bModernTabs;
 
 	CColor iSelectColor;
 	CColor iBackgroundColor;

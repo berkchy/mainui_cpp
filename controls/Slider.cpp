@@ -153,7 +153,7 @@ void CMenuSlider::Draw( void )
 	int	textHeight, sliderX;
 	uint textflags = ( iFlags & QMF_DROPSHADOW ) ? ETF_SHADOW : 0;
 
-	if( !UI_HIDE_STATUS_TEXT && szStatusText && iFlags & QMF_NOTIFY )
+	if( szStatusText && iFlags & QMF_NOTIFY )
 	{
 		Point coord;
 

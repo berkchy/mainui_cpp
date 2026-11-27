@@ -64,7 +64,7 @@ void CMenuFramework::Draw()
 	// draw status text if status text isn't rendered at right side of an item
 	// ideally, framework shouldn't even know about this but since everything
 	// WON-styled goes here, let's leave it here...
-	if( !UI_HIDE_STATUS_TEXT && item && item == lastItem && !FBitSet( item->iFlags, QMF_NOTIFY ) && item->szStatusText != NULL )
+	if( item && item == lastItem && !FBitSet( item->iFlags, QMF_NOTIFY ) && item->szStatusText != NULL )
 	{
 		float alpha = bound( 0, ((( uiStatic.realTime - statusFadeTime ) - 100 ) * 0.01f ), 1 );
 		int r, g, b, x, len;
@@ -221,21 +221,41 @@ bool CMenuFramework::DrawAnimation()
 
 CMenuFramework::CMenuBannerBitmap::CMenuBannerBitmap()
 {
+	// decoration, must not take keyboard focus
+	SetBits( iFlags, QMF_INACTIVE );
 	SetRect( UI_BANNER_POSX, UI_BANNER_POSY, UI_BANNER_WIDTH, UI_BANNER_HEIGHT );
 }
 
 void CMenuFramework::CMenuBannerBitmap::SetPicture(const char *pic)
 {
+	if( uiStatic.lowmemory || uiStatic.hideBanners )
+		return;
+
 	image.Load( pic );
 }
 
 void CMenuFramework::CMenuBannerBitmap::Draw( Point pt, Size sz )
 {
-	if( szName && szName[0] )
+	if( uiStatic.hideBanners )
+		return;
+
+	if( image.IsValid() )
 	{
-		UI_DrawString( uiStatic.hDefaultFont, pt, sz, szName,
-			uiPromptTextColor, UI_MED_CHAR_HEIGHT * uiStatic.scaleY,
-			QM_LEFT, ETF_NOSIZELIMIT | ETF_FORCECOL );
+		UI_DrawPic( pt, sz, uiColorWhite, image, QM_DRAWADDITIVE );
+	}
+	else
+	{
+		UI_DrawString( uiStatic.hHeavyBlur, pt,
+			sz,
+			szName,
+			uiPromptTextColor, m_scChSize,
+			QM_LEFT, ETF_ADDITIVE | ETF_NOSIZELIMIT | ETF_FORCECOL );
+
+		UI_DrawString( uiStatic.hLightBlur, pt,
+			sz,
+			szName,
+			uiPromptTextColor, m_scChSize,
+			QM_LEFT, ETF_ADDITIVE | ETF_NOSIZELIMIT | ETF_FORCECOL );
 	}
 }
 

@@ -20,7 +20,6 @@ GNU General Public License for more details.
 #include "gameinfo.h"
 #include "FontManager.h"
 #include "BMPUtils.h"
-#include "Primitive.h"
 #include "miniutl.h"
 
 //
@@ -79,7 +78,7 @@ extern "C" EXPORT void AddTouchButtonToList( const char *name, const char *textu
 #define Green( x )	( ((x) & 0xFF00 ) >> 8 )
 #define Blue( x )	( ((x) & 0xFF ) >> 0 )
 
-inline unsigned int PackRGBA( const unsigned int r, const unsigned int g, const unsigned int b, const unsigned int a )
+inline constexpr unsigned int PackRGBA( const unsigned int r, const unsigned int g, const unsigned int b, const unsigned int a )
 {
 	return ((a)<<24|(r)<<16|(g)<<8|(b));
 }
@@ -110,30 +109,6 @@ inline unsigned int PackAlpha( const unsigned int ulRGB, const unsigned int ulAl
 inline unsigned int UnpackAlpha( const unsigned int ulRGBA )
 {
 	return ((ulRGBA & 0xFF000000) >> 24);
-}
-
-inline void UI_FitSizePreserveAspect( const Size &srcSize, const Size &dstSize, Point &outOffset, Size &outSize )
-{
-	outOffset = Point( 0, 0 );
-	outSize = dstSize;
-
-	if( srcSize.w > 0 && srcSize.h > 0 )
-	{
-		float scaleX = (float)dstSize.w / srcSize.w;
-		float scaleY = (float)dstSize.h / srcSize.h;
-		float scale = scaleX < scaleY ? scaleX : scaleY;
-
-		outSize.w = (int)( srcSize.w * scale + 0.5f );
-		outSize.h = (int)( srcSize.h * scale + 0.5f );
-
-		if( outSize.w < 1 )
-			outSize.w = 1;
-		if( outSize.h < 1 )
-			outSize.h = 1;
-
-		outOffset.x = ( dstSize.w - outSize.w ) / 2;
-		outOffset.y = ( dstSize.h - outSize.h ) / 2;
-	}
 }
 
 inline float InterpVal( const float from, const float to, const float frac )
@@ -174,6 +149,13 @@ const char *L( const char *szStr ) __attribute__(( format_arg( 1 ))); // L means
 #else
 const char *L( const char *szStr ); // L means Localize!
 #endif
+
+// like gettext's N_(), marks a key for dictgen.py where L() can't be called yet, e.g. in constant tables
+#define N_( x ) x
+
+// L() for keys that only come from the game's own translation files, dictgen.py skips them
+#define L_GAME( x ) L( x )
+
 void UI_FreeCustomStrings( void );
 
 inline size_t Q_strncpy( char *dst, const char *src, size_t size )

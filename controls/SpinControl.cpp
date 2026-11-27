@@ -20,7 +20,7 @@ GNU General Public License for more details.
 #include "Utils.h"
 #include "Scissor.h"
 
-CMenuSpinControl::CMenuSpinControl()  : BaseClass(), m_szBackground(),
+CMenuSpinControl::CMenuSpinControl()  : BaseClass(), bWrapAround( false ), m_szBackground(),
 		m_szLeftArrow(), m_szRightArrow(), m_szLeftArrowFocus(), m_szRightArrowFocus(),
 		m_flMinValue(0), m_flMaxValue(1), m_flCurValue(0), m_flRange(0.1), m_pModel( NULL ),
 		m_iFloatPrecision(0)
@@ -127,7 +127,7 @@ void CMenuSpinControl::Draw( void )
 	Size scCenterBox;
 	uint textflags = ( iFlags & QMF_DROPSHADOW ) ? ETF_SHADOW : 0;
 
-	if( !UI_HIDE_STATUS_TEXT && szStatusText && iFlags & QMF_NOTIFY )
+	if( szStatusText && iFlags & QMF_NOTIFY )
 	{
 		Point coord;
 
@@ -230,6 +230,11 @@ const char *CMenuSpinControl::MoveLeft()
 			m_flCurValue = m_flMinValue;
 		sound = uiStatic.sounds[SND_MOVE];
 	}
+	else if( bWrapAround && m_flMaxValue > m_flMinValue )
+	{
+		m_flCurValue = m_flMaxValue;
+		sound = uiStatic.sounds[SND_MOVE];
+	}
 	else sound = uiStatic.sounds[SND_BUZZ];
 
 	return sound;
@@ -244,6 +249,11 @@ const char *CMenuSpinControl::MoveRight()
 		m_flCurValue += m_flRange;
 		if( m_flCurValue > m_flMaxValue )
 			m_flCurValue = m_flMaxValue;
+		sound = uiStatic.sounds[SND_MOVE];
+	}
+	else if( bWrapAround && m_flMaxValue > m_flMinValue )
+	{
+		m_flCurValue = m_flMinValue;
 		sound = uiStatic.sounds[SND_MOVE];
 	}
 	else sound = uiStatic.sounds[SND_BUZZ];

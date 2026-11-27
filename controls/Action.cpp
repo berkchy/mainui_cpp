@@ -25,7 +25,6 @@ CMenuAction::CMenuAction() : BaseClass()
 	m_bfillBackground = false;
 	forceCalcW = forceCalcY = false;
 	bIgnoreColorstring = false;
-	m_iTextInsetX = 0;
 }
 
 /*
@@ -53,10 +52,10 @@ void CMenuAction::VidInit( )
 		else
 		{
 			if( forceCalcW )
-				size.w = g_FontMgr->GetTextWideScaled( font, szName, GetCharSize() ) / uiStatic.scaleX;
+				size.w = g_FontMgr->GetTextWideScaled( font, szName, charSize ) / uiStatic.scaleX;
 
 			if( forceCalcY )
-				size.h = g_FontMgr->GetTextHeightExt( font, szName, GetCharSize(), size.w ) / uiStatic.scaleX;
+				size.h = g_FontMgr->GetTextHeightExt( font, szName, charSize, size.w ) / uiStatic.scaleX;
 		}
 
 		m_bLimitBySize = false;
@@ -114,14 +113,7 @@ CMenuAction::Draw
 */
 void CMenuAction::Draw( )
 {
-	bool bIsFocused = (this == m_pParent->ItemAtCursor());
-	bool bHasFocusFlags = (iFlags & (QMF_HASMOUSEFOCUS | QMF_HASKEYBOARDFOCUS)) != 0;
-
 	uint textflags = 0;
-	int textInsetX = m_iTextInsetX * uiStatic.scaleX;
-	textInsetX = bound( 0, textInsetX, m_scSize.w );
-	Point textPos = m_scPos + Size( textInsetX, 0 );
-	Size textSize = Size( m_scSize.w - textInsetX, m_scSize.h );
 
 	if( FBitSet( iFlags, QMF_DROPSHADOW ))
 		SetBits( textflags, ETF_SHADOW );
@@ -141,7 +133,7 @@ void CMenuAction::Draw( )
 	}
 	else if( m_bfillBackground )
 	{
-		if( !bIsFocused || !bHasFocusFlags || (iFlags & QMF_GRAYED) )
+		if( this != m_pParent->ItemAtCursor() || iFlags & QMF_GRAYED )
 		{
 			UI_FillRect( m_scPos, m_scSize, m_iBackcolor );
 		}
@@ -151,7 +143,7 @@ void CMenuAction::Draw( )
 		}
 	}
 
-	if( !UI_HIDE_STATUS_TEXT && szStatusText && iFlags & QMF_NOTIFY )
+	if( szStatusText && iFlags & QMF_NOTIFY )
 	{
 		Point coord;
 
@@ -167,19 +159,19 @@ void CMenuAction::Draw( )
 
 	if( iFlags & QMF_GRAYED )
 	{
-		UI_DrawString( font, textPos, textSize, szName, uiColorDkGrey, m_scChSize, eTextAlignment, textflags | ETF_FORCECOL );
+		UI_DrawString( font, m_scPos, m_scSize, szName, uiColorDkGrey, m_scChSize, eTextAlignment, textflags | ETF_FORCECOL );
 		return; // grayed
 	}
 
-	if( !bIsFocused || !bHasFocusFlags || eFocusAnimation == QM_NOFOCUSANIMATION )
+	if( this != m_pParent->ItemAtCursor() || eFocusAnimation == QM_NOFOCUSANIMATION )
 	{
-		UI_DrawString( font, textPos, textSize, szName, colorBase, m_scChSize, eTextAlignment, textflags );
+		UI_DrawString( font, m_scPos, m_scSize, szName, colorBase, m_scChSize, eTextAlignment, textflags );
 		return; // no focus
 	}
 
 	if( eFocusAnimation == QM_HIGHLIGHTIFFOCUS )
 	{
-		UI_DrawString( font, textPos, textSize, szName, colorFocus, m_scChSize, eTextAlignment, textflags );
+		UI_DrawString( font, m_scPos, m_scSize, szName, colorFocus, m_scChSize, eTextAlignment, textflags );
 	}
 	else if( eFocusAnimation == QM_PULSEIFFOCUS )
 	{
@@ -187,7 +179,7 @@ void CMenuAction::Draw( )
 
 		color = PackAlpha( colorBase, 255 * (0.5f + 0.5f * sin( (float)uiStatic.realTime / UI_PULSE_DIVISOR )));
 
-		UI_DrawString( font, textPos, textSize, szName, color, m_scChSize, eTextAlignment, textflags );
+		UI_DrawString( font, m_scPos, m_scSize, szName, color, m_scChSize, eTextAlignment, textflags );
 	}
 }
 

@@ -121,8 +121,7 @@ void CMenuYesNoMessageBox::Draw()
 {
 	UI_FillRect( 0, 0, gpGlobals->scrWidth, gpGlobals->scrHeight, 0x40000000 );
 
-	EngFuncs::FillRGBA( m_scPos.x, m_scPos.y, m_scSize.w, m_scSize.h,
-		Red( uiMenuBgColor ), Green( uiMenuBgColor ), Blue( uiMenuBgColor ), Alpha( uiMenuBgColor ) );
+	EngFuncs::FillRGBA( m_scPos.x, m_scPos.y, m_scSize.w, m_scSize.h, 20, 20, 20, 235 );
 	UI_DrawRectangle( m_scPos, m_scSize, uiInputFgColor );
 
 	CMenuBaseWindow::Draw();
@@ -144,6 +143,25 @@ bool CMenuYesNoMessageBox::KeyDown( int key )
 	}
 
 	return BaseClass::KeyDown( key );
+}
+
+bool CMenuYesNoMessageBox::KeyUp( int key )
+{
+	if( BaseClass::KeyUp( key ))
+		return true;
+
+	// Enter in a text field or spin control confirms the dialog
+	// gamepad A button on a text field opens the system keyboard, see CMenuField::KeyDown
+	CMenuBaseItem *item = ItemAtCursor();
+	if( item && item != &yes && item != &no && UI::Key::IsEnter( key ) && key != K_A_BUTTON )
+	{
+		if( bAutoHide )
+			Hide();
+		onPositive( this );
+		return true;
+	}
+
+	return false;
 }
 
 /*

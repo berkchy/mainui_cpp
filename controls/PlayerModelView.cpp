@@ -31,15 +31,6 @@ CMenuPlayerModelView::CMenuPlayerModelView() : CMenuBaseItem()
 	eOverrideMode = PMV_DONTCARE;
 	refdef.fov_x = 40.0f;
 	bDrawAsPlayer = true;
-	m_bRenderingScene = false;
-	m_bCanCaptureFocus = true;
-}
-
-bool CMenuPlayerModelView::MouseMove( int x, int y )
-{
-	if( !m_bCanCaptureFocus )
-		return false;
-	return CMenuBaseItem::MouseMove( x, y );
 }
 
 void CMenuPlayerModelView::VidInit()
@@ -60,17 +51,7 @@ void CMenuPlayerModelView::VidInit()
 
 	ent = EngFuncs::GetPlayerModel();
 
-	if( !ent )
-	{
-		return;
-	}
-
-	// preserve engine-managed entity fields and reset only preview state
-	memset( &ent->curstate, 0, sizeof( ent->curstate ));
-	memset( &ent->latched, 0, sizeof( ent->latched ));
-	ent->origin[0] = ent->origin[1] = ent->origin[2] = 0.0f;
-	ent->angles[0] = ent->angles[1] = ent->angles[2] = 0.0f;
-	ent->model = NULL;
+	memset( ent, 0, sizeof( cl_entity_t ));
 
 	// adjust entity params
 	ent->index = 0;
@@ -158,21 +139,7 @@ void CMenuPlayerModelView::Draw()
 		if( hPlayerImage )
 		{
 			EngFuncs::PIC_Set( hPlayerImage, 255, 255, 255, 255 );
-
-			int imgWidth = EngFuncs::PIC_Width( hPlayerImage );
-			int imgHeight = EngFuncs::PIC_Height( hPlayerImage );
-			Point drawPos = m_scPos;
-			Size drawSize = m_scSize;
-
-			if( imgWidth > 0 && imgHeight > 0 )
-			{
-				Point offset;
-				UI_FitSizePreserveAspect( Size( imgWidth, imgHeight ), m_scSize, offset, drawSize );
-				drawPos.x += offset.x;
-				drawPos.y += offset.y;
-			}
-
-			EngFuncs::PIC_DrawTrans( drawPos, drawSize );
+			EngFuncs::PIC_DrawTrans( m_scPos, m_scSize );
 		}
 		else
 		{
@@ -181,17 +148,6 @@ void CMenuPlayerModelView::Draw()
 	}
 	else
 	{
-		if( !ent )
-		{
-			ent = EngFuncs::GetPlayerModel();
-		}
-
-		if( !ent )
-		{
-			UI_DrawString( font, m_scPos, m_scSize, L( "No preview" ), colorBase, m_scChSize, QM_CENTER, ETF_SHADOW );
-			return;
-		}
-
 		EngFuncs::ClearScene();
 
 		if( bDrawAsPlayer )
@@ -246,24 +202,8 @@ void CMenuPlayerModelView::Draw()
 		}
 
 		// draw the player model
-		if( ent && ent->model )
-		{
-			if( m_bRenderingScene )
-			{
-				UI_DrawString( font, m_scPos, m_scSize, L( "No preview" ), colorBase, m_scChSize, QM_CENTER, ETF_SHADOW );
-			}
-			else
-			{
-				m_bRenderingScene = true;
-				EngFuncs::CL_CreateVisibleEntity( ET_NORMAL, ent );
-				EngFuncs::RenderScene( &refdef );
-				m_bRenderingScene = false;
-			}
-		}
-		else
-		{
-			UI_DrawString( font, m_scPos, m_scSize, L( "No preview" ), colorBase, m_scChSize, QM_CENTER, ETF_SHADOW );
-		}
+		EngFuncs::CL_CreateVisibleEntity( ET_NORMAL, ent );
+		EngFuncs::RenderScene( &refdef );
 	}
 }
 

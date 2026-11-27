@@ -32,13 +32,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "utflib.h"
 
 cvar_t		*ui_showmodels;
-cvar_t		*ui_showclassmodels;
 cvar_t		*ui_show_window_stack;
 cvar_t		*ui_borderclip;
 cvar_t		*ui_prefer_won_background;
 cvar_t		*ui_background_stretch;
 cvar_t		*ui_logohorizontal;
-cvar_t		*menu_fontsize;
 
 uiStatic_t	uiStatic;
 static CMenuEntry	*s_pEntries = NULL;
@@ -61,7 +59,6 @@ const char	*uiSounds[] = {
 // they match default WON colors.lst now, except alpha
 // a1ba: made uiColorHelp brighter so it's easier to read
 unsigned int uiColorHelp        = 0xFFA0A0A0; // 160, 160, 160, 255 // hint letters color
-unsigned int uiMenuBgColor      = 0xD7121417; // 18,  20,  23,  215 // menu background color
 unsigned int uiPromptBgColor    = 0xFF383838; // 56,  56,  56,  255 // dialog background color
 unsigned int uiPromptTextColor  = 0xFFF0B418; // 240, 180, 24,  255 // dialog or button letters color
 unsigned int uiPromptFocusColor = 0xFFFFFF00; // 255, 255,  0,  255 // dialog or button focus letters color
@@ -601,15 +598,26 @@ void UI_CloseMenu( void )
 		EngFuncs::KEY_SetDest( KEY_GAME );
 }
 
-void UI_CloseClientMenu( void )
-{
-	if( !uiStatic.client.IsActive() )
-		return;
+/*
+=================
+UI_PrepareSingleplayerGame
 
-	uiStatic.client.Clean();
-	EngFuncs::KEY_ClearStates();
-	EngFuncs::KEY_SetDest( KEY_GAME );
-	EngFuncs::ClientCmd( false, "touch_setclientonly 0" );
+The caller then starts the map with its own command.
+=================
+*/
+void UI_PrepareSingleplayerGame( int skill )
+{
+	if( EngFuncs::GetCvarFloat( "host_serverstate" ) && EngFuncs::GetCvarFloat( "maxplayers" ) > 1 )
+		EngFuncs::HostEndGame( "end of the game" );
+
+	EngFuncs::CvarSetValue( "skill", skill );
+	EngFuncs::CvarSetValue( "deathmatch", 0.0f );
+	EngFuncs::CvarSetValue( "teamplay", 0.0f );
+	EngFuncs::CvarSetValue( "pausable", 1.0f ); // singleplayer is always allowing pause
+	EngFuncs::CvarSetValue( "maxplayers", 1.0f );
+	EngFuncs::CvarSetValue( "coop", 0.0f );
+
+	EngFuncs::PlayBackgroundTrack( NULL, NULL );
 }
 
 // =====================================================================
@@ -1007,51 +1015,6 @@ void UI_ApplyCustomColors( void )
 	EngFuncs::COM_FreeFile( afile );
 }
 
-static int UI_ClampColor( int v )
-{
-	if( v < 0 ) return 0;
-	if( v > 255 ) return 255;
-	return v;
-}
-
-void UI_RefreshMenuBgColor( void )
-{
-	const char *str = EngFuncs::GetCvarString( "menu_bgcolor" );
-
-	if( str && *str )
-	{
-		if( *str == '#' ) str++;
-
-		size_t len = strlen( str );
-
-		if( len == 8 || len == 6 )
-		{
-			int r = Red( uiMenuBgColor );
-			int g = Green( uiMenuBgColor );
-			int b = Blue( uiMenuBgColor );
-			int a = Alpha( uiMenuBgColor );
-
-			if( len == 8 )
-				sscanf( str, "%2x%2x%2x%2x", &r, &g, &b, &a );
-			else
-				sscanf( str, "%2x%2x%2x", &r, &g, &b );
-
-			uiMenuBgColor = PackRGBA( UI_ClampColor( r ), UI_ClampColor( g ),
-				UI_ClampColor( b ), UI_ClampColor( a ) );
-		}
-		else
-		{
-			int r, g, b, a;
-			if( sscanf( str, "%d %d %d %d", &r, &g, &b, &a ) == 4 )
-				uiMenuBgColor = PackRGBA( UI_ClampColor( r ), UI_ClampColor( g ),
-					UI_ClampColor( b ), UI_ClampColor( a ) );
-		}
-	}
-
-	uiPromptBgColor = uiMenuBgColor;
-	uiInputBgColor = uiMenuBgColor;
-}
-
 static void UI_LoadBackgroundMapList( void )
 {
 	if( !EngFuncs::FileExists( "scripts/chapterbackgrounds.txt", true ))
@@ -1234,20 +1197,14 @@ void UI_Init( void )
 {
 	// register our cvars and commands
 	ui_showmodels = EngFuncs::CvarRegister( "ui_showmodels", "0", FCVAR_ARCHIVE );
-	ui_showclassmodels = EngFuncs::CvarRegister( "ui_showclassmodels", "1", FCVAR_ARCHIVE );
 	ui_show_window_stack = EngFuncs::CvarRegister( "ui_show_window_stack", "0", FCVAR_ARCHIVE );
 	ui_borderclip = EngFuncs::CvarRegister( "ui_borderclip", "0", FCVAR_ARCHIVE );
 	ui_prefer_won_background = EngFuncs::CvarRegister( "ui_prefer_won_background", "0", FCVAR_ARCHIVE );
 	ui_background_stretch = EngFuncs::CvarRegister( "ui_background_stretch", "0", FCVAR_ARCHIVE );
 	ui_logohorizontal = EngFuncs::CvarRegister( "ui_logohorizontal", "0", FCVAR_ARCHIVE );
-	menu_fontsize = EngFuncs::CvarRegister( "menu_fontsize", "17", FCVAR_ARCHIVE );
-	EngFuncs::CvarRegister( "menu_bgcolor", "121417D7", FCVAR_ARCHIVE );
 
 	// show cl_predict dialog
 	EngFuncs::CvarRegister( "menu_mp_firsttime2", "1", FCVAR_ARCHIVE );
-
-	// autofill ammo after bought weapon
-	EngFuncs::CvarRegister( "ui_cs_autofill", "0", FCVAR_ARCHIVE );
 
 	for( CMenuEntry *entry = s_pEntries; entry; entry = entry->m_pNext )
 	{
@@ -1269,11 +1226,15 @@ void UI_Init( void )
 
 	gMenu.m_gameinfo = *gi;
 
-	uiStatic.renderPicbuttonText = true;
+	// CZ:DS has no WON menu graphics, don't let the ones from valve show through
+	// and its background has the title in the top left corner, keep it in view when cropped
+	const bool czds = UI_IsCZDS();
+	uiStatic.renderPicbuttonText = ( gMenu.m_gameinfo.flags & GFL_RENDER_PICBUTTON_TEXT ) || czds;
+	uiStatic.hideBanners = czds;
+	uiStatic.backgroundTopLeft = czds;
 
 	// trying to load colors.lst
 	UI_ApplyCustomColors ();
-	UI_RefreshMenuBgColor();
 }
 
 /*

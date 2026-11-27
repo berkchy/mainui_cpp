@@ -34,11 +34,11 @@ if(NOT XASH_SDK)
 endif()
 
 file(GLOB MAINUI_CONTROLS_SOURCES "controls/*.cpp")
-file(GLOB MAINUI_MENUS_SOURCES "menus/*.cpp" "menus/dynamic/*.cpp" "menus/client/*.cpp")
+file(GLOB MAINUI_MENUS_SOURCES "menus/*.cpp" "menus/dynamic/*.cpp")
 file(GLOB MAINUI_FONT_RENDER_SOURCES "font/*.cpp")
 file(GLOB MAINUI_SOURCES "miniutl/*.cpp" "*.cpp")
 
-add_library(menu SHARED ${MAINUI_CONTROLS_SOURCES} ${MAINUI_MENUS_SOURCES} ${MAINUI_FONT_RENDER_SOURCES} ${MAINUI_SOURCES} ${CMAKE_SOURCE_DIR}/common/interface.cpp)
+add_library(menu SHARED ${MAINUI_CONTROLS_SOURCES} ${MAINUI_MENUS_SOURCES} ${MAINUI_FONT_RENDER_SOURCES} ${MAINUI_SOURCES})
 
 if(NOT WIN32 AND NOT MINGW)
 	add_compile_options(-Wall -Wextra -Wno-unused-parameter -Wno-unused-variable)
@@ -55,7 +55,7 @@ if(ANDROID)
 	set(MAINUI_USE_STB TRUE)
 endif()
 
-include_directories(${XASH_SDK}/common ${XASH_SDK}/engine ${XASH_SDK}/pm_shared ${XASH_SDK}/public . controls/ menus/ miniutl/ font/ model/ ${CMAKE_SOURCE_DIR}/common ${CMAKE_SOURCE_DIR}/public)
+include_directories(${XASH_SDK}/common ${XASH_SDK}/engine ${XASH_SDK}/pm_shared ${XASH_SDK}/public . controls/ menus/ miniutl/ font/ model/)
 
 if(MSVC)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
@@ -71,9 +71,9 @@ if(MAINUI_USE_CUSTOM_FONT_RENDER)
 		else()
 			# Use freetype2
 			find_package(PkgConfig)
-			find_package(Freetype REQUIRED)
-			include_directories(${FREETYPE_INCLUDE_DIRS})
-			target_link_libraries(menu ${FREETYPE_LIBRARIES})
+			pkg_check_modules(FT2 REQUIRED freetype2)
+			include_directories(${FT2_INCLUDE_DIRS})
+			target_link_libraries(menu ${FT2_LIBRARIES})
 			add_definitions(-DMAINUI_USE_FREETYPE)
 		endif()
 	endif()
@@ -84,10 +84,6 @@ endif()
 if(NOT BUILD_AS_PART_OF_ENGINE)
 	# grab platform library suffix
 	set_target_postfix(menu)
-	if(NOT DEFINED GAMEDIR AND DEFINED GAME_DIR)
-		# parent project provides GAME_DIR, use it as GAMEDIR for compatibility
-		set(GAMEDIR "${GAME_DIR}")
-	endif()
 else()
 	# install to the same directory as engine
         set(GAMEDIR ".")

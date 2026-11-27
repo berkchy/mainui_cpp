@@ -55,13 +55,19 @@ void CMenuOptions::_Init( void )
 	msgBox.Link( this );
 
 	AddItem( banner );
-	AddButton( L( "Controls" ), L( "Change keyboard, mouse, touch and joystick settings." ),
+	AddButton( L( "Controls" ), L( "Change keyboard and mouse settings" ),
 		PC_CONTROLS, UI_Controls_Menu, QMF_NOTIFY );
-	AddButton( L( "GameUI_Audio" ), L( "Change sound volume and quality." ),
+	AddButton( L( "GameUI_Audio" ), L( "Change sound volume and quality" ),
 		PC_AUDIO, UI_Audio_Menu, QMF_NOTIFY );
-	AddButton( L( "GameUI_Video" ), L( "Change screen size, video mode, gamme and glare reduction." ),
+	AddButton( L( "GameUI_Video" ), L( "Change screen size, video mode and gamma" ),
 		PC_VIDEO, UI_Video_Menu, QMF_NOTIFY );
-	AddButton( L( "Done" ), L( "Go back to the Main Menu." ),
+	AddButton( L( "Touch" ), L( "Change touch settings and buttons" ),
+		PC_TOUCH, UI_Touch_Menu, QMF_NOTIFY, 't' );
+	AddButton( L( "GameUI_Joystick" ), L( "Change gamepad axis and button settings" ),
+		PC_GAMEPAD, UI_GamePad_Menu, QMF_NOTIFY, 'g' );
+	AddButton( L( "Update" ), L( "Check for updates" ),
+		PC_UPDATE, msgBox.MakeOpenEvent(), QMF_NOTIFY );
+	AddButton( L( "Done" ), L( "Go back to the Main menu" ),
 		PC_DONE, VoidCb( &CMenuOptions::Hide ), QMF_NOTIFY );
 }
 

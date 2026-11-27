@@ -331,8 +331,6 @@ void CMenuItemsHolder::Draw( )
 {
 	CMenuBaseItem *item;
 
-	UI_RefreshMenuBgColor();
-
 	// draw contents
 	FOR_EACH_VEC( m_pItems, i )
 	{
@@ -344,7 +342,6 @@ void CMenuItemsHolder::Draw( )
 		if( !item->IsVisible() )
 			continue;
 
-		item->RefreshCharSize();
 		item->Draw();
 
 		if( ui_borderclip->value )

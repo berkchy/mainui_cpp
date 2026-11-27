@@ -154,22 +154,12 @@ public:
 	inline Size  GetRenderSize()     const { return m_scSize; }
 
 	void SetCharSize( EFontSizes fs );
-	int GetCharSize() const;
-	void RefreshCharSize();
 
 	inline void SetNameAndStatus( const char *name, const char *status, const char *tag = NULL )
 	{
 		szName = name;
 		szStatusText = status;
 		szTag = tag;
-	}
-
-	void SetText( const char *text )
-	{
-		if( m_bAllocName )
-			delete[] (char*)szName;
-		szName = StringCopy( text );
-		m_bAllocName = true;
 	}
 
 	CMenuItemsHolder* Parent() const			{ return m_pParent; }
@@ -189,7 +179,6 @@ public:
 	Point pos;
 	Size size;
 	int charSize;
-	EFontSizes fontEnum;
 
 	const char *szName;
 	const char *szStatusText;

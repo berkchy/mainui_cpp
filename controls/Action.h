@@ -32,7 +32,6 @@ public:
 
 	void SetBackground( const char *path, unsigned int color = uiColorWhite );
 	void SetBackground( unsigned int color, unsigned int focused = 0 );
-	void SetTextInsetX( int insetX ) { m_iTextInsetX = insetX; }
 
 	bool m_bLimitBySize;
 	bool bIgnoreColorstring;
@@ -43,7 +42,6 @@ private:
 	CImage m_szBackground;
 	bool m_bfillBackground;
 	bool forceCalcW, forceCalcY;
-	int m_iTextInsetX;
 };
 
 #endif // MENU_ACTION_H

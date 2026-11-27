@@ -133,9 +133,6 @@ public:
 
 	CColor iBackgroundColor;
 	CColor iHeaderColor;
-	CColor iSelectedColor;
-	CColor iSelectedAccent;
-	int iRightPadding;
 
 private:
 	float Step( void );

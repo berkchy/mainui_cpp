@@ -23,7 +23,6 @@ GNU General Public License for more details.
 
 CMenuBitmap::CMenuBitmap() : BaseClass()
 {
-	bKeepAspectRatio = false;
 	SetRenderMode( QM_DRAWNORMAL );
 }
 
@@ -82,65 +81,50 @@ CMenuBitmap::Draw
 */
 void CMenuBitmap::Draw( void )
 {
-	if( bDrawStroke )
-		UI_DrawRectangle( m_scPos, m_scSize, colorStroke );
-
-	if( !szPic.IsValid() )
+	if( !szPic )
 	{
-		if( colorBase != 0 )
-			UI_FillRect( m_scPos, m_scSize, colorBase );
+		UI_FillRect( m_scPos, m_scSize, colorBase );
 		return;
 	}
 
-	CImage *pPic = &szPic;
-	ERenderMode mode = eRenderMode;
-	unsigned int color = colorBase;
-	bool hasFocus = false;
-
 	if( iFlags & QMF_GRAYED )
 	{
-		color = uiColorDkGrey;
-	}
-	else if( ( iFlags & QMF_MOUSEONLY ) && !( iFlags & QMF_HASMOUSEFOCUS ) )
-	{
-		// no focus
-	}
-	else if( this == m_pParent->ItemAtCursor() )
-	{
-		hasFocus = true;
+		UI_DrawPic( m_scPos, m_scSize, uiColorDkGrey, szPic, eRenderMode );
+		return; // grayed
 	}
 
-	if( hasFocus )
+	if(( iFlags & QMF_MOUSEONLY ) && !( iFlags & QMF_HASMOUSEFOCUS ))
 	{
-		pPic = &szFocusPic;
-		mode = eFocusRenderMode;
-		if( eFocusAnimation == QM_PULSEIFFOCUS )
-		{
-			color = PackAlpha( colorBase, 255 * (0.5f + 0.5f * sin( (float)uiStatic.realTime / UI_PULSE_DIVISOR )));
-		}
-	}
-	else if( m_bPressed )
-	{
-		pPic = &szPressPic;
-		mode = ePressRenderMode;
+		UI_DrawPic( m_scPos, m_scSize, colorBase, szPic, eRenderMode );
+		return; // no focus
 	}
 
-	Point drawPos = m_scPos;
-	Size drawSize = m_scSize;
-
-	if( bKeepAspectRatio )
+	if( this != m_pParent->ItemAtCursor() )
 	{
-		int w = EngFuncs::PIC_Width( *pPic );
-		int h = EngFuncs::PIC_Height( *pPic );
-
-		if( w > 0 && h > 0 )
-		{
-			Point offset;
-			UI_FitSizePreserveAspect( Size( w, h ), m_scSize, offset, drawSize );
-			drawPos.x += offset.x;
-			drawPos.y += offset.y;
-		}
+		UI_DrawPic( m_scPos, m_scSize, colorBase, szPic, eRenderMode );
+		return; // no focus
 	}
 
-	UI_DrawPic( drawPos, drawSize, color, *pPic, mode );
+	if( this->m_bPressed )
+	{
+		UI_DrawPic( m_scPos, m_scSize, colorBase, szPressPic, ePressRenderMode );
+	}
+
+	switch( eFocusAnimation )
+	{
+	case QM_HIGHLIGHTIFFOCUS:
+		UI_DrawPic( m_scPos, m_scSize, colorBase, szFocusPic, eFocusRenderMode );
+		break;
+	case QM_PULSEIFFOCUS:
+	{
+		int	color;
+
+		color = PackAlpha( colorBase, 255 * (0.5f + 0.5f * sin( (float)uiStatic.realTime / UI_PULSE_DIVISOR )));
+		UI_DrawPic( m_scPos, m_scSize, color, szFocusPic, eFocusRenderMode );
+		break;
+	}
+	default:
+		UI_DrawPic( m_scPos, m_scSize, colorBase, szPic, eRenderMode ); // ignore focus
+		break;
+	}
 }

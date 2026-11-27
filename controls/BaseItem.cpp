@@ -100,48 +100,20 @@ bool CMenuBaseItem::KeyDown( int key )
 void CMenuBaseItem::SetCharSize( EFontSizes fs )
 {
 	font = fs + 1; // It's guaranteed that handles will match font sizes
-	fontEnum = fs;
 
 	switch( fs )
 	{
 	case QM_DEFAULTFONT:
-		charSize = UI_MED_CHAR_HEIGHT * 2 / 3;
-		break;
 	case QM_BOLDFONT:
 		charSize = UI_MED_CHAR_HEIGHT;
 		break;
 	case QM_SMALLFONT:
 		charSize = UI_SMALL_CHAR_HEIGHT;
 		break;
-	case QM_SMALLERFONT:
-		charSize = UI_SMALLER_CHAR_HEIGHT;
-		break;
-	case QM_TINYFONT:
-		charSize = UI_TINY_CHAR_HEIGHT;
-		break;
 	case QM_BIGFONT:
 		charSize = UI_BIG_CHAR_HEIGHT;
 		break;
 	}
-}
-
-int CMenuBaseItem::GetCharSize() const
-{
-	if( fontEnum == QM_DEFAULTFONT && menu_fontsize )
-	{
-		int size = (int)menu_fontsize->value;
-		if( size < 8 ) size = 8;
-		if( size > 48 ) size = 48;
-		return size;
-	}
-	return charSize;
-}
-
-void CMenuBaseItem::RefreshCharSize()
-{
-	m_scChSize = GetCharSize();
-	if( !(iFlags & QMF_DISABLESCAILING) )
-		m_scChSize *= uiStatic.scaleY;
 }
 
 void CMenuBaseItem::_Event( int ev )
@@ -211,7 +183,7 @@ void CMenuBaseItem::CalcPosition()
 
 void CMenuBaseItem::CalcSizes()
 {
-	RefreshCharSize();
+	m_scChSize = charSize;
 	if( iFlags & QMF_DISABLESCAILING )
 	{
 		m_scSize = size;
@@ -219,6 +191,7 @@ void CMenuBaseItem::CalcSizes()
 	else
 	{
 		m_scSize = size.Scale();
+		m_scChSize *= uiStatic.scaleY;
 	}
 
 	if( m_scSize.w < 0 )

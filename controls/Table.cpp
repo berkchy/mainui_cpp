@@ -41,9 +41,6 @@ CMenuTable::CMenuTable() : BaseClass(),
 	eFocusAnimation = QM_HIGHLIGHTIFFOCUS;
 	SetCharSize( QM_SMALLFONT );
 	bDrawStroke = true;
-	iSelectedColor = PackRGB( 80, 56, 24 );
-	iSelectedAccent = PackRGB( 240, 150, 40 );
-	iRightPadding = 0;
 }
 
 void CMenuTable::VidInit()
@@ -177,7 +174,8 @@ bool CMenuTable::MouseMove( int x, int y )
 		}
 	}
 
-	iTopItem = bound( 0, iTopItem, m_pModel->GetRows() - iNumRows );
+	// list shorter than the view must not get a negative top item
+	iTopItem = bound( 0, iTopItem, Q_max( 0, m_pModel->GetRows() - iNumRows ));
 
 	return true;
 }
@@ -488,19 +486,8 @@ void CMenuTable::DrawLine( Point p, const char **psz, size_t size, uint textColo
 			}
 		}
 
-		unsigned int alignment = m_pModel->GetAlignmentForColumn( i );
-		Size drawSize = sz;
-
-		if( alignment == QM_RIGHT && iRightPadding )
-		{
-			int pad = iRightPadding * uiStatic.scaleX;
-
-			pt.x += pad;
-			drawSize.w = Q_max( 0.0f, drawSize.w - (float)pad );
-		}
-
-		UI_DrawString( font, pt, drawSize, psz[i], textColor, m_scChSize,
-			alignment, textflags );
+		UI_DrawString( font, pt, sz, psz[i], textColor, m_scChSize,
+			m_pModel->GetAlignmentForColumn( i ), textflags );
 	}
 }
 
@@ -556,23 +543,9 @@ void CMenuTable::DrawLine( Point p, int line, uint textColor, bool forceCol, uin
 		switch( type )
 		{
 		case CELL_TEXT:
-		{
-			unsigned int alignment = m_pModel->GetAlignmentForColumn( i );
-			Point textPos = p;
-			Size drawSize = sz;
-
-			if( alignment == QM_RIGHT && iRightPadding )
-			{
-				int pad = iRightPadding * uiStatic.scaleX;
-
-				textPos.x += pad;
-				drawSize.w = Q_max( 0.0f, drawSize.w - (float)pad );
-			}
-
-			UI_DrawString( font, textPos, drawSize, str, textColor, m_scChSize, alignment,
+			UI_DrawString( font, p, sz, str, textColor, m_scChSize, m_pModel->GetAlignmentForColumn( i ),
 				textflags | ( m_pModel->IsCellTextWrapped( line, i ) ? 0 : ETF_NOSIZELIMIT ) );
 			break;
-		}
 		case CELL_IMAGE_ADDITIVE:
 		case CELL_IMAGE_DEFAULT:
 		case CELL_IMAGE_HOLES:
@@ -633,7 +606,7 @@ void CMenuTable::DrawLine( Point p, int line, uint textColor, bool forceCol, uin
 void CMenuTable::Draw()
 {
 	int i, y;
-	int selColor = iSelectedColor;
+	int selColor = PackRGB( 80, 56, 24 );
 	int upFocus, downFocus, scrollbarFocus;
 
 	// HACKHACK: recalc iNumRows, to be not greater than iNumItems
@@ -643,7 +616,8 @@ void CMenuTable::Draw()
 
 	// HACKHACK: normalize iTopItem
 	// remove when there will be per-pixel scrolling
-	iTopItem = bound( 0, iTopItem, m_pModel->GetRows() - 1 );
+	// empty list must not get a negative top item, scrollbar would jump
+	iTopItem = bound( 0, iTopItem, Q_max( 0, m_pModel->GetRows() - 1 ));
 
 	if( UI_CursorInRect( boxPos, boxSize ) )
 	{
@@ -799,9 +773,6 @@ void CMenuTable::Draw()
 				fillColor = 0x80383838;
 			}
 		}
-
-		if( i == iCurItem && !(iFlags & (QMF_GRAYED|QMF_INACTIVE)) )
-			UI_FillRect( boxPos.x, y, Q_max( 2, (int)(4 * uiStatic.scaleX) ), m_scChSize, iSelectedAccent );
 
 		DrawLine( Point( boxPos.x, y ), i, color, forceCol, fillColor );
 	}

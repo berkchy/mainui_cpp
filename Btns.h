@@ -106,7 +106,6 @@ enum EDefaultBtns
 #define PC_TOUCH_RESET   "gfx/shell/btn_touch_reset"
 #define PC_FAVORITE      "gfx/shell/btn_favorite"
 #define PC_UNFAVORITE    "gfx/shell/btn_unfavorite"
-#define PC_CROSSHAIR	 "gfx/shell/btn_xhair"
 #define PC_GYRO          "gfx/shell/btn_gyro"
 
 #define BUTTON_NOFOCUS	0
