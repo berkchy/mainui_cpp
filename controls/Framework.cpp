@@ -237,17 +237,11 @@ void CMenuFramework::CMenuBannerBitmap::Draw( Point pt, Size sz )
 	}
 	else
 	{
-		UI_DrawString( uiStatic.hHeavyBlur, pt,
+		UI_DrawString( uiStatic.hDefaultFont, pt,
 			sz,
 			szName,
 			uiPromptTextColor, m_scChSize,
-			QM_LEFT, ETF_ADDITIVE | ETF_NOSIZELIMIT | ETF_FORCECOL );
-
-		UI_DrawString( uiStatic.hLightBlur, pt,
-			sz,
-			szName,
-			uiPromptTextColor, m_scChSize,
-			QM_LEFT, ETF_ADDITIVE | ETF_NOSIZELIMIT | ETF_FORCECOL );
+			QM_LEFT, ETF_NOSIZELIMIT | ETF_FORCECOL );
 	}
 }
 

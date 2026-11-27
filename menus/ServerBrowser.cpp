@@ -444,6 +444,7 @@ public:
 
 	CMenuAction backdrop;
 	CMenuAction tabBarBg;
+	CMenuAction sidebarBg[7];
 	CMenuPicButton *joinGame;
 	CMenuPicButton *createGame;
 	CMenuPicButton *refresh;
@@ -1172,12 +1173,43 @@ UI_Background_Ownerdraw
 */
 void CMenuServerBrowser::Draw( void )
 {
-	backdrop.SetBackground( uiMenuBgColor, uiMenuBgColor );
-	tabBarBg.SetBackground( uiMenuBgColor, uiMenuBgColor );
-	gameList.iBackgroundColor = uiMenuBgColor;
-	tabSwitch.iBackgroundColor = uiMenuBgColor;
+	uint panelColor = PackRGBA( Red( uiMenuBgColor ), Green( uiMenuBgColor ), Blue( uiMenuBgColor ), 232 );
+	uint surfaceColor = PackRGBA( 13, 16, 21, 244 );
+
+	backdrop.SetBackground( panelColor, panelColor );
+	tabBarBg.SetBackground( surfaceColor, surfaceColor );
+	gameList.iBackgroundColor = surfaceColor;
+	tabSwitch.iBackgroundColor = PackRGBA( 16, 20, 26, 248 );
+
+	CMenuPicButton *sidebarButtons[7] = { joinGame, createGame, viewGameInfo, favorite, refresh, addServer, done };
+	bool sidebarFocus[7];
+	for( int i = 0; i < 7; i++ )
+	{
+		sidebarFocus[i] = ItemAtCursor() == sidebarButtons[i];
+		uint bg = sidebarFocus[i] ? PackRGBA( 30, 36, 44, 250 )
+			: ( i == 0 ? PackRGBA( 34, 28, 23, 246 ) : PackRGBA( 18, 22, 28, 240 ) );
+		uint stroke = sidebarFocus[i] ? PackRGB( 255, 185, 85 )
+			: ( i == 0 ? PackRGB( 255, 150, 40 ) : PackRGB( 48, 56, 68 ) );
+
+		sidebarBg[i].SetBackground( bg, bg );
+		sidebarBg[i].colorStroke = stroke;
+		sidebarBg[i].iStrokeWidth = ( sidebarFocus[i] || i == 0 ) ? 2 : 1;
+	}
 
 	CMenuFramework::Draw();
+
+	for( int i = 0; i < 7; i++ )
+	{
+		if( !sidebarFocus[i] && i != 0 )
+			continue;
+
+		Point p = sidebarBg[i].GetRenderPosition();
+		Size s = sidebarBg[i].GetRenderSize();
+		uint accent = sidebarFocus[i] ? PackRGB( 255, 195, 95 ) : PackRGB( 255, 150, 40 );
+		UI_FillRect( p.x, p.y, Q_max( 2, (int)(3 * uiStatic.scaleX) ), s.h, accent );
+		UI_FillRect( p.x, p.y + s.h - Q_max( 2, (int)(3 * uiStatic.scaleY) ), s.w,
+			Q_max( 2, (int)(3 * uiStatic.scaleY) ), accent );
+	}
 
 	struct
 	{
@@ -1196,9 +1228,9 @@ void CMenuServerBrowser::Draw( void )
 	{
 		Point p = filters[i].box->GetRenderPosition();
 		Size s = filters[i].box->GetRenderSize();
-		filters[i].box->iBackgroundColor = uiMenuBgColor;
+		filters[i].box->iBackgroundColor = PackRGBA( 14, 17, 22, 248 );
 
-		UI_DrawString( uiStatic.hDefaultFont, p.x, p.y - labelH - (int)(4 * uiStatic.scaleY),
+		UI_DrawString( uiStatic.hDefaultFont, p.x, p.y - labelH - (int)(6 * uiStatic.scaleY),
 			s.w, labelH, filters[i].label, PackRGB( 175, 185, 200 ), labelH,
 			QM_LEFT, ETF_FORCECOL | ETF_NOSIZELIMIT );
 	}
@@ -1240,12 +1272,25 @@ void CMenuServerBrowser::_Init( void )
 	backdrop.eFocusAnimation = QM_NOFOCUSANIMATION;
 	backdrop.iFlags |= QMF_INACTIVE;
 	AddItem( backdrop );
+
+	for( int i = 0; i < 7; i++ )
+	{
+		sidebarBg[i].SetNameAndStatus( NULL, NULL );
+		sidebarBg[i].SetBackground( PackRGBA( 18, 22, 28, 240 ), PackRGBA( 18, 22, 28, 240 ) );
+		sidebarBg[i].bDrawStroke = true;
+		sidebarBg[i].colorStroke = PackRGB( 48, 56, 68 );
+		sidebarBg[i].iStrokeWidth = 1;
+		sidebarBg[i].eFocusAnimation = QM_NOFOCUSANIMATION;
+		sidebarBg[i].iFlags |= QMF_INACTIVE;
+		AddItem( sidebarBg[i] );
+	}
+
 	AddItem( banner );
 
 	tabBarBg.SetNameAndStatus( NULL, NULL );
-	tabBarBg.SetBackground( PackRGBA( 16, 18, 22, 235 ), PackRGBA( 16, 18, 22, 235 ) );
+	tabBarBg.SetBackground( PackRGBA( 13, 16, 21, 244 ), PackRGBA( 13, 16, 21, 244 ) );
 	tabBarBg.bDrawStroke = true;
-	tabBarBg.colorStroke = PackRGB( 52, 59, 70 );
+	tabBarBg.colorStroke = PackRGB( 58, 68, 82 );
 	tabBarBg.iStrokeWidth = 1;
 	tabBarBg.eFocusAnimation = QM_NOFOCUSANIMATION;
 	tabBarBg.iFlags |= QMF_INACTIVE;
@@ -1288,20 +1333,20 @@ void CMenuServerBrowser::_Init( void )
 	msgBox.Link( this );
 
 	gameList.SetCharSize( QM_SMALLFONT );
-	gameList.iBackgroundColor = PackRGBA( 18, 20, 23, 235 );
-	gameList.iHeaderColor = PackRGB( 255, 175, 70 );
-	gameList.colorStroke = PackRGB( 48, 54, 64 );
-	gameList.iSelectedColor = PackRGBA( 255, 150, 40, 48 );
-	gameList.iSelectedAccent = PackRGB( 255, 165, 55 );
-	gameList.iRightPadding = 8;
+	gameList.iBackgroundColor = PackRGBA( 13, 16, 21, 244 );
+	gameList.iHeaderColor = PackRGB( 255, 190, 95 );
+	gameList.colorStroke = PackRGB( 58, 68, 82 );
+	gameList.iSelectedColor = PackRGBA( 255, 150, 40, 52 );
+	gameList.iSelectedAccent = PackRGB( 255, 175, 65 );
+	gameList.iRightPadding = 18;
 	gameList.iStrokeWidth = 1;
 	gameList.bDrawStroke = false;
-	gameList.SetupColumn( COLUMN_PASSWORD, NULL, 32.0f, true );
-	gameList.SetupColumn( COLUMN_FAVORITE, NULL, 32.0f, true );
-	gameList.SetupColumn( COLUMN_NAME, L( "Name" ), 0.36f );
-	gameList.SetupColumn( COLUMN_MAP, L( "GameUI_Map" ), 0.22f );
-	gameList.SetupColumn( COLUMN_PLAYERS, L( "Players" ), 110.0f, true );
-	gameList.SetupColumn( COLUMN_PING, L( "Ping" ), 160.0f, true );
+	gameList.SetupColumn( COLUMN_PASSWORD, NULL, 28.0f, true );
+	gameList.SetupColumn( COLUMN_FAVORITE, NULL, 28.0f, true );
+	gameList.SetupColumn( COLUMN_NAME, L( "Name" ), 0.46f );
+	gameList.SetupColumn( COLUMN_MAP, L( "GameUI_Map" ), 0.24f );
+	gameList.SetupColumn( COLUMN_PLAYERS, L( "Players" ), 0.14f );
+	gameList.SetupColumn( COLUMN_PING, L( "Ping" ), 0.16f );
 	gameList.SetupColumn( COLUMN_IP, L( "IP" ), 0, true );
 	gameList.SetModel( &gameListModel );
 	gameList.bFramedHintText = true;
@@ -1319,11 +1364,11 @@ void CMenuServerBrowser::_Init( void )
 	tabSwitch.bKeepToggleWidth = true;
 	tabSwitch.bModernTabs = true;
 	tabSwitch.SetCharSize( QM_BOLDFONT );
-	tabSwitch.iSelectColor = PackRGB( 255, 175, 75 );
-	tabSwitch.iBackgroundColor = PackRGBA( 20, 23, 28, 245 );
-	tabSwitch.colorStroke = PackRGB( 52, 59, 70 );
-	tabSwitch.iFgTextColor = PackRGB( 255, 195, 105 );
-	tabSwitch.iBgTextColor = PackRGB( 190, 200, 215 );
+	tabSwitch.iSelectColor = PackRGB( 255, 185, 85 );
+	tabSwitch.iBackgroundColor = PackRGBA( 16, 20, 26, 248 );
+	tabSwitch.colorStroke = PackRGB( 58, 68, 82 );
+	tabSwitch.iFgTextColor = PackRGB( 255, 205, 130 );
+	tabSwitch.iBgTextColor = PackRGB( 175, 187, 205 );
 	tabSwitch.onChanged = VoidCb( &CMenuServerBrowser::OnTabSwitch );
 
 	// server.dll needs for reading savefiles or startup newgame
@@ -1484,9 +1529,12 @@ void CMenuServerBrowser::_Init( void )
 	CMenuDropDown *filterBoxes[] = { &filterPing, &filterEmpty, &filterFull, &filterMap, &filterProtocol };
 	for( int i = 0; i < V_ARRAYSIZE( filterBoxes ); i++ )
 	{
-		filterBoxes[i]->iBackgroundColor = PackRGBA( 24, 27, 32, 255 );
-		filterBoxes[i]->iFgTextColor = PackRGB( 215, 222, 235 );
-		filterBoxes[i]->iBgTextColor = PackRGB( 175, 185, 200 );
+		filterBoxes[i]->iBackgroundColor = PackRGBA( 14, 17, 22, 248 );
+		filterBoxes[i]->iFgTextColor = PackRGB( 220, 228, 240 );
+		filterBoxes[i]->iBgTextColor = PackRGB( 175, 187, 205 );
+		filterBoxes[i]->bDrawStroke = true;
+		filterBoxes[i]->colorStroke = PackRGB( 45, 52, 63 );
+		filterBoxes[i]->iStrokeWidth = 1;
 		filterBoxes[i]->SetCharSize( QM_SMALLFONT );
 	}
 
@@ -1526,51 +1574,50 @@ void CMenuServerBrowser::LayoutControls()
 	backdrop.CalcPosition();
 
 	const int sidebarX = 24;
-	const int buttonW = 220;
-	const int buttonH = 54;
-	const int gap = 8;
+	const int buttonW = 224;
+	const int buttonH = 50;
+	const int gap = 10;
 
 	CMenuPicButton *sidebar[] = { joinGame, createGame, viewGameInfo, favorite, refresh, addServer };
-	int y = 190;
+	int y = 184;
 	for( int i = 0; i < V_ARRAYSIZE( sidebar ); i++ )
 	{
+		sidebarBg[i].SetRect( sidebarX, y, buttonW, buttonH );
+		sidebarBg[i].CalcPosition();
 		sidebar[i]->SetRect( sidebarX, y, buttonW, buttonH );
 		sidebar[i]->CalcPosition();
 		y += buttonH + gap;
 	}
 
+	sidebarBg[6].SetRect( sidebarX, 684, buttonW, buttonH );
+	sidebarBg[6].CalcPosition();
 	done->SetRect( sidebarX, 684, buttonW, buttonH );
 	done->CalcPosition();
 
-	const int mainX = 270;
+	const int mainX = 264;
 	const int mainW = uiStatic.width - mainX - 24;
 
-	tabBarBg.SetRect( mainX - 6, 172, mainW + 12, 60 );
+	tabBarBg.SetRect( mainX - 4, 166, mainW + 8, 58 );
 	tabBarBg.CalcPosition();
-	tabSwitch.SetRect( mainX, 180, mainW, 44 );
+	tabSwitch.SetRect( mainX + 4, 174, mainW - 8, 42 );
 	tabSwitch.CalcPosition();
 
-	gameList.SetCoord( mainX, 232 );
+	gameList.SetCoord( mainX, 228 );
 	gameList.SetSize( mainW, gameList.size.h );
 	gameList.CalcPosition();
 
-	int x = mainX;
-	const int filterY = 640;
-	filterPing.SetRect( x, filterY, 110, 34 );
-	x += filterPing.size.w + 12;
-	filterEmpty.SetRect( x, filterY, 130, 34 );
-	x += filterEmpty.size.w + 12;
-	filterFull.SetRect( x, filterY, 130, 34 );
-	x += filterFull.size.w + 12;
-	filterMap.SetRect( x, filterY, 170, 34 );
-	x += filterMap.size.w + 12;
-	filterProtocol.SetRect( x, filterY, 140, 34 );
+	const int filterY = 648;
+	const int filterW[5] = { 100, 120, 110, 150, 130 };
+	const int filterGap = ( mainW - 610 ) / 4;
+	CMenuDropDown *filters[5] = { &filterPing, &filterEmpty, &filterFull, &filterMap, &filterProtocol };
 
-	filterPing.CalcPosition();
-	filterEmpty.CalcPosition();
-	filterFull.CalcPosition();
-	filterMap.CalcPosition();
-	filterProtocol.CalcPosition();
+	int x = mainX;
+	for( int i = 0; i < 5; i++ )
+	{
+		filters[i]->SetRect( x, filterY, filterW[i], 34 );
+		filters[i]->CalcPosition();
+		x += filterW[i] + filterGap;
+	}
 }
 
 bool CMenuServerBrowser::IsAddressInTab( int tab, const netadr_t &adr ) const
@@ -1596,6 +1643,8 @@ void CMenuServerBrowser::Show()
 		banner.SetPicture( ART_BANNER_LAN );
 		favorite->Hide();
 		addServer->Hide();
+		sidebarBg[3].Hide();
+		sidebarBg[5].Hide();
 		tabSwitch.Hide();
 		tabBarBg.Hide();
 		filterProtocol.Hide();
@@ -1606,6 +1655,8 @@ void CMenuServerBrowser::Show()
 		banner.SetPicture( ART_BANNER_INET );
 		favorite->Show();
 		addServer->Show();
+		sidebarBg[3].Show();
+		sidebarBg[5].Show();
 		tabSwitch.Show();
 		tabBarBg.Show();
 		filterProtocol.Show();
