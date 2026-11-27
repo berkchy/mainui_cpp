@@ -416,6 +416,7 @@ public:
 	void GetGamesList( void );
 	void ClearList( void );
 	void RefreshList( void );
+	void RefreshListInternal( bool clearVisible );
 	void JoinGame( void );
 	void ResetPing( void )
 	{
@@ -442,6 +443,8 @@ public:
 	static void Connect( server_t &server );
 
 	CMenuAction backdrop;
+	CMenuAction tabBarBg;
+	CMenuAction sidebarBg[7];
 	CMenuPicButton *joinGame;
 	CMenuPicButton *createGame;
 	CMenuPicButton *refresh;
@@ -935,7 +938,7 @@ void CMenuServerBrowser::QueryServerList( const CUtlVector<favlist_entry_t> &lis
 
 		FOR_EACH_VEC( m_InternetServers[curTab], j )
 		{
-			if( !EngFuncs::NET_CompareAdr( &m_InternetServers[curTab][j].adr, &adr ))
+			if( EngFuncs::NET_CompareAdr( &m_InternetServers[curTab][j].adr, &adr ))
 			{
 				found = true;
 				break;
@@ -974,58 +977,75 @@ void CMenuServerBrowser::QueryServerList( const CUtlVector<favlist_entry_t> &lis
 
 void CMenuServerBrowser::RefreshList()
 {
-	gameListModel.serversRefreshTime = EngFuncs::DoubleTime();
+	RefreshListInternal( true );
+}
 
+void CMenuServerBrowser::RefreshListInternal( bool clearVisible )
+{
 	if( m_bLanOnly )
 	{
+		if( clearVisible )
+			ClearList();
+
+		gameListModel.serversRefreshTime = EngFuncs::DoubleTime();
 		m_LanServers.RemoveAll();
 		EngFuncs::ClientCmd( false, "localservers\n" );
+		return;
 	}
-	else if( uiStatic.realTime > refreshTime2 )
+
+	if( uiStatic.realTime <= refreshTime2 )
+		return;
+
+	if( clearVisible )
+		ClearList();
+
+	gameListModel.serversRefreshTime = EngFuncs::DoubleTime();
+
+	int refreshTab = tabSwitch.GetState();
+	if( refreshTab < 0 || refreshTab >= INTERNET_TAB_COUNT )
+		refreshTab = 0;
+
+	m_iLastRefreshTab = refreshTab;
+	m_InternetServers[refreshTab].RemoveAll();
+
+	if( refreshTab == 2 )
+		QueryServerList( favoritesList );
+	else if( refreshTab == 3 )
+		QueryServerList( historyList );
+	else
 	{
-		m_iLastRefreshTab = tabSwitch.GetState();
-		if( m_iLastRefreshTab >= 0 && m_iLastRefreshTab < INTERNET_TAB_COUNT )
-			m_InternetServers[m_iLastRefreshTab].RemoveAll();
+		char filter[128] = "";
+		char *buf = filter;
+		int remaining = sizeof(filter);
 
-		if( tabSwitch.GetState() == 2 )
-			QueryServerList( favoritesList );
-		else if( tabSwitch.GetState() == 3 )
-			QueryServerList( historyList );
-		else
+		if( filterEmpty.GetItem( ) )
 		{
-			char filter[128] = "";
-			char *buf = filter;
-			int remaining = sizeof(filter);
-
-			if( filterEmpty.GetItem( ) )
-			{
-				int n = snprintf(buf, remaining, "\\empty\\%c", (char) filterEmpty.GetItem( ) );
-				remaining -= n;
-				buf += n;
-			}
-
-			if( filterFull.GetItem( ) )
-			{
-				int n = snprintf(buf, remaining, "\\full\\%c", (char) filterFull.GetItem( ) );
-				remaining -= n;
-				buf += n;
-			}
-
-			if( filterMap.GetItem( )[0] )
-			{
-				int n = snprintf(buf, remaining, "\\map\\%s", filterMap.GetItem( ) );
-				remaining -= n;
-				buf += n;
-			}
-
-			EngFuncs::ClientCmdF( false, "internetservers %s\n", filter );
+			int n = snprintf(buf, remaining, "\\empty\\%c", (char) filterEmpty.GetItem( ) );
+			remaining -= n;
+			buf += n;
 		}
 
-		refreshTime2 = uiStatic.realTime + (EngFuncs::GetCvarFloat("cl_nat") ? 4000:1000);
-		refresh->SetGrayed( true );
-		if( uiStatic.realTime + 20000 < refreshTime )
-			refreshTime = uiStatic.realTime + 20000;
+		if( filterFull.GetItem( ) )
+		{
+			int n = snprintf(buf, remaining, "\\full\\%c", (char) filterFull.GetItem( ) );
+			remaining -= n;
+			buf += n;
+		}
+
+		if( filterMap.GetItem( )[0] )
+		{
+			int n = snprintf(buf, remaining, "\\map\\%s", filterMap.GetItem( ) );
+			remaining -= n;
+			buf += n;
+		}
+
+		EngFuncs::ClientCmdF( false, "internetservers %s\n", filter );
 	}
+
+	refreshTime2 = uiStatic.realTime + (EngFuncs::GetCvarFloat("cl_nat") ? 4000:1000);
+	refresh->SetGrayed( true );
+	if( uiStatic.realTime + 20000 < refreshTime )
+		refreshTime = uiStatic.realTime + 20000;
 }
 
 void CMenuServerBrowser::ViewGameInfo()
@@ -1063,7 +1083,7 @@ void CMenuServerBrowser::OnTabSwitch()
 		// re-add entries via model to apply filters and update UI controls
 		gameListModel.AddServerToList( m_InternetServers[newTab][i].adr, m_InternetServers[newTab][i].info, m_InternetServers[newTab][i].favorite );
 	}
-	RefreshList();
+	RefreshListInternal( false );
 }
 
 void CMenuServerBrowser::OnChangeSelectedServer( void )
@@ -1135,7 +1155,8 @@ void CMenuServerBrowser::AddServer( void )
 	server_t serv( adr, fakeInfoString, false, true );
 	serv.UpdateData();
 	serv.SetPing( MAX_PING );
-	m_InternetServers[2].AddToTail( serv );
+	if( !IsAddressInTab( 2, adr ))
+		m_InternetServers[2].AddToTail( serv );
 	if( tabSwitch.GetState() == 2 )
 	{
 		gameListModel.AddServerToList( adr, fakeInfoString, false );
@@ -1216,6 +1237,30 @@ void CMenuServerBrowser::_Init( void )
 	AddItem( backdrop );
 	AddItem( banner );
 
+	tabBarBg.SetNameAndStatus( NULL, NULL );
+	tabBarBg.SetBackground( PackRGBA( 16, 18, 22, 235 ), PackRGBA( 16, 18, 22, 235 ) );
+	tabBarBg.bDrawStroke = true;
+	tabBarBg.colorStroke = PackRGB( 52, 59, 70 );
+	tabBarBg.iStrokeWidth = 1;
+	tabBarBg.eFocusAnimation = QM_NOFOCUSANIMATION;
+	tabBarBg.iFlags |= QMF_INACTIVE;
+	AddItem( tabBarBg );
+
+	for( int i = 0; i < V_ARRAYSIZE( sidebarBg ); i++ )
+	{
+		sidebarBg[i].SetNameAndStatus( NULL, NULL );
+		sidebarBg[i].SetBackground( PackRGBA( 30, 34, 40, 230 ), PackRGBA( 30, 34, 40, 230 ) );
+		sidebarBg[i].bDrawStroke = true;
+		sidebarBg[i].colorStroke = PackRGB( 58, 66, 78 );
+		sidebarBg[i].iStrokeWidth = 1;
+		sidebarBg[i].eFocusAnimation = QM_NOFOCUSANIMATION;
+		sidebarBg[i].iFlags |= QMF_INACTIVE;
+		AddItem( sidebarBg[i] );
+	}
+
+	sidebarBg[0].SetBackground( PackRGBA( 52, 38, 24, 235 ), PackRGBA( 52, 38, 24, 235 ) );
+	sidebarBg[0].colorStroke = PackRGB( 255, 150, 40 );
+
 	joinGame = AddButton( L( "Join game" ), nullptr, PC_JOIN_GAME, VoidCb( &CMenuServerBrowser::JoinGame ), QMF_GRAYED );
 	joinGame->onReleasedClActive = msgBox.MakeOpenEvent();
 
@@ -1258,14 +1303,15 @@ void CMenuServerBrowser::_Init( void )
 	gameList.colorStroke = PackRGB( 48, 54, 64 );
 	gameList.iSelectedColor = PackRGBA( 255, 150, 40, 48 );
 	gameList.iSelectedAccent = PackRGB( 255, 165, 55 );
+	gameList.iRightPadding = 8;
 	gameList.iStrokeWidth = 1;
 	gameList.bDrawStroke = false;
 	gameList.SetupColumn( COLUMN_PASSWORD, NULL, 32.0f, true );
 	gameList.SetupColumn( COLUMN_FAVORITE, NULL, 32.0f, true );
-	gameList.SetupColumn( COLUMN_NAME, L( "Name" ), 0.40f );
-	gameList.SetupColumn( COLUMN_MAP, L( "GameUI_Map" ), 0.25f );
-	gameList.SetupColumn( COLUMN_PLAYERS, L( "Players" ), 100.0f, true );
-	gameList.SetupColumn( COLUMN_PING, L( "Ping" ), 120.0f, true );
+	gameList.SetupColumn( COLUMN_NAME, L( "Name" ), 0.36f );
+	gameList.SetupColumn( COLUMN_MAP, L( "GameUI_Map" ), 0.22f );
+	gameList.SetupColumn( COLUMN_PLAYERS, L( "Players" ), 110.0f, true );
+	gameList.SetupColumn( COLUMN_PING, L( "Ping" ), 160.0f, true );
 	gameList.SetupColumn( COLUMN_IP, L( "IP" ), 0, true );
 	gameList.SetModel( &gameListModel );
 	gameList.bFramedHintText = true;
@@ -1283,10 +1329,11 @@ void CMenuServerBrowser::_Init( void )
 	tabSwitch.bKeepToggleWidth = true;
 	tabSwitch.bModernTabs = true;
 	tabSwitch.SetCharSize( QM_BOLDFONT );
-	tabSwitch.iSelectColor = PackRGB( 255, 165, 55 );
-	tabSwitch.iBackgroundColor = PackRGBA( 24, 27, 32, 255 );
-	tabSwitch.iFgTextColor = PackRGB( 255, 165, 55 );
-	tabSwitch.iBgTextColor = PackRGB( 170, 180, 195 );
+	tabSwitch.iSelectColor = PackRGB( 255, 175, 75 );
+	tabSwitch.iBackgroundColor = PackRGBA( 20, 23, 28, 245 );
+	tabSwitch.colorStroke = PackRGB( 52, 59, 70 );
+	tabSwitch.iFgTextColor = PackRGB( 255, 195, 105 );
+	tabSwitch.iBgTextColor = PackRGB( 190, 200, 215 );
 	tabSwitch.onChanged = VoidCb( &CMenuServerBrowser::OnTabSwitch );
 
 	// server.dll needs for reading savefiles or startup newgame
@@ -1497,17 +1544,23 @@ void CMenuServerBrowser::LayoutControls()
 	int y = 190;
 	for( int i = 0; i < V_ARRAYSIZE( sidebar ); i++ )
 	{
+		sidebarBg[i].SetRect( sidebarX - 6, y - 4, buttonW + 12, buttonH + 8 );
+		sidebarBg[i].CalcPosition();
 		sidebar[i]->SetRect( sidebarX, y, buttonW, buttonH );
 		sidebar[i]->CalcPosition();
 		y += buttonH + gap;
 	}
 
+	sidebarBg[6].SetRect( sidebarX - 6, 680, buttonW + 12, buttonH + 8 );
+	sidebarBg[6].CalcPosition();
 	done->SetRect( sidebarX, 684, buttonW, buttonH );
 	done->CalcPosition();
 
 	const int mainX = 270;
 	const int mainW = uiStatic.width - mainX - 24;
 
+	tabBarBg.SetRect( mainX - 6, 172, mainW + 12, 60 );
+	tabBarBg.CalcPosition();
 	tabSwitch.SetRect( mainX, 180, mainW, 44 );
 	tabSwitch.CalcPosition();
 
@@ -1541,7 +1594,7 @@ bool CMenuServerBrowser::IsAddressInTab( int tab, const netadr_t &adr ) const
 
 	FOR_EACH_VEC( m_InternetServers[tab], i )
 	{
-		if( !EngFuncs::NET_CompareAdr( &m_InternetServers[tab][i].adr, &adr ))
+		if( EngFuncs::NET_CompareAdr( &m_InternetServers[tab][i].adr, &adr ))
 			return true;
 	}
 
@@ -1557,7 +1610,10 @@ void CMenuServerBrowser::Show()
 		banner.SetPicture( ART_BANNER_LAN );
 		favorite->Hide();
 		addServer->Hide();
+		sidebarBg[3].Hide();
+		sidebarBg[5].Hide();
 		tabSwitch.Hide();
+		tabBarBg.Hide();
 		filterProtocol.Hide();
 		gameListModel.filterProtocol = 0;
 	}
@@ -1566,7 +1622,10 @@ void CMenuServerBrowser::Show()
 		banner.SetPicture( ART_BANNER_INET );
 		favorite->Show();
 		addServer->Show();
+		sidebarBg[3].Show();
+		sidebarBg[5].Show();
 		tabSwitch.Show();
+		tabBarBg.Show();
 		filterProtocol.Show();
 		gameListModel.filterProtocol = filterProtocol.GetItem( );
 
@@ -1661,7 +1720,7 @@ void CMenuServerBrowser::AddServerToList( netadr_t adr, const char *info )
 		int pos = -1;
 		for( int i = 0; i < buf.Count(); ++i )
 		{
-			if( !EngFuncs::NET_CompareAdr( &buf[i].adr, &adr ))
+			if( EngFuncs::NET_CompareAdr( &buf[i].adr, &adr ))
 			{
 				pos = i;
 				break;
@@ -1754,7 +1813,7 @@ void CMenuServerBrowser::AddServerToList( netadr_t adr, const char *info )
 	int pos = -1;
 	for( int i = 0; i < buf.Count(); ++i )
 	{
-		if( !EngFuncs::NET_CompareAdr( &buf[i].adr, &adr ))
+		if( EngFuncs::NET_CompareAdr( &buf[i].adr, &adr ))
 		{
 			pos = i;
 			break;

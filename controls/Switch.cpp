@@ -249,7 +249,9 @@ void CMenuSwitch::Draw( void )
 			uint tempflags = textflags;
 			tempflags |= ETF_FORCECOL;
 
-			UI_FillRect( m_switches[i].pt, sz, bModernTabs ? (uint)iBackgroundColor : selectColor );
+			uint activeBg = bModernTabs ? InterpColor( (uint)iBackgroundColor, (uint)iSelectColor, 0.18f ) : selectColor;
+
+			UI_FillRect( m_switches[i].pt, sz, activeBg );
 			UI_DrawString( font, pt, sz, m_switches[i].name,
 				bModernTabs ? (uint)iSelectColor : (uint)iFgTextColor,
 				m_scChSize, eTextAlignment, tempflags );
@@ -274,17 +276,31 @@ void CMenuSwitch::Draw( void )
 
 	if( bModernTabs )
 	{
-		const int indicatorH = Q_max( 2, (int)(3 * uiStatic.scaleY) );
+		const int indicatorH = Q_max( 3, (int)(4 * uiStatic.scaleY) );
+		const int accentH = Q_max( 2, (int)(2 * uiStatic.scaleY) );
 
-		UI_FillRect( m_scPos.x, m_scPos.y + m_scSize.h - indicatorH, m_scSize.w, indicatorH, iBackgroundColor );
+		UI_FillRect( m_scPos.x, m_scPos.y + m_scSize.h - indicatorH,
+			m_scSize.w, indicatorH, (uint)colorStroke );
 
 		for( int i = 0; i < m_switches.Count(); i++ )
 		{
-			if( m_switches[i].hidden || i != m_iState )
+			if( m_switches[i].hidden )
+				continue;
+
+			if( i != m_switches.Count() - 1 && m_switches[i+1].sz.w )
+			{
+				UI_FillRect( m_switches[i+1].pt.x, m_scPos.y + accentH,
+					Q_max( 1, (int)uiStatic.scaleX ), m_scSize.h - indicatorH - accentH,
+					(uint)colorStroke );
+			}
+
+			if( i != m_iState )
 				continue;
 
 			UI_FillRect( m_switches[i].pt.x, m_scPos.y + m_scSize.h - indicatorH,
 				m_switches[i].sz.w, indicatorH, iSelectColor );
+			UI_FillRect( m_switches[i].pt.x, m_scPos.y,
+				m_switches[i].sz.w, accentH, iSelectColor );
 		}
 	}
 	else

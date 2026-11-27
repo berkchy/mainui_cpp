@@ -43,6 +43,7 @@ CMenuTable::CMenuTable() : BaseClass(),
 	bDrawStroke = true;
 	iSelectedColor = PackRGB( 80, 56, 24 );
 	iSelectedAccent = PackRGB( 240, 150, 40 );
+	iRightPadding = 0;
 }
 
 void CMenuTable::VidInit()
@@ -487,8 +488,19 @@ void CMenuTable::DrawLine( Point p, const char **psz, size_t size, uint textColo
 			}
 		}
 
-		UI_DrawString( font, pt, sz, psz[i], textColor, m_scChSize,
-			m_pModel->GetAlignmentForColumn( i ), textflags );
+		unsigned int alignment = m_pModel->GetAlignmentForColumn( i );
+		Size drawSize = sz;
+
+		if( alignment == QM_RIGHT && iRightPadding )
+		{
+			int pad = iRightPadding * uiStatic.scaleX;
+
+			pt.x += pad;
+			drawSize.w = Q_max( 0.0f, drawSize.w - (float)pad );
+		}
+
+		UI_DrawString( font, pt, drawSize, psz[i], textColor, m_scChSize,
+			alignment, textflags );
 	}
 }
 
@@ -544,9 +556,23 @@ void CMenuTable::DrawLine( Point p, int line, uint textColor, bool forceCol, uin
 		switch( type )
 		{
 		case CELL_TEXT:
-			UI_DrawString( font, p, sz, str, textColor, m_scChSize, m_pModel->GetAlignmentForColumn( i ),
+		{
+			unsigned int alignment = m_pModel->GetAlignmentForColumn( i );
+			Point textPos = p;
+			Size drawSize = sz;
+
+			if( alignment == QM_RIGHT && iRightPadding )
+			{
+				int pad = iRightPadding * uiStatic.scaleX;
+
+				textPos.x += pad;
+				drawSize.w = Q_max( 0.0f, drawSize.w - (float)pad );
+			}
+
+			UI_DrawString( font, textPos, drawSize, str, textColor, m_scChSize, alignment,
 				textflags | ( m_pModel->IsCellTextWrapped( line, i ) ? 0 : ETF_NOSIZELIMIT ) );
 			break;
+		}
 		case CELL_IMAGE_ADDITIVE:
 		case CELL_IMAGE_DEFAULT:
 		case CELL_IMAGE_HOLES:
