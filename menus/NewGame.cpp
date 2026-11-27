@@ -113,9 +113,9 @@ void CMenuNewGame::_Init( void )
 	hardCallback = StartGameCb;
 	hardCallback.pExtra = (void *)3;
 
-	CMenuPicButton *easy = AddButton( L( "GameUI_Easy" ), L( "StringsList_200" ), PC_EASY, easyCallback, QMF_NOTIFY );
-	CMenuPicButton *norm = AddButton( L( "GameUI_Medium" ), L( "StringsList_201" ), PC_MEDIUM, normCallback, QMF_NOTIFY );
-	CMenuPicButton *hard = AddButton( L( "GameUI_Hard" ), L( "StringsList_202" ), PC_DIFFICULT, hardCallback, QMF_NOTIFY );
+	CMenuPicButton *easy = AddButton( "GameUI_Easy", "StringsList_200", PC_EASY, easyCallback, QMF_NOTIFY );
+	CMenuPicButton *norm = AddButton( "GameUI_Medium", "StringsList_201", PC_MEDIUM, normCallback, QMF_NOTIFY );
+	CMenuPicButton *hard = AddButton( "GameUI_Hard", "StringsList_202", PC_DIFFICULT, hardCallback, QMF_NOTIFY );
 
 	easy->onReleasedClActive =
 		norm->onReleasedClActive =
@@ -124,7 +124,7 @@ void CMenuNewGame::_Init( void )
 	norm->onReleasedClActive.pExtra = &normCallback;
 	hard->onReleasedClActive.pExtra = &hardCallback;
 
-	AddButton( L( "GameUI_Cancel" ), L( "Go back to the Main menu" ), PC_CANCEL, VoidCb( &CMenuNewGame::Hide ), QMF_NOTIFY );
+	AddButton( "GameUI_Cancel", "Go back to the Main menu", PC_CANCEL, VoidCb( &CMenuNewGame::Hide ), QMF_NOTIFY );
 
 	startDemoChapter.SetCoord( 72, 230 + m_iBtnsNum * 50 );
 	startDemoChapter.SetNameAndStatus( L( "GameUI_PlayGame_Alt" ), L( "Play the demo chapter on selected difficulty" ));

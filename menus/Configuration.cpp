@@ -55,13 +55,13 @@ void CMenuOptions::_Init( void )
 	msgBox.Link( this );
 
 	AddItem( banner );
-	AddButton( L( "Controls" ), L( "Change keyboard, mouse, touch and joystick settings." ),
+	AddButton( "Controls", "Change keyboard, mouse, touch and joystick settings.",
 		PC_CONTROLS, UI_Controls_Menu, QMF_NOTIFY );
-	AddButton( L( "GameUI_Audio" ), L( "Change sound volume and quality." ),
+	AddButton( "GameUI_Audio", "Change sound volume and quality.",
 		PC_AUDIO, UI_Audio_Menu, QMF_NOTIFY );
-	AddButton( L( "GameUI_Video" ), L( "Change screen size, video mode, gamme and glare reduction." ),
+	AddButton( "GameUI_Video", "Change screen size, video mode, gamme and glare reduction.",
 		PC_VIDEO, UI_Video_Menu, QMF_NOTIFY );
-	AddButton( L( "Done" ), L( "Go back to the Main Menu." ),
+	AddButton( "Done", "Go back to the Main Menu.",
 		PC_DONE, VoidCb( &CMenuOptions::Hide ), QMF_NOTIFY );
 }
 

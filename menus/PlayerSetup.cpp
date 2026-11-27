@@ -550,18 +550,18 @@ void CMenuPlayerSetup::_Init( void )
 
 	AddItem( banner );
 
-	AddButton( L( "Done" ), nullptr, PC_DONE, VoidCb( &CMenuPlayerSetup::SaveAndPopMenu ) );
-	CMenuPicButton *gameOpt = AddButton( L( "Game options" ), nullptr, PC_GAME_OPTIONS );
+	AddButton( "Done", nullptr, PC_DONE, VoidCb( &CMenuPlayerSetup::SaveAndPopMenu ) );
+	CMenuPicButton *gameOpt = AddButton( "Game options", nullptr, PC_GAME_OPTIONS );
 	SET_EVENT_MULTI( gameOpt->onReleased,
 	{
 		((CMenuPlayerSetup*)pSelf->Parent())->SetConfig();
 		UI_AdvUserOptions_Menu();
 	});
 
-	AddButton( L( "Adv. Options" ), nullptr, PC_ADV_OPT, UI_GameOptions_Menu );
+	AddButton( "Adv. Options", nullptr, PC_ADV_OPT, UI_GameOptions_Menu );
 	gameOpt->SetGrayed( !UI_AdvUserOptions_IsAvailable() );
 	
-	AddButton( L( "Crosshair" ), nullptr, PC_CROSSHAIR, UI_Crosshair_Menu );
+	AddButton( "Crosshair", nullptr, PC_CROSSHAIR, UI_Crosshair_Menu );
 
 	showModels.iFlags |= addFlags;
 	showModels.szName = L( "Show 3D preview" );
@@ -617,7 +617,7 @@ void CMenuPlayerSetup::_Init( void )
 		logo.onChanged = VoidCb( &CMenuPlayerSetup::UpdateLogo );
 		logo.SetRect( 460, logoImage.pos.y + logoImage.size.h + UI_OUTLINE_WIDTH, 200, 32 );
 
-		btnChooseColor.szName = L( "Choose logo color" );
+		btnChooseColor.szName = "Choose logo color";
 		btnChooseColor.SetRect( 460, logo.pos.y + logo.size.h + UI_OUTLINE_WIDTH, 200, 32 );
 		btnChooseColor.onReleased = VoidCb( &CMenuPlayerSetup::ShowColorPicker );
 

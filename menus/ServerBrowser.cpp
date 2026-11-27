@@ -817,12 +817,12 @@ void CMenuServerBrowser::ToggleFavoriteButton( bool en )
 {
 	if( en )
 	{
-		favorite->szName = L( "Favorite" );
+		favorite->szName = "Favorite";
 		favorite->SetPicture( PC_FAVORITE, 'o' );
 	}
 	else
 	{
-		favorite->szName = L( "Unfavorite" );
+		favorite->szName = "Unfavorite";
 		favorite->SetPicture( PC_UNFAVORITE, 'o' );
 	}
 }
@@ -1175,10 +1175,10 @@ void CMenuServerBrowser::_Init( void )
 {
 	AddItem( banner );
 
-	joinGame = AddButton( L( "Join game" ), nullptr, PC_JOIN_GAME, VoidCb( &CMenuServerBrowser::JoinGame ), QMF_GRAYED );
+	joinGame = AddButton( "Join game", nullptr, PC_JOIN_GAME, VoidCb( &CMenuServerBrowser::JoinGame ), QMF_GRAYED );
 	joinGame->onReleasedClActive = msgBox.MakeOpenEvent();
 
-	createGame = AddButton( L( "GameUI_GameMenu_CreateServer" ), NULL, PC_CREATE_GAME );
+	createGame = AddButton( "GameUI_GameMenu_CreateServer", NULL, PC_CREATE_GAME );
 	SET_EVENT_MULTI( createGame->onReleased,
 	{
 		if( ((CMenuServerBrowser*)pSelf->Parent())->m_bLanOnly )
@@ -1188,12 +1188,12 @@ void CMenuServerBrowser::_Init( void )
 		UI_CreateGame_Menu();
 	});
 
-	viewGameInfo = AddButton( L( "View game info" ), nullptr, PC_VIEW_GAME_INFO, VoidCb( &CMenuServerBrowser::ViewGameInfo ), QMF_GRAYED );
-	favorite = AddButton( L( "Favorite" ), nullptr, PC_FAVORITE, VoidCb( &CMenuServerBrowser::FavoriteServer ), 0, 'o' );
-	refresh = AddButton( L( "Refresh" ), nullptr, PC_REFRESH, VoidCb( &CMenuServerBrowser::RefreshList ) );
-	addServer = AddButton( L( "Add server" ), nullptr, PC_ADD_SERVER, VoidCb( &CMenuServerBrowser::ShowAddServerBox ));
+	viewGameInfo = AddButton( "View game info", nullptr, PC_VIEW_GAME_INFO, VoidCb( &CMenuServerBrowser::ViewGameInfo ), QMF_GRAYED );
+	favorite = AddButton( "Favorite", nullptr, PC_FAVORITE, VoidCb( &CMenuServerBrowser::FavoriteServer ), 0, 'o' );
+	refresh = AddButton( "Refresh", nullptr, PC_REFRESH, VoidCb( &CMenuServerBrowser::RefreshList ) );
+	addServer = AddButton( "Add server", nullptr, PC_ADD_SERVER, VoidCb( &CMenuServerBrowser::ShowAddServerBox ));
 
-	AddButton( L( "Done" ), nullptr, PC_DONE, VoidCb( &CMenuServerBrowser::Hide ) );
+	AddButton( "Done", nullptr, PC_DONE, VoidCb( &CMenuServerBrowser::Hide ) );
 
 	msgBox.SetMessage( L( "Join a network game will exit any current game, OK to exit?" ) );
 	msgBox.SetPositiveButton( L( "GameUI_OK" ), PC_OK );

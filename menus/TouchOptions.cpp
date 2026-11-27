@@ -308,7 +308,7 @@ void CMenuTouchOptions::_Init( void )
 {
 	banner.SetPicture(ART_BANNER);
 
-	done.szName = L( "Done" );
+	done.szName = "Done";
 	done.SetPicture( PC_DONE );
 	done.onReleased = VoidCb( &CMenuTouchOptions::SaveAndPopMenu );
 
@@ -366,19 +366,19 @@ void CMenuTouchOptions::_Init( void )
 	profilename.szName = L( "New Profile:" );
 	profilename.iMaxLength = 16;
 
-	reset.szName = L( "Reset" );
+	reset.szName = "Reset";
 	reset.SetPicture( PC_TOUCH_RESET );
 	reset.onReleased = VoidCb( &CMenuTouchOptions::ResetMsgBox );
 
-	remove.SetNameAndStatus( L( "Delete" ), L( "Delete saved game" ) );
+	remove.SetNameAndStatus( "Delete", "Delete saved game" );
 	remove.SetPicture( PC_DELETE );
 	remove.onReleased = VoidCb( &CMenuTouchOptions::DeleteMsgBox );
 
-	apply.SetNameAndStatus( L( "Activate" ), L( "Apply selected profile" ) );
+	apply.SetNameAndStatus( "Activate", "Apply selected profile" );
 	apply.SetPicture( PC_ACTIVATE );
 	apply.onReleased = VoidCb( &CMenuTouchOptions::Apply );
 
-	save.SetNameAndStatus( L( "GameUI_Save" ), L( "Save new profile" ) );
+	save.SetNameAndStatus( "GameUI_Save", "Save new profile" );
 	save.SetPicture( PC_TOUCH_SAVE );
 	save.onReleased = VoidCb( &CMenuTouchOptions::Save );
 

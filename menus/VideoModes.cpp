@@ -407,8 +407,8 @@ void CMenuVidModes::_Init( void )
 	});
 
 	AddItem( banner );
-	AddButton( L( "GameUI_Apply" ), nullptr, PC_OK, VoidCb( &CMenuVidModes::SetConfig ) );
-	AddButton( L( "GameUI_Cancel" ), nullptr, PC_CANCEL, VoidCb( &CMenuVidModes::Hide ) );
+	AddButton( "GameUI_Apply", nullptr, PC_OK, VoidCb( &CMenuVidModes::SetConfig ) );
+	AddButton( "GameUI_Cancel", nullptr, PC_CANCEL, VoidCb( &CMenuVidModes::Hide ) );
 	AddItem( renderers );
 	AddItem( windowMode );
 	AddItem( vsync );

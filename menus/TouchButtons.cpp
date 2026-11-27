@@ -442,12 +442,12 @@ void CMenuTouchButtons::_Init( void )
 
 	banner.SetPicture(ART_BANNER);
 
-	done.szName = L( "Done" );
+	done.szName = "Done";
 	done.SetPicture( PC_DONE );
 	done.onReleased = ExitMenuCb;
 	done.onReleased.pExtra = (void*)"touch_writeconfig\n";
 
-	cancel.szName = L( "GameUI_Cancel" );
+	cancel.szName = "GameUI_Cancel";
 	cancel.SetPicture( PC_CANCEL );
 	cancel.onReleased = ExitMenuCb;
 	cancel.onReleased.pExtra = (void*)"touch_reloadconfig\n";
@@ -504,19 +504,19 @@ void CMenuTouchButtons::_Init( void )
 	latch.onChanged.pExtra = &curflags;
 	latch.onChanged = CMenuCheckBox::BitMaskCb;
 
-	save.SetNameAndStatus( L( "GameUI_Save" ), L( "Save as new button" ) );
+	save.SetNameAndStatus( "GameUI_Save", "Save as new button" );
 	save.SetPicture( PC_TOUCH_SAVE );
 	save.onReleased = VoidCb( &CMenuTouchButtons::SaveButton );
 
-	editor.SetNameAndStatus( L( "Editor" ), L( "Open interactive editor" ) );
+	editor.SetNameAndStatus( "Editor", "Open interactive editor" );
 	editor.SetPicture( PC_TOUCH_EDITOR );
 	editor.onReleased = UI_TouchEdit_Menu;
 
-	select.SetNameAndStatus( L( "Select" ), L( "Select texture from list" ) );
+	select.SetNameAndStatus( "Select", "Select texture from list" );
 	select.SetPicture( PC_TOUCH_SELECT );
 	select.onReleased = VoidCb( &CMenuTouchButtons::OpenFileDialog );
 
-	selectCmd.SetNameAndStatus( L( "Pick" ), L( "Pick command from key bindings list" ) );
+	selectCmd.SetNameAndStatus( "Pick", "Pick command from key bindings list" );
 	selectCmd.SetPicture( PC_TOUCH_SELECT );
 	selectCmd.onReleased = VoidCb( &CMenuTouchButtons::OpenCommandPicker );
 	cmdPicker.pCaller = this;
@@ -534,11 +534,11 @@ void CMenuTouchButtons::_Init( void )
 	texture.onChanged = VoidCb( &CMenuTouchButtons::UpdateTexture );
 	texture.eTextAlignment = QM_RIGHT;
 
-	reset.SetNameAndStatus( L( "Reset" ), L( "Reset touch to default state" ) );
+	reset.SetNameAndStatus( "Reset", "Reset touch to default state" );
 	reset.SetPicture( PC_TOUCH_RESET );
 	reset.onReleased = VoidCb( &CMenuTouchButtons::ResetMsgBox );
 
-	remove.SetNameAndStatus( L( "Delete" ), L( "Delete selected button" ) );		// Delete - уже было раньше
+	remove.SetNameAndStatus( "Delete", "Delete selected button" );		// Delete - уже было раньше
 	remove.SetPicture( PC_DELETE );
 	remove.onReleased = VoidCb( &CMenuTouchButtons::RemoveMsgBox );
 
@@ -668,7 +668,7 @@ void CMenuCommandPickerDialog::_Init()
 	list.SetupColumn( 0, L( "GameUI_Action" ), 0.6f );
 	list.SetupColumn( 1, L( "Command" ), 0.4f );
 
-	ok.szName = L( "GameUI_OK" );
+	ok.szName = "GameUI_OK";
 	ok.SetPicture( PC_OK );
 	ok.SetRect( 720 / 2 - UI_BUTTONS_WIDTH / 2 - 8, 480 - 56, UI_BUTTONS_WIDTH / 2, UI_BUTTONS_HEIGHT );
 	SET_EVENT_MULTI( ok.onReleased,
@@ -676,7 +676,7 @@ void CMenuCommandPickerDialog::_Init()
 		((CMenuCommandPickerDialog *)pSelf->Parent())->Confirm();
 	});
 
-	cancel.szName = L( "GameUI_Cancel" );
+	cancel.szName = "GameUI_Cancel";
 	cancel.SetPicture( PC_CANCEL );
 	cancel.SetRect( 720 / 2 + 8, 480 - 56, UI_BUTTONS_WIDTH / 2, UI_BUTTONS_HEIGHT );
 	SET_EVENT_MULTI( cancel.onReleased,

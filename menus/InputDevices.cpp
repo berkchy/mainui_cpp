@@ -78,7 +78,7 @@ void CMenuInputDevices::_Init( void )
 {
 	//banner.SetPicture( ART_BANNER );
 
-	done.SetNameAndStatus( L( "Done" ), L( "Save changed and go back to the Customize Menu" ) );
+	done.SetNameAndStatus( "Done", "Save changed and go back to the Customize Menu" );
 	done.SetPicture( PC_DONE );
 	done.onReleased = VoidCb( &CMenuInputDevices::SaveAndPopMenu );
 	done.SetCoord( 72, 680 );
@@ -112,7 +112,7 @@ void CMenuInputDevices::_Init( void )
 	joystick.SetCoord( 72, 330 );
 	joystick.iFlags |= QMF_NOTIFY;
 
-	evdev.SetNameAndStatus( L( "Evdev input (root)" ), L( "Press this to enable full mouse and keyboard control on Android" ));
+	evdev.SetNameAndStatus( "Evdev input (root)", "Press this to enable full mouse and keyboard control on Android" );
 	evdev.iFlags |= QMF_NOTIFY;
 	evdev.SetCoord( 72, 380 );
 	evdev.onReleased.SetCommand( false, "evdev_autodetect\n" );

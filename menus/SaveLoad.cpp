@@ -57,9 +57,9 @@ void CMenuSaveLoad::_Init( void )
 	hintMessage.SetCoord( 360, 480 );
 
 	AddItem( banner );
-	AddButton( L( "GameUI_LoadGame" ), L( "GameUI_LoadGameHelp" ), PC_LOAD_GAME, UI_LoadGame_Menu, QMF_NOTIFY );
-	AddButton( L( "GameUI_SaveGame" ), L( "GameUI_SaveGameHelp" ), PC_SAVE_GAME, UI_SaveGame_Menu, QMF_NOTIFY );
-	AddButton( L( "Done" ), L( "Go back to the Main menu" ), PC_DONE, VoidCb( &CMenuSaveLoad::Hide ), QMF_NOTIFY );
+	AddButton( "GameUI_LoadGame", "GameUI_LoadGameHelp", PC_LOAD_GAME, UI_LoadGame_Menu, QMF_NOTIFY );
+	AddButton( "GameUI_SaveGame", "GameUI_SaveGameHelp", PC_SAVE_GAME, UI_SaveGame_Menu, QMF_NOTIFY );
+	AddButton( "Done", "Go back to the Main menu", PC_DONE, VoidCb( &CMenuSaveLoad::Hide ), QMF_NOTIFY );
 	AddItem( hintMessage );
 }
 

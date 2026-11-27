@@ -44,16 +44,16 @@ void UI_Touch_Menu( void )
 		menu_touch->banner.SetPicture( ART_BANNER );
 		menu_touch->AddItem( menu_touch->banner );
 
-		menu_touch->AddButton( L( "Touch options" ), L( "Touch sensitivity and profile options" ), PC_TOUCH_OPTIONS,
+		menu_touch->AddButton( "Touch options", "Touch sensitivity and profile options", PC_TOUCH_OPTIONS,
 			UI_TouchOptions_Menu, QMF_NOTIFY, 'o' );
 
-		menu_touch->AddButton( L( "Touch buttons" ), L( "Add, remove, edit touch buttons" ), PC_TOUCH_BUTTONS,
+		menu_touch->AddButton( "Touch buttons", "Add, remove, edit touch buttons", PC_TOUCH_BUTTONS,
 			UI_TouchButtons_Menu, QMF_NOTIFY, 'b' );
 
-		menu_touch->AddButton( L( "Gyroscope" ), L( "Built-in device gyroscope options" ), PC_GYRO,
+		menu_touch->AddButton( "Gyroscope", "Built-in device gyroscope options", PC_GYRO,
 			UI_MobileGyro_Menu, QMF_NOTIFY, 'g' );
 
-		menu_touch->AddButton( L( "Done" ),  L( "Go back to the previous menu" ), PC_DONE, VoidCb( &CMenuFramework::Hide ), QMF_NOTIFY );
+		menu_touch->AddButton( "Done",  "Go back to the previous menu", PC_DONE, VoidCb( &CMenuFramework::Hide ), QMF_NOTIFY );
 	}
 
 	menu_touch->Show();

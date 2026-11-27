@@ -121,7 +121,7 @@ void CMenuGameOptions::_Init( void )
 	allowDownload.LinkCvar( "cl_allowdownload" );
 	allowDownload.SetCoord( 360, 315 );
 
-	allowConsole.SetNameAndStatus( L( "Enable developer console" ), L( "Turns on console when engine was run without -console or -dev parameter" ));
+	allowConsole.SetNameAndStatus( "Enable developer console", "Turns on console when engine was run without -console or -dev parameter" );
 	allowConsole.SetCoord( 360, 365 );
 	allowConsole.onReleased.SetCommand( false, "ui_allowconsole\n" );
 
@@ -172,8 +172,8 @@ void CMenuGameOptions::_Init( void )
 	});
 
 	AddItem( banner );
-	AddButton( L( "Done" ), nullptr, PC_DONE, VoidCb( &CMenuGameOptions::SaveCb ) );
-	AddButton( L( "GameUI_Cancel" ), nullptr, PC_CANCEL, VoidCb( &CMenuGameOptions::RestoreCb ) );
+	AddButton( "Done", nullptr, PC_DONE, VoidCb( &CMenuGameOptions::SaveCb ) );
+	AddButton( "GameUI_Cancel", nullptr, PC_CANCEL, VoidCb( &CMenuGameOptions::RestoreCb ) );
 
 	AddItem( maxFPS );
 	//AddItem( hand );

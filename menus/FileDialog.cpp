@@ -129,8 +129,8 @@ void CMenuFileDialog::_Init( void )
 	preview.SetRect( 72, 380, 196, 196 );
 
 	// AddItem( banner );
-	AddButton( L( "Done" ), L( "Use selected file" ), PC_DONE, VoidCb( &CMenuFileDialog::SaveAndPopMenu ) );
-	AddButton( L( "GameUI_Cancel" ), L( "Cancel file selection" ), PC_CANCEL, VoidCb( &CMenuFileDialog::RejectChanges ) );
+	AddButton( "Done", "Use selected file", PC_DONE, VoidCb( &CMenuFileDialog::SaveAndPopMenu ) );
+	AddButton( "GameUI_Cancel", "Cancel file selection", PC_CANCEL, VoidCb( &CMenuFileDialog::RejectChanges ) );
 	AddItem( preview );
 	AddItem( fileList );
 }

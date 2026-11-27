@@ -160,7 +160,7 @@ void CMenuAudio::_Init( void )
 	vibration.SetCoord( 700, 560 );
 
 	AddItem( banner );
-	AddButton( L( "Done" ), nullptr, PC_DONE, VoidCb( &CMenuAudio::SaveAndPopMenu ));
+	AddButton( "Done", nullptr, PC_DONE, VoidCb( &CMenuAudio::SaveAndPopMenu ));
 	AddItem( soundVolume );
 	AddItem( musicVolume );
 	AddItem( suitVolume );

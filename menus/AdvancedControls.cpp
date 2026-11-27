@@ -146,7 +146,7 @@ void CAdvancedControls::_Init( void )
 {
 	banner.SetPicture( ART_BANNER );
 
-	done.szName = L( "Done" );
+	done.szName = "Done";
 	done.SetPicture( PC_DONE );
 	done.onReleased = VoidCb( &CAdvancedControls::SaveAndPopMenu );
 	done.SetCoord( 72, 710 );
@@ -190,7 +190,7 @@ void CAdvancedControls::_Init( void )
 	sensitivity.Setup( 0.0, 20.0f, 0.1 );
 	sensitivity.SetCoord( 72, 690 );
 
-	inputDev.SetNameAndStatus( L( "Input devices" ), L( "Toggle mouse, touch controls" ) );
+	inputDev.SetNameAndStatus( "Input devices", "Toggle mouse, touch controls" );
 	inputDev.onReleased = UI_InputDevices_Menu;
 	inputDev.iFlags |= QMF_NOTIFY;
 	if( CL_IsActive() && !EngFuncs::GetCvarFloat( "host_serverstate" ))

@@ -194,7 +194,7 @@ void CMenuVidOptions::_Init( void )
 	brightness.onCvarGet = VoidCb( &CMenuVidOptions::GetConfig );
 	height += 60;
 
-	done.szName = L( "GameUI_OK" );
+	done.szName = "GameUI_OK";
 	done.SetCoord( 72, height );
 	done.SetPicture( PC_DONE );
 	done.onReleased = VoidCb( &CMenuVidOptions::SaveAndPopMenu );

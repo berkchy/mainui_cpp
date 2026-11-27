@@ -228,10 +228,10 @@ void CMenuCreateGame::_Init( void )
 
 	// add them here, so "done" button can be used by mapsListModel::Update
 	AddItem( banner );
-	CMenuPicButton *advOpt = AddButton( L( "Adv. Options" ), nullptr, PC_ADV_OPT, UI_AdvServerOptions_Menu );
+	CMenuPicButton *advOpt = AddButton( "Adv. Options", nullptr, PC_ADV_OPT, UI_AdvServerOptions_Menu );
 	advOpt->SetGrayed( !UI_AdvServerOptions_IsAvailable() );
 
-	done = AddButton( L( "GameUI_OK" ), nullptr, PC_OK, Begin );
+	done = AddButton( "GameUI_OK", nullptr, PC_OK, Begin );
 	done->onReleasedClActive = msgBox.MakeOpenEvent();
 
 	mapsList.SetCharSize( QM_SMALLFONT );
@@ -292,7 +292,7 @@ void CMenuCreateGame::_Init( void )
 	msgBox.SetMessage( L( "Starting a new game will exit any current game, OK to exit?" ) );
 	msgBox.Link( this );
 
-	AddButton( L( "GameUI_Cancel" ), nullptr, PC_CANCEL, VoidCb( &CMenuCreateGame::Hide ) );
+	AddButton( "GameUI_Cancel", nullptr, PC_CANCEL, VoidCb( &CMenuCreateGame::Hide ) );
 	AddItem( hostName );
 	AddItem( maxClients );
 	AddItem( password );

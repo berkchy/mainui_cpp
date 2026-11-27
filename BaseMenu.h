@@ -149,6 +149,7 @@ extern uiStatic_t		uiStatic;
 
 extern unsigned int	uiColorHelp;
 extern unsigned int	uiMenuBgColor;
+extern bool         uiMenuBgColorForced;
 extern unsigned int	uiPromptBgColor;
 extern unsigned int	uiPromptTextColor;
 extern unsigned int	uiPromptFocusColor;

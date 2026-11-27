@@ -238,24 +238,24 @@ CMenuAction *CClientJoinClass::AddButton( int key, const char *name, const char 
 void CClientJoinClassT::_Init()
 {
 	m_szDefaultClass = "terror";
-	AddButton( '1', L( "Cstrike_Terror" ), "terror",
+	AddButton( '1', "Cstrike_Terror", "terror",
 		Point( 100, 180 ));
-	AddButton( '2', L( "Cstrike_L337_Krew" ), "leet",
+	AddButton( '2', "Cstrike_L337_Krew", "leet",
 		Point( 100, 230 ));
-	AddButton( '3', L( "Cstrike_Arctic" ), "arctic",
+	AddButton( '3', "Cstrike_Arctic", "arctic",
 		Point( 100, 280 ));
-	AddButton( '4', L( "Cstrike_Guerilla" ), "guerilla",
+	AddButton( '4', "Cstrike_Guerilla", "guerilla",
 		Point( 100, 330 ));
 	if( hasCzero )
 	{
-		AddButton( '5', L( "Cstrike_Militia" ), "militia",
+		AddButton( '5', "Cstrike_Militia", "militia",
 			Point( 100, 380 ));
-		AddButton( '6', L( "Cstrike_Auto_Select" ), "t_random",
+		AddButton( '6', "Cstrike_Auto_Select", "t_random",
 			Point( 100, 430 ));
 	}
 	else
 	{
-		AddButton( '5', L( "Cstrike_Auto_Select" ), "t_random",
+		AddButton( '5', "Cstrike_Auto_Select", "t_random",
 			Point( 100, 430 ));
 	}
 
@@ -265,24 +265,24 @@ void CClientJoinClassT::_Init()
 void CClientJoinClassCT::_Init()
 {
 	m_szDefaultClass = "urban";
-	AddButton( '1', L( "Cstrike_Urban" ), "urban",
+	AddButton( '1', "Cstrike_Urban", "urban",
 		Point( 100, 180 ));
-	AddButton( '2', L( "Cstrike_GSG9" ), "gsg9",
+	AddButton( '2', "Cstrike_GSG9", "gsg9",
 		Point( 100, 230 ));
-	AddButton( '3', L( "Cstrike_SAS" ), "sas",
+	AddButton( '3', "Cstrike_SAS", "sas",
 		Point( 100, 280 ));
-	AddButton( '4', L( "Cstrike_GIGN" ), "gign",
+	AddButton( '4', "Cstrike_GIGN", "gign",
 		Point( 100, 330 ));
 	if( hasCzero )
 	{
-		AddButton( '5', L( "Cstrike_Spetsnaz" ), "spetsnaz",
+		AddButton( '5', "Cstrike_Spetsnaz", "spetsnaz",
 			Point( 100, 380 ));
-		AddButton( '6', L( "Cstrike_Auto_Select" ), "ct_random",
+		AddButton( '6', "Cstrike_Auto_Select", "ct_random",
 			Point( 100, 430 ));
 	}
 	else
 	{
-		AddButton( '5', L( "Cstrike_Auto_Select" ), "ct_random",
+		AddButton( '5', "Cstrike_Auto_Select", "ct_random",
 			Point( 100, 430 ));
 	}
 

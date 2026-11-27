@@ -345,7 +345,7 @@ void CMenuGamePad::_Init( void )
 	presets.SetupColumn( 0, L( "Presets" ), 1.0f );
 	presets.SetupColumn( 1, NULL, 32.0f, true );
 
-	applyPreset.SetNameAndStatus( L( "Activate" ), L( "Apply selected preset" ) );
+	applyPreset.SetNameAndStatus( "Activate", "Apply selected preset" );
 	applyPreset.SetPicture( PC_ACTIVATE );
 	applyPreset.onReleased = msgBox.MakeOpenEvent();
 
@@ -354,9 +354,9 @@ void CMenuGamePad::_Init( void )
 	msgBox.Link( this );
 
 	AddItem( banner );
-	AddButton( L( "Controls" ), nullptr, PC_CONTROLS, UI_Controls_Menu );
-	AddButton( L( "Gyroscope" ), nullptr, PC_GYRO, UI_GamePadGyro_Menu, QMF_NOTIFY, 'g' );
-	AddButton( L( "Done" ), nullptr, PC_DONE, VoidCb( &CMenuGamePad::SaveAndPopMenu ) );	// Обе строки уже встречались ранее !!
+	AddButton( "Controls", nullptr, PC_CONTROLS, UI_Controls_Menu );
+	AddButton( "Gyroscope", nullptr, PC_GYRO, UI_GamePadGyro_Menu, QMF_NOTIFY, 'g' );
+	AddButton( "Done", nullptr, PC_DONE, VoidCb( &CMenuGamePad::SaveAndPopMenu ) );	// Обе строки уже встречались ранее !!
 	for( i = 0; i < 6; i++ )
 		AddItem( axisBind[i] );
 	AddItem( enableOsk );

@@ -244,12 +244,12 @@ void CMenuControls::_Init( void )
 	msgBox2.Link( this );
 
 	AddItem( banner );
-	AddButton( L( "GameUI_UseDefaults" ), nullptr, PC_USE_DEFAULTS, msgBox2.MakeOpenEvent( ));
-	AddButton( L( "Adv. Controls" ), nullptr, PC_ADV_CONTROLS, UI_AdvControls_Menu );
-	AddButton( L( "Touch" ), L( "Change touch settings and buttons" ), PC_TOUCH, UI_Touch_Menu );
-	AddButton( L( "GameUI_Joystick" ), L( "Change gamepad axis and button settings" ), PC_GAMEPAD, UI_GamePad_Menu );
-	AddButton( L( "GameUI_OK" ), nullptr, PC_OK, VoidCb( &CMenuControls::SaveAndPopMenu ));
-	AddButton( L( "GameUI_Cancel" ), nullptr, PC_CANCEL, VoidCb( &CMenuControls::Cancel ));
+	AddButton( "GameUI_UseDefaults", nullptr, PC_USE_DEFAULTS, msgBox2.MakeOpenEvent( ));
+	AddButton( "Adv. Controls", nullptr, PC_ADV_CONTROLS, UI_AdvControls_Menu );
+	AddButton( "Touch", "Change touch settings and buttons", PC_TOUCH, UI_Touch_Menu );
+	AddButton( "GameUI_Joystick", "Change gamepad axis and button settings", PC_GAMEPAD, UI_GamePad_Menu );
+	AddButton( "GameUI_OK", nullptr, PC_OK, VoidCb( &CMenuControls::SaveAndPopMenu ));
+	AddButton( "GameUI_Cancel", nullptr, PC_CANCEL, VoidCb( &CMenuControls::Cancel ));
 	AddItem( keysList );
 }
 

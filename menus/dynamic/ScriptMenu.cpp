@@ -317,8 +317,8 @@ static void ScriptCvarWriteSync( CMenuBaseItem *pSelf, void *pExtra )
 void CMenuScriptConfig::_Init( void )
 {
 	AddItem( banner );
-	AddButton( L( "Done" ), nullptr, PC_DONE, VoidCb( &CMenuScriptConfig::SaveAndPopMenu ) );
-	AddButton( L( "GameUI_Cancel" ), nullptr, PC_CANCEL, VoidCb( &CMenuScriptConfig::Hide ) );
+	AddButton( "Done", nullptr, PC_DONE, VoidCb( &CMenuScriptConfig::SaveAndPopMenu ) );
+	AddButton( "GameUI_Cancel", nullptr, PC_CANCEL, VoidCb( &CMenuScriptConfig::Hide ) );
 
 	if( !m_pVars )
 		return;

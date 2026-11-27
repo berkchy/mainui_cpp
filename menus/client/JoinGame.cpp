@@ -61,22 +61,22 @@ private:
 void CClientJoinGame::_Init()
 {
 	CMenuAction *btn;
-	btn = AddButton( '1', L( "Cstrike_Terrorist_Forces" ),
+	btn = AddButton( '1', "Cstrike_Terrorist_Forces",
 	                 Point( 100, 180 ), MakeCb( "jointeam 1" ) );
 
-	btn = AddButton( '2', L( "Cstrike_CT_Forces" ),
+	btn = AddButton( '2', "Cstrike_CT_Forces",
 	                 Point( 100, 230 ), MakeCb( "jointeam 2" ) );
 
-	vipbutton = AddButton( '3', L( "Cstrike_VIP_Team" ),
+	vipbutton = AddButton( '3', "Cstrike_VIP_Team",
 	                       Point( 100, 280 ), MakeCb( "jointeam 3" ) );
 
-	btn = AddButton( '5', L( "Cstrike_Team_AutoAssign" ),
+	btn = AddButton( '5', "Cstrike_Team_AutoAssign",
 	                 Point( 100, 380 ), MakeCb( "jointeam 5" ) );
 
-	spectate = AddButton( '6', L( "Cstrike_Menu_Spectate" ),
+	spectate = AddButton( '6', "Cstrike_Menu_Spectate",
 	                      Point( 100, 430 ), MakeCb( "jointeam 6" ) );
 
-	cancel = AddButton( '0', L( "Cstrike_Cancel" ),
+	cancel = AddButton( '0', "Cstrike_Cancel",
 	                    Point( 100, 530 ), CEventCallback( VoidCb( &CMenuBaseWindow::Hide ) ) );
 
 	scroll.SetRect( 400, 180, 400, 200 );

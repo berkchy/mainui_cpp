@@ -177,8 +177,8 @@ void CMenuGyro::_Init( void )
 	dRoll.SetNameAndStatus( L( "Roll" ), L( "Gyro roll deadzone" ) );
 
 	AddItem( banner );
-	AddButton( L( "Done" ), nullptr, PC_DONE, VoidCb( &CMenuGyro::SaveAndPopMenu ) );
-	AddButton( L( "GameUI_Cancel" ), nullptr, PC_CANCEL, VoidCb( &CMenuFramework::Hide ) );
+	AddButton( "Done", nullptr, PC_DONE, VoidCb( &CMenuGyro::SaveAndPopMenu ) );
+	AddButton( "GameUI_Cancel", nullptr, PC_CANCEL, VoidCb( &CMenuFramework::Hide ) );
 
 	AddItem( enable );
 	AddItem( sensitivity_label );

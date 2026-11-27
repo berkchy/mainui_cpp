@@ -112,7 +112,7 @@ CMenuBackgroundBitmap::Draw
 */
 void CMenuBackgroundBitmap::Draw()
 {
-	if( bForceColor )
+	if( bForceColor || uiMenuBgColorForced )
 	{
 		colorBase = uiMenuBgColor;
 		DrawColor();

@@ -60,11 +60,11 @@ public:
 			CMenuAction *cancelBtn;
 			if( eAmmoClass == BUY_EQUIPMENT )
 			{
-				cancelBtn = AddButton( '0', L("Cstrike_Cancel"), Point( 100, 580 ), CEventCallback( MenuCb( &CClientBaseBuyMenu::cancelPressedCb ), nullptr ) );
+				cancelBtn = AddButton( '0', "Cstrike_Cancel", Point( 100, 580 ), CEventCallback( MenuCb( &CClientBaseBuyMenu::cancelPressedCb ), nullptr ) );
 			}
 			else
 			{
-				cancelBtn = AddButton( '0', L("Cstrike_Cancel"), Point( 100, 530 ), CEventCallback( MenuCb( &CClientBaseBuyMenu::cancelPressedCb ), nullptr ) );
+				cancelBtn = AddButton( '0', "Cstrike_Cancel", Point( 100, 530 ), CEventCallback( MenuCb( &CClientBaseBuyMenu::cancelPressedCb ), nullptr ) );
 			}
 			cancelBtn->onGotFocus = MenuCb( &CClientBaseBuyMenu::cancelFocusCb );
 
@@ -305,7 +305,7 @@ public:
 		CEventCallback pressCb = MenuCb( &CClientBaseBuyMenu::weaponPressedCb );
 		pressCb.pExtra = &weapons[numWeapons];
 
-		CMenuAction *btn = AddButton( key, L( labelKey.String() ), pt, pressCb );
+		CMenuAction *btn = AddButton( key, labelKey.String(), pt, pressCb );
 		btn->onPressed.pExtra = &weapons[numWeapons];
 
 		btn->onGotFocus = MenuCb( &CClientBaseBuyMenu::weaponFocusCb );
@@ -550,29 +550,29 @@ void CClientMainBuyMenu::_Init()
 	AddItem( columnDivider );
 
 	Point pt = Point( 100, buttonsTopY );
-	AddButton( '1', L( "Cstrike_Pistols" ), pt, Menu_Show_Team<CClientPistolsTMenu, CClientPistolsCTMenu> );
+	AddButton( '1', "Cstrike_Pistols", pt, Menu_Show_Team<CClientPistolsTMenu, CClientPistolsCTMenu> );
 	pt.y += 50;
-	AddButton( '2', L( "Cstrike_Shotguns" ), pt, Menu_Show_Team<CClientShotgunsMenu, CClientShotgunsMenu> );
+	AddButton( '2', "Cstrike_Shotguns", pt, Menu_Show_Team<CClientShotgunsMenu, CClientShotgunsMenu> );
 	pt.y += 50;
-	AddButton( '3', L( "Cstrike_SubMachineGuns" ), pt, Menu_Show_Team<CClientSubMachineGunsTMenu, CClientSubMachineGunsCTMenu> );
+	AddButton( '3', "Cstrike_SubMachineGuns", pt, Menu_Show_Team<CClientSubMachineGunsTMenu, CClientSubMachineGunsCTMenu> );
 	pt.y += 50;
-	AddButton( '4', L( "Cstrike_Rifles" ), pt, Menu_Show_Team<CClientRiflesTMenu, CClientRiflesCTMenu> );
+	AddButton( '4', "Cstrike_Rifles", pt, Menu_Show_Team<CClientRiflesTMenu, CClientRiflesCTMenu> );
 	pt.y += 50;
-	AddButton( '5', L( "Cstrike_MachineGuns" ), pt, Menu_Show_Team<CClientMachineGunsMenu, CClientMachineGunsMenu> );
+	AddButton( '5', "Cstrike_MachineGuns", pt, Menu_Show_Team<CClientMachineGunsMenu, CClientMachineGunsMenu> );
 	pt.y += 50;
-	AddButton( '6', L( "Cstrike_Prim_Ammo" ), pt, ExecAndHide( "primammo" ) );
+	AddButton( '6', "Cstrike_Prim_Ammo", pt, ExecAndHide( "primammo" ) );
 	pt.y += 50;
-	AddButton( '7', L( "Cstrike_Sec_Ammo" ), pt, ExecAndHide( "secammo" ));
+	AddButton( '7', "Cstrike_Sec_Ammo", pt, ExecAndHide( "secammo" ));
 	pt.y += 50;
-	AddButton( '8', L( "Cstrike_Equipment" ), pt, Menu_Show_Team<CClientItemTMenu, CClientItemCTMenu> );
+	AddButton( '8', "Cstrike_Equipment", pt, Menu_Show_Team<CClientItemTMenu, CClientItemCTMenu> );
 	pt.y += 50;
-	AddButton( '0', L( "Cstrike_Cancel" ), pt, CEventCallback( []( CMenuBaseItem *, void * ) { UI_CloseClientMenu(); } ) );
+	AddButton( '0', "Cstrike_Cancel", pt, CEventCallback( []( CMenuBaseItem *, void * ) { UI_CloseClientMenu(); } ) );
 
 	pt.x = 400;
 	pt.y = buttonsTopY;
-	AddButton( 'A', L( "Cstrike_BuyMenuAutobuy" ), pt, ExecAndHide( "autobuy" ) );
+	AddButton( 'A', "Cstrike_BuyMenuAutobuy", pt, ExecAndHide( "autobuy" ) );
 	pt.y += 50;
-	AddButton( 'R', L( "Cstrike_BuyMenuRebuy" ), pt, ExecAndHide( "rebuy" ) );
+	AddButton( 'R', "Cstrike_BuyMenuRebuy", pt, ExecAndHide( "rebuy" ) );
 	pt.y += 50;
 
 	autoFill.szName = L( "Auto buy ammo" );

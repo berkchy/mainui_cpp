@@ -73,7 +73,6 @@ private:
 	CMenuPicButton	multiPlayer;
 	CMenuPicButton	customGame;
 	CMenuPicButton	readme;
-	CMenuPicButton	previews;
 	CMenuPicButton	quit;
 
 	// buttons on top right. Maybe should be drawn if fullscreen == 1?
@@ -172,7 +171,7 @@ void CMenuMain::_Init( void )
 	else bCustomGame = false;
 
 	// console
-	console.SetNameAndStatus( L( "GameUI_Console" ), NULL );
+	console.SetNameAndStatus( "GameUI_Console", NULL );
 	console.iFlags |= QMF_NOTIFY;
 	console.SetPicture( PC_CONSOLE );
 	console.SetVisibility( gpGlobals->developer );
@@ -182,33 +181,33 @@ void CMenuMain::_Init( void )
 		EngFuncs::KEY_SetDest( KEY_CONSOLE );
 	});
 
-	resumeGame.SetNameAndStatus( L( "GameUI_GameMenu_ResumeGame" ), L( "StringsList_188" ) );
+	resumeGame.SetNameAndStatus( "GameUI_GameMenu_ResumeGame", "StringsList_188" );
 	resumeGame.SetPicture( PC_RESUME_GAME );
 	resumeGame.iFlags |= QMF_NOTIFY;
 	resumeGame.onReleased = UI_CloseMenu;
 
-	disconnect.SetNameAndStatus( L( "GameUI_GameMenu_Disconnect" ), L( "Disconnect from server." ) );
+	disconnect.SetNameAndStatus( "GameUI_GameMenu_Disconnect", "Disconnect from server." );
 	disconnect.SetPicture( PC_DISCONNECT );
 	disconnect.iFlags |= QMF_NOTIFY;
 	disconnect.onReleased = VoidCb( &CMenuMain::DisconnectDialogCb );
 
-	newGame.SetNameAndStatus( L( "GameUI_NewGame" ), L( "StringsList_189" ) );
+	newGame.SetNameAndStatus( "GameUI_NewGame", "StringsList_189" );
 	newGame.SetPicture( PC_NEW_GAME );
 	newGame.iFlags |= QMF_NOTIFY;
 	newGame.onReleased = UI_NewGame_Menu;
 
-	hazardCourse.SetNameAndStatus( L( "GameUI_TrainingRoom" ), L( "StringsList_190" ) );
+	hazardCourse.SetNameAndStatus( "GameUI_TrainingRoom", "StringsList_190" );
 	hazardCourse.SetPicture( PC_HAZARD_COURSE );
 	hazardCourse.iFlags |= QMF_NOTIFY;
 	hazardCourse.onReleasedClActive = VoidCb( &CMenuMain::HazardCourseDialogCb );
 	hazardCourse.onReleased = VoidCb( &CMenuMain::HazardCourseCb );
 
-	multiPlayer.SetNameAndStatus( L( "GameUI_Multiplayer" ), L( "StringsList_198" ) );
+	multiPlayer.SetNameAndStatus( "GameUI_Multiplayer", "StringsList_198" );
 	multiPlayer.SetPicture( PC_MULTIPLAYER );
 	multiPlayer.iFlags |= QMF_NOTIFY;
 	multiPlayer.onReleased = UI_MultiPlayer_Menu;
 
-	configuration.SetNameAndStatus( L( "GameUI_Options" ), L( "StringsList_193" ) );
+	configuration.SetNameAndStatus( "GameUI_Options", "StringsList_193" );
 	configuration.SetPicture( PC_CONFIG );
 	configuration.iFlags |= QMF_NOTIFY;
 	configuration.onReleased = UI_Options_Menu;
@@ -217,27 +216,22 @@ void CMenuMain::_Init( void )
 
 	if( UI_IsCZDS( ))
 	{
-		worldMap.SetNameAndStatus( L_GAME( "CZERO_WorldMap" ), L( "Choose a mission" ) );
+		worldMap.SetNameAndStatus( "CZERO_WorldMap", "Choose a mission" );
 		worldMap.iFlags |= QMF_NOTIFY;
 		worldMap.onReleased = UI_WorldMap_Menu;
 	}
 
-	customGame.SetNameAndStatus( L( "GameUI_ChangeGame" ), L( "StringsList_530" ) );
+	customGame.SetNameAndStatus( "GameUI_ChangeGame", "StringsList_530" );
 	customGame.SetPicture( PC_CUSTOM_GAME );
 	customGame.iFlags |= QMF_NOTIFY;
 	customGame.onReleased = UI_CustomGame_Menu;
 
 	// TODO: add readme screen later
-	readme.SetNameAndStatus( L("View Readme"), L( "StringsList_194" ) );
+	readme.SetNameAndStatus( "View Readme", "StringsList_194" );
 	readme.SetPicture( PC_VIEW_README );
 	readme.iFlags |= QMF_NOTIFY;
 
-	previews.SetNameAndStatus( L( "Previews" ), L( "StringsList_400" ) );
-	previews.SetPicture( PC_PREVIEWS );
-	previews.iFlags |= QMF_NOTIFY;
-	SET_EVENT( previews.onReleased, EngFuncs::ShellExecute( MenuStrings[ IDS_MEDIA_PREVIEWURL ], NULL, false ) );
-
-	quit.SetNameAndStatus( L( "GameUI_GameMenu_Quit" ), L( "GameUI_QuitConfirmationText" ) );
+	quit.SetNameAndStatus( "GameUI_GameMenu_Quit", "GameUI_QuitConfirmationText" );
 	quit.SetPicture( PC_QUIT );
 	quit.iFlags |= QMF_NOTIFY;
 	quit.onReleased = VoidCb( &CMenuMain::QuitDialogCb );
@@ -265,12 +259,6 @@ void CMenuMain::_Init( void )
 
 	if ( gMenu.m_gameinfo.gamemode == GAME_SINGLEPLAYER_ONLY )
 		multiPlayer.SetGrayed( true );
-
-	// too short execute string - not a real command
-	if( strlen( MenuStrings[IDS_MEDIA_PREVIEWURL] ) <= 3 )
-	{
-		previews.SetGrayed( true );
-	}
 
 	// server.dll needs for reading savefiles or startup newgame
 	if( !EngFuncs::CheckGameDll( ))
@@ -307,7 +295,6 @@ void CMenuMain::_Init( void )
 
 	AddItem( multiPlayer );
 
-	AddItem( previews );
 	AddItem( quit );
 }
 
@@ -320,9 +307,6 @@ void CMenuMain::VidInit( bool connected )
 {
 	int hoffset = ( 70 / 640.0 ) * 1024.0;
 
-	// in original menu Previews is located at specific point
-	int previews_voffset = ( 404 / 480.0 ) * 768.0;
-
 	// no visible console button gap
 	int ygap = (( 404 - 373 ) / 480.0 ) * 768.0;
 
@@ -330,11 +314,10 @@ void CMenuMain::VidInit( bool connected )
 	minimizeBtn.SetRect( uiStatic.width - 72, 13, 32, 32 );
 	quitButton.SetRect( uiStatic.width - 36, 13, 32, 32 );
 
-	previews.SetCoord( hoffset, previews_voffset );
-	quit.SetCoord( hoffset, previews_voffset + ygap );
+	quit.SetCoord( hoffset, ( 404 / 480.0 ) * 768.0 + ygap );
 
 	// let's start calculating positions
-	int yoffset = previews_voffset - ygap;
+	int yoffset = ( 404 / 480.0 ) * 768.0 - ygap;
 
 	multiPlayer.SetCoord( hoffset, yoffset );
 	yoffset -= ygap;
@@ -380,13 +363,13 @@ void CMenuMain::VidInit( bool connected )
 
 	if( connected && single )
 	{
-		saveRestore.SetNameAndStatus( L( "Save\\Load Game" ), L( "StringsList_192" ) );
+		saveRestore.SetNameAndStatus( "Save\\Load Game", "StringsList_192" );
 		saveRestore.SetPicture( PC_SAVE_LOAD_GAME );
 		saveRestore.onReleased = UI_SaveLoad_Menu;
 	}
 	else
 	{
-		saveRestore.SetNameAndStatus( L( "GameUI_LoadGame" ), L( "StringsList_191" ) );
+		saveRestore.SetNameAndStatus( "GameUI_LoadGame", "StringsList_191" );
 		saveRestore.SetPicture( PC_LOAD_GAME );
 		saveRestore.onReleased = UI_LoadGame_Menu;
 	}

@@ -249,9 +249,9 @@ void CMenuCustomGame::_Init( void )
 	msgBox.Link( this );
 
 	AddItem( banner );
-	load = AddButton( L( "Activate" ), nullptr, PC_ACTIVATE, VoidCb( &CMenuCustomGame::ShowDialog ) );
-	go2url = AddButton( L( "Visit web site" ), nullptr, PC_VISIT_WEB_SITE, MenuCb( &CMenuCustomGame::Go2Site ) );
-	AddButton( L( "Done" ), nullptr, PC_DONE, VoidCb( &CMenuCustomGame::Hide ) );
+	load = AddButton( "Activate", nullptr, PC_ACTIVATE, VoidCb( &CMenuCustomGame::ShowDialog ) );
+	go2url = AddButton( "Visit web site", nullptr, PC_VISIT_WEB_SITE, MenuCb( &CMenuCustomGame::Go2Site ) );
+	AddButton( "Done", nullptr, PC_DONE, VoidCb( &CMenuCustomGame::Hide ) );
 
 	modList.onChanged = VoidCb( &CMenuCustomGame::UpdateExtras );
 	modList.SetupColumn( 0, L( "GameUI_Type" ), 0.20f );

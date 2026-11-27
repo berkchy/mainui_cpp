@@ -39,6 +39,7 @@ cvar_t		*ui_prefer_won_background;
 cvar_t		*ui_background_stretch;
 cvar_t		*ui_logohorizontal;
 cvar_t		*menu_fontsize;
+cvar_t		*menu_bgcolor;
 
 uiStatic_t	uiStatic;
 static CMenuEntry	*s_pEntries = NULL;
@@ -62,6 +63,7 @@ const char	*uiSounds[] = {
 // a1ba: made uiColorHelp brighter so it's easier to read
 unsigned int uiColorHelp        = 0xFFA0A0A0; // 160, 160, 160, 255 // hint letters color
 unsigned int uiMenuBgColor      = 0xD7121417; // 18,  20,  23,  215 // menu background color
+bool         uiMenuBgColorForced = false;
 unsigned int uiPromptBgColor    = 0xFF383838; // 56,  56,  56,  255 // dialog background color
 unsigned int uiPromptTextColor  = 0xFFF0B418; // 240, 180, 24,  255 // dialog or button letters color
 unsigned int uiPromptFocusColor = 0xFFFFFF00; // 255, 255,  0,  255 // dialog or button focus letters color
@@ -673,6 +675,15 @@ void UI_UpdateMenu( float flTime )
 	if( UI_UpdateWindowInsets() )
 		UI_VidInit();
 
+	if( menu_fontsize && FBitSet( menu_fontsize->flags, FCVAR_CHANGED ))
+	{
+		ClearBits( menu_fontsize->flags, FCVAR_CHANGED );
+		UI_VidInit();
+	}
+
+	if( menu_bgcolor && FBitSet( menu_bgcolor->flags, FCVAR_CHANGED ))
+		UI_RefreshMenuBgColor();
+
 	static bool loadStuff = true;
 
 	// can't do this in Init, since these are dependent on cvar values
@@ -1039,6 +1050,8 @@ static int UI_ClampColor( int v )
 void UI_RefreshMenuBgColor( void )
 {
 	const char *str = EngFuncs::GetCvarString( "menu_bgcolor" );
+	bool changed = menu_bgcolor && FBitSet( menu_bgcolor->flags, FCVAR_CHANGED );
+	bool forced = uiMenuBgColorForced;
 
 	if( str && *str )
 	{
@@ -1068,8 +1081,19 @@ void UI_RefreshMenuBgColor( void )
 				uiMenuBgColor = PackRGBA( UI_ClampColor( r ), UI_ClampColor( g ),
 					UI_ClampColor( b ), UI_ClampColor( a ) );
 		}
+
+		if( changed || strcmp( str, "121417D7" ))
+			forced = true;
+	}
+	else if( changed )
+	{
+		forced = false;
 	}
 
+	if( changed )
+		ClearBits( menu_bgcolor->flags, FCVAR_CHANGED );
+
+	uiMenuBgColorForced = forced;
 	uiPromptBgColor = uiMenuBgColor;
 	uiInputBgColor = uiMenuBgColor;
 }
@@ -1263,7 +1287,7 @@ void UI_Init( void )
 	ui_background_stretch = EngFuncs::CvarRegister( "ui_background_stretch", "0", FCVAR_ARCHIVE );
 	ui_logohorizontal = EngFuncs::CvarRegister( "ui_logohorizontal", "0", FCVAR_ARCHIVE );
 	menu_fontsize = EngFuncs::CvarRegister( "menu_fontsize", "17", FCVAR_ARCHIVE );
-	EngFuncs::CvarRegister( "menu_bgcolor", "121417D7", FCVAR_ARCHIVE );
+	menu_bgcolor = EngFuncs::CvarRegister( "menu_bgcolor", "121417D7", FCVAR_ARCHIVE );
 
 	// show cl_predict dialog
 	EngFuncs::CvarRegister( "menu_mp_firsttime2", "1", FCVAR_ARCHIVE );

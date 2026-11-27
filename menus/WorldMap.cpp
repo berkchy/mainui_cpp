@@ -346,7 +346,7 @@ void CMenuWorldMapSelect::_Init()
 		CMenuWorldMapSkill &item = m_Skills[i];
 
 		item.skill = i + 1;
-		item.szName = L_GAME( s_SkillKeys[i] );
+		item.szName = s_SkillKeys[i];
 		item.SetRect( 688, 502 + i * 45, 320, SKILL_HEIGHT );
 		InitText( item, CHAR_MEDIUM, s_ColorSkill, QM_LEFT );
 		item.colorFocus = s_ColorHighlight;
@@ -358,11 +358,11 @@ void CMenuWorldMapSelect::_Init()
 		AddItem( item );
 	}
 
-	InitButton( m_Cancel, L_GAME( "CZERO_Cancel" ), 614, 656, 176, 35 );
+	InitButton( m_Cancel, "CZERO_Cancel", 614, 656, 176, 35 );
 	m_Cancel.onReleased = VoidCb( &CMenuWorldMapSelect::Hide );
 	AddItem( m_Cancel );
 
-	InitButton( m_Ok, L_GAME( "CZERO_Okay" ), 816, 656, 160, 35 );
+	InitButton( m_Ok, "CZERO_Okay", 816, 656, 160, 35 );
 	m_Ok.onReleased = VoidCb( &CMenuWorldMapSelect::StartMission );
 	AddItem( m_Ok );
 }
@@ -548,6 +548,7 @@ void CMenuWorldMap::_Init()
 
 		item.mission = i;
 		SetLocalized( item, item.titleKey, sizeof( item.titleKey ), m.title, "_TITLE" );
+		item.szName = item.titleKey;
 		item.SetRect( m.x, m.y, MISSION_TEXT_OFFSET + m.w, MISSION_HEIGHT );
 		InitText( item, CHAR_SMALL, uiColorWhite, QM_LEFT );
 		item.colorFocus = s_ColorHighlight;
@@ -574,7 +575,7 @@ void CMenuWorldMap::_Init()
 	InitLabel( m_InfoBrief, 224, 627, 480, 112, CHAR_MEDIUM, s_ColorText, QM_TOPLEFT );
 	AddItem( m_InfoBrief );
 
-	InitButton( m_Resume, L_GAME( "CZERO_Resume" ), 806, 699, 128, 41 );
+	InitButton( m_Resume, "CZERO_Resume", 806, 699, 128, 41 );
 	m_Resume.onReleased = UI_CloseMenu;
 	AddItem( m_Resume );
 }
