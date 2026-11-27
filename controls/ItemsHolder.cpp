@@ -331,6 +331,8 @@ void CMenuItemsHolder::Draw( )
 {
 	CMenuBaseItem *item;
 
+	UI_RefreshMenuBgColor();
+
 	// draw contents
 	FOR_EACH_VEC( m_pItems, i )
 	{

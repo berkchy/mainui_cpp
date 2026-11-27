@@ -106,6 +106,7 @@ void CMenuBackgroundBitmap::Draw()
 {
 	if( bForceColor )
 	{
+		colorBase = uiPromptBgColor;
 		DrawColor();
 		return;
 	}

@@ -61,6 +61,7 @@ const char	*uiSounds[] = {
 // they match default WON colors.lst now, except alpha
 // a1ba: made uiColorHelp brighter so it's easier to read
 unsigned int uiColorHelp        = 0xFFA0A0A0; // 160, 160, 160, 255 // hint letters color
+unsigned int uiMenuBgColor      = 0xD7121417; // 18,  20,  23,  215 // menu background color
 unsigned int uiPromptBgColor    = 0xFF383838; // 56,  56,  56,  255 // dialog background color
 unsigned int uiPromptTextColor  = 0xFFF0B418; // 240, 180, 24,  255 // dialog or button letters color
 unsigned int uiPromptFocusColor = 0xFFFFFF00; // 255, 255,  0,  255 // dialog or button focus letters color
@@ -1006,6 +1007,51 @@ void UI_ApplyCustomColors( void )
 	EngFuncs::COM_FreeFile( afile );
 }
 
+static int UI_ClampColor( int v )
+{
+	if( v < 0 ) return 0;
+	if( v > 255 ) return 255;
+	return v;
+}
+
+void UI_RefreshMenuBgColor( void )
+{
+	const char *str = EngFuncs::GetCvarString( "menu_bgcolor" );
+
+	if( str && *str )
+	{
+		if( *str == '#' ) str++;
+
+		size_t len = strlen( str );
+
+		if( len == 8 || len == 6 )
+		{
+			int r = Red( uiMenuBgColor );
+			int g = Green( uiMenuBgColor );
+			int b = Blue( uiMenuBgColor );
+			int a = Alpha( uiMenuBgColor );
+
+			if( len == 8 )
+				sscanf( str, "%2x%2x%2x%2x", &r, &g, &b, &a );
+			else
+				sscanf( str, "%2x%2x%2x", &r, &g, &b );
+
+			uiMenuBgColor = PackRGBA( UI_ClampColor( r ), UI_ClampColor( g ),
+				UI_ClampColor( b ), UI_ClampColor( a ) );
+		}
+		else
+		{
+			int r, g, b, a;
+			if( sscanf( str, "%d %d %d %d", &r, &g, &b, &a ) == 4 )
+				uiMenuBgColor = PackRGBA( UI_ClampColor( r ), UI_ClampColor( g ),
+					UI_ClampColor( b ), UI_ClampColor( a ) );
+		}
+	}
+
+	uiPromptBgColor = uiMenuBgColor;
+	uiInputBgColor = uiMenuBgColor;
+}
+
 static void UI_LoadBackgroundMapList( void )
 {
 	if( !EngFuncs::FileExists( "scripts/chapterbackgrounds.txt", true ))
@@ -1195,6 +1241,7 @@ void UI_Init( void )
 	ui_background_stretch = EngFuncs::CvarRegister( "ui_background_stretch", "0", FCVAR_ARCHIVE );
 	ui_logohorizontal = EngFuncs::CvarRegister( "ui_logohorizontal", "0", FCVAR_ARCHIVE );
 	menu_fontsize = EngFuncs::CvarRegister( "menu_fontsize", "17", FCVAR_ARCHIVE );
+	EngFuncs::CvarRegister( "menu_bgcolor", "121417D7", FCVAR_ARCHIVE );
 
 	// show cl_predict dialog
 	EngFuncs::CvarRegister( "menu_mp_firsttime2", "1", FCVAR_ARCHIVE );
@@ -1226,6 +1273,7 @@ void UI_Init( void )
 
 	// trying to load colors.lst
 	UI_ApplyCustomColors ();
+	UI_RefreshMenuBgColor();
 }
 
 /*

@@ -1172,6 +1172,11 @@ UI_Background_Ownerdraw
 */
 void CMenuServerBrowser::Draw( void )
 {
+	backdrop.SetBackground( uiMenuBgColor, uiMenuBgColor );
+	tabBarBg.SetBackground( uiMenuBgColor, uiMenuBgColor );
+	gameList.iBackgroundColor = uiMenuBgColor;
+	tabSwitch.iBackgroundColor = uiMenuBgColor;
+
 	CMenuFramework::Draw();
 
 	struct
@@ -1191,6 +1196,7 @@ void CMenuServerBrowser::Draw( void )
 	{
 		Point p = filters[i].box->GetRenderPosition();
 		Size s = filters[i].box->GetRenderSize();
+		filters[i].box->iBackgroundColor = uiMenuBgColor;
 
 		UI_DrawString( uiStatic.hDefaultFont, p.x, p.y - labelH - (int)(4 * uiStatic.scaleY),
 			s.w, labelH, filters[i].label, PackRGB( 175, 185, 200 ), labelH,
