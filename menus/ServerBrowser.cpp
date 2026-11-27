@@ -1281,7 +1281,7 @@ void CMenuServerBrowser::_Init( void )
 	msgBox.onPositive = VoidCb( &CMenuServerBrowser::JoinGame );
 	msgBox.Link( this );
 
-	gameList.SetCharSize( QM_DEFAULTFONT );
+	gameList.SetCharSize( QM_SMALLFONT );
 	gameList.iBackgroundColor = PackRGBA( 18, 20, 23, 235 );
 	gameList.iHeaderColor = PackRGB( 255, 175, 70 );
 	gameList.colorStroke = PackRGB( 48, 54, 64 );
