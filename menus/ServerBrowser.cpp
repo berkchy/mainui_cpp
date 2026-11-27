@@ -1326,6 +1326,10 @@ void CMenuServerBrowser::_Init( void )
 	addServer->colorBase = PackRGB( 190, 200, 215 );
 	done->colorBase = PackRGB( 150, 160, 175 );
 
+	CMenuPicButton *sidebarButtons[] = { joinGame, createGame, viewGameInfo, favorite, refresh, addServer, done };
+	for( int i = 0; i < V_ARRAYSIZE( sidebarButtons ); i++ )
+		sidebarButtons[i]->bButtonBox = false;
+
 	msgBox.SetMessage( L( "Join a network game will exit any current game, OK to exit?" ) );
 	msgBox.SetPositiveButton( L( "GameUI_OK" ), PC_OK );
 	msgBox.HighlightChoice( CMenuYesNoMessageBox::HIGHLIGHT_YES );

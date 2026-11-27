@@ -44,6 +44,7 @@ public:
 
 	bool bEnableTransitions;
 	bool bPulse;
+	bool bButtonBox;
 private:
 	bool bRollOver;
 

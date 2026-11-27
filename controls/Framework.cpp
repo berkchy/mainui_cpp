@@ -233,7 +233,7 @@ void CMenuFramework::CMenuBannerBitmap::Draw( Point pt, Size sz )
 {
 	if( image.IsValid() )
 	{
-		UI_DrawPic( pt, sz, uiColorWhite, image, QM_DRAWADDITIVE );
+		UI_DrawPic( pt, sz, uiColorWhite, image, QM_DRAWNORMAL );
 	}
 	else
 	{
