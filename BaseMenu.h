@@ -162,6 +162,7 @@ extern unsigned int	uiColorBlack;
 
 // TODO: Move it under namespace?
 
+int UI_GetMenuFontSize( void );
 void UI_RefreshMenuBgColor( void );
 void UI_ScaleCoords( int *x, int *y, int *w, int *h );
 void UI_ScaleCoords( int &x, int &y, int &w, int &h );

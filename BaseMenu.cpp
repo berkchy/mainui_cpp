@@ -1047,6 +1047,16 @@ static int UI_ClampColor( int v )
 	return v;
 }
 
+int UI_GetMenuFontSize( void )
+{
+	int size = menu_fontsize ? (int)menu_fontsize->value : UI_MED_CHAR_HEIGHT;
+
+	if( size < 8 ) size = 8;
+	if( size > 48 ) size = 48;
+
+	return size;
+}
+
 void UI_RefreshMenuBgColor( void )
 {
 	const char *str = EngFuncs::GetCvarString( "menu_bgcolor" );

@@ -105,6 +105,12 @@ void CMenuBackgroundBitmap::DrawSteamBackgroundLayout( Point p, int xOffset, int
 		DrawBackgroundPiece( s_SteamBackground[i], p, xOffset, yOffset, xScale, yScale );
 }
 
+static void UI_DrawMenuBgOverlay( void )
+{
+	if( uiMenuBgColorForced )
+		UI_FillRect( 0, 0, ScreenWidth, ScreenHeight, uiMenuBgColor );
+}
+
 /*
 =================
 CMenuBackgroundBitmap::Draw
@@ -112,7 +118,7 @@ CMenuBackgroundBitmap::Draw
 */
 void CMenuBackgroundBitmap::Draw()
 {
-	if( bForceColor || uiMenuBgColorForced )
+	if( bForceColor )
 	{
 		colorBase = uiMenuBgColor;
 		DrawColor();
@@ -136,6 +142,7 @@ void CMenuBackgroundBitmap::Draw()
 	if( szPic )
 	{
 		UI_DrawPic( m_scPos, m_scSize, uiColorWhite, szPic );
+		UI_DrawMenuBgOverlay();
 		return;
 	}
 
@@ -155,6 +162,7 @@ void CMenuBackgroundBitmap::Draw()
 	if( s_state == DRAW_COLOR )
 	{
 		DrawColor();
+		UI_DrawMenuBgOverlay();
 		return;
 	}
 	else if( s_state == DRAW_WON )
@@ -219,6 +227,8 @@ void CMenuBackgroundBitmap::Draw()
 		DrawBackgroundPiece( s_WONBackground, p, xOffset, yOffset, xScale, yScale );
 	else
 		DrawSteamBackgroundLayout( p, xOffset, yOffset, xScale, yScale );
+
+	UI_DrawMenuBgOverlay();
 
 	// print CS16Client version
 	char version[32];

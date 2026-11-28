@@ -125,13 +125,9 @@ void CMenuBaseItem::SetCharSize( EFontSizes fs )
 
 int CMenuBaseItem::GetCharSize() const
 {
-	if( fontEnum == QM_DEFAULTFONT && menu_fontsize )
-	{
-		int size = (int)menu_fontsize->value;
-		if( size < 8 ) size = 8;
-		if( size > 48 ) size = 48;
-		return size;
-	}
+	if( fontEnum == QM_DEFAULTFONT )
+		return UI_GetMenuFontSize();
+
 	return charSize;
 }
 

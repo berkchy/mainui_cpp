@@ -65,17 +65,19 @@ CFontManager::~CFontManager()
 void CFontManager::VidInit( void )
 {
 	static float prevScale = 0;
+	static int prevFontSize = 0;
 
 	float scale = uiStatic.scaleY;
+	int fontSize = UI_GetMenuFontSize();
 
-	if( !prevScale
+	if( !prevScale || fontSize != prevFontSize
 #ifndef SCALE_FONTS // complete disables font re-rendering
 	|| fabs( scale - prevScale ) > 0.1f
 #endif
 	)
 	{
 		DeleteAllFonts();
-		uiStatic.hDefaultFont = CFontBuilder( DEFAULT_MENUFONT, UI_MED_CHAR_HEIGHT * scale, DEFAULT_WEIGHT )
+		uiStatic.hDefaultFont = CFontBuilder( DEFAULT_MENUFONT, fontSize * scale, DEFAULT_WEIGHT )
 			.SetHandleNum( QM_DEFAULTFONT )
 			.Create();
 		uiStatic.hSmallFont   = CFontBuilder( DEFAULT_MENUFONT, UI_SMALL_CHAR_HEIGHT * scale, DEFAULT_WEIGHT )
@@ -90,17 +92,17 @@ void CFontManager::VidInit( void )
 		uiStatic.hBigFont     = CFontBuilder( DEFAULT_MENUFONT, UI_BIG_CHAR_HEIGHT * scale, DEFAULT_WEIGHT )
 			.SetHandleNum( QM_BIGFONT )
 			.Create();
-		uiStatic.hBoldFont = CFontBuilder( DEFAULT_MENUFONT, UI_MED_CHAR_HEIGHT * scale, 1000 )
+		uiStatic.hBoldFont = CFontBuilder( DEFAULT_MENUFONT, fontSize * scale, 1000 )
 			.SetHandleNum( QM_BOLDFONT )
 			.Create();
 
 		if( !uiStatic.lowmemory )
 		{
-			uiStatic.hLightBlur = CFontBuilder( DEFAULT_MENUFONT, UI_MED_CHAR_HEIGHT * scale, DEFAULT_WEIGHT )
+			uiStatic.hLightBlur = CFontBuilder( DEFAULT_MENUFONT, fontSize * scale, DEFAULT_WEIGHT )
 				.SetBlurParams( 2 * scale, 1.25f )
 				.Create();
 
-			uiStatic.hHeavyBlur = CFontBuilder( DEFAULT_MENUFONT, UI_MED_CHAR_HEIGHT * scale, DEFAULT_WEIGHT )
+			uiStatic.hHeavyBlur = CFontBuilder( DEFAULT_MENUFONT, fontSize * scale, DEFAULT_WEIGHT )
 				.SetBlurParams( 8 * scale, 2.0f )
 				.Create();
 		}
@@ -109,6 +111,7 @@ void CFontManager::VidInit( void )
 			.SetOutlineSize()
 			.Create();
 		prevScale = scale;
+		prevFontSize = fontSize;
 	}
 }
 
