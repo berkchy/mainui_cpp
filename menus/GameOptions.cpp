@@ -108,7 +108,7 @@ UI_GameOptions_Init
 void CMenuGameOptions::_Init( void )
 {
 	banner.SetPicture( ART_BANNER );
-	maxFPS.SetNameAndStatus( L( "FPS limit" ), L( "Cap your game frame rate" ));
+	maxFPS.SetNameAndStatus( L( "FPS limit" ), "Cap your game frame rate" );
 	maxFPS.Setup( 20, 500, 20 );
 	maxFPS.LinkCvar( "fps_max", CMenuEditable::CVAR_VALUE );
 	maxFPS.SetRect( 360, 260, 220, 32 );
@@ -128,17 +128,17 @@ void CMenuGameOptions::_Init( void )
 	cmdrate.SetRect( 600, 470, 200, 32 );
 	cmdrate.Setup( 20, 60, 5 );
 	cmdrate.LinkCvar( "cl_cmdrate", CMenuEditable::CVAR_VALUE );
-	cmdrate.SetNameAndStatus( L( "Command rate (cl_cmdrate)" ), L( "How many commands sent to server per second" ) );
+	cmdrate.SetNameAndStatus( L( "Command rate (cl_cmdrate)" ), "How many commands sent to server per second" );
 
 	updaterate.SetRect( 600, 570, 200, 32 );
 	updaterate.Setup( 20, 100, 5 );
 	updaterate.LinkCvar( "cl_updaterate", CMenuEditable::CVAR_VALUE );
-	updaterate.SetNameAndStatus( L( "Update rate (cl_updaterate)" ), L( "How many updates sent from server per second" ) );
+	updaterate.SetNameAndStatus( L( "Update rate (cl_updaterate)" ), "How many updates sent from server per second" );
 
 	rate.SetRect( 600, 670, 200, 32 );
 	rate.Setup( 2500, 90000, 500 );
 	rate.LinkCvar( "rate", CMenuEditable::CVAR_VALUE );
-	rate.SetNameAndStatus( L( "Network speed (rate)" ), L( "Limit traffic (bytes per second)" ) );
+	rate.SetNameAndStatus( L( "Network speed (rate)" ), "Limit traffic (bytes per second)" );
 
 	networkMode.iFlags = QMF_INACTIVE|QMF_DROPSHADOW;
 	networkMode.szName = L( "Select network mode:" );

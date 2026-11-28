@@ -321,24 +321,24 @@ void CMenuGamePad::_Init( void )
 
 	for( i = 0, y = 230; i < 6; i++, y += 50 )
 	{
-		axisBind[i].szStatusText = L( "Set axis binding" );
+		axisBind[i].szStatusText = "Set axis binding";
 		axisBind[i].Setup( &model );
 	}
 
 	side.Setup( 0.0f, 1.0f, 0.1f );
-	side.SetNameAndStatus( L( "Side" ), L( "Side movement sensitivity" ) );
+	side.SetNameAndStatus( L( "Side" ), "Side movement sensitivity" );
 	invSide.SetNameAndStatus( L( "Invert" ), L( "Invert side movement axis" ) );
 
 	forward.Setup( 0.0f, 1.0f, 0.1f );
-	forward.SetNameAndStatus( L( "Forward" ), L( "Forward movement sensitivity" ) );
+	forward.SetNameAndStatus( L( "Forward" ), "Forward movement sensitivity" );
 	invFwd.SetNameAndStatus( L( "Invert" ), L( "Invert forward movement axis" ) );
 
 	pitch.Setup( 0.0f, 200.0f, 0.1f );
-	pitch.SetNameAndStatus( L( "Look X" ), L( "Horizontal look sensitivity" ) );
+	pitch.SetNameAndStatus( L( "Look X" ), "Horizontal look sensitivity" );
 	invPitch.SetNameAndStatus( L( "Invert" ), L( "Invert pitch axis" ) );
 
 	yaw.Setup( 0.0f, 200.0f, 0.1f );
-	yaw.SetNameAndStatus( L( "Look Y" ), L( "Vertical look sensitivity" ) );
+	yaw.SetNameAndStatus( L( "Look Y" ), "Vertical look sensitivity" );
 	invYaw.SetNameAndStatus( L( "Invert" ), L( "Invert yaw axis" ) );
 
 	presets.SetModel( &presetsModel );

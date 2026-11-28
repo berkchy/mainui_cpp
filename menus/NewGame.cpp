@@ -127,7 +127,7 @@ void CMenuNewGame::_Init( void )
 	AddButton( "GameUI_Cancel", "Go back to the Main menu", PC_CANCEL, VoidCb( &CMenuNewGame::Hide ), QMF_NOTIFY );
 
 	startDemoChapter.SetCoord( 72, 230 + m_iBtnsNum * 50 );
-	startDemoChapter.SetNameAndStatus( L( "GameUI_PlayGame_Alt" ), L( "Play the demo chapter on selected difficulty" ));
+	startDemoChapter.SetNameAndStatus( "GameUI_PlayGame_Alt", "Play the demo chapter on selected difficulty" );
 
 	if( EngFuncs::IsMapValid( gMenu.m_gameinfo.demomap ))
 		AddItem( startDemoChapter );

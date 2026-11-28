@@ -453,19 +453,19 @@ void CMenuTouchButtons::_Init( void )
 	cancel.onReleased.pExtra = (void*)"touch_reloadconfig\n";
 
 	red.eFocusAnimation = QM_PULSEIFFOCUS;
-	red.SetNameAndStatus( L( "Red:" ), L( "Texture red channel" ) );
+	red.SetNameAndStatus( L( "Red:" ), "Texture red channel" );
 	red.Setup( 0, 255, 1 );
 
 	green.eFocusAnimation = QM_PULSEIFFOCUS;
-	green.SetNameAndStatus( L( "Green:" ), L( "Texture green channel" ) );
+	green.SetNameAndStatus( L( "Green:" ), "Texture green channel" );
 	green.Setup( 0, 255, 1 );
 
 	blue.eFocusAnimation = QM_PULSEIFFOCUS;
-	blue.SetNameAndStatus( L( "Blue:" ), L( "Texture blue channel" ) );
+	blue.SetNameAndStatus( L( "Blue:" ), "Texture blue channel" );
 	blue.Setup( 0, 255, 1 );
 
 	alpha.eFocusAnimation = QM_PULSEIFFOCUS;
-	alpha.SetNameAndStatus( L( "Alpha:" ), L( "Texture alpha channel" ) );
+	alpha.SetNameAndStatus( L( "Alpha:" ), "Texture alpha channel" );
 	alpha.Setup( 0, 255, 1 );
 
 	hide.SetNameAndStatus( L( "Hide" ), L( "Show/hide button" ) );

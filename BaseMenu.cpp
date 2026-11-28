@@ -1328,7 +1328,7 @@ void UI_Init( void )
 	// CZ:DS has no WON menu graphics, don't let the ones from valve show through
 	// and its background has the title in the top left corner, keep it in view when cropped
 	const bool czds = UI_IsCZDS();
-	uiStatic.renderPicbuttonText = ( gMenu.m_gameinfo.flags & GFL_RENDER_PICBUTTON_TEXT ) || czds;
+	uiStatic.renderPicbuttonText = true;
 	uiStatic.hideBanners = czds;
 	uiStatic.backgroundTopLeft = czds;
 

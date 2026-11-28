@@ -312,23 +312,23 @@ void CMenuTouchOptions::_Init( void )
 	done.SetPicture( PC_DONE );
 	done.onReleased = VoidCb( &CMenuTouchOptions::SaveAndPopMenu );
 
-	lookX.SetNameAndStatus( L( "Look X" ), L( "Horizontal look sensitivity" ) );
+	lookX.SetNameAndStatus( L( "Look X" ), "Horizontal look sensitivity" );
 	lookX.Setup( 50, 500, 5 );
 	lookX.LinkCvar( "touch_yaw" );
 
-	lookY.SetNameAndStatus( L( "Look Y" ), L( "Vertical look sensitivity" ) );
+	lookY.SetNameAndStatus( L( "Look Y" ), "Vertical look sensitivity" );
 	lookY.Setup( 50, 500, 5 );
 	lookY.LinkCvar( "touch_pitch" );
 
-	moveX.SetNameAndStatus( L( "Side" ), L( "Side movement sensitivity" ) );
+	moveX.SetNameAndStatus( L( "Side" ), "Side movement sensitivity" );
 	moveX.Setup( 0.02, 1.0, 0.05 );
 	moveX.LinkCvar( "touch_sidezone" );
 
-	moveY.SetNameAndStatus( L( "Forward" ), L( "Forward movement sensitivity" ) );
+	moveY.SetNameAndStatus( L( "Forward" ), "Forward movement sensitivity" );
 	moveY.Setup( 0.02, 1.0, 0.05 );
 	moveY.LinkCvar( "touch_forwardzone" );
 
-	gridsize.szStatusText = L( "Set grid size" );
+	gridsize.szStatusText = "Set grid size";
 	gridsize.Setup( 25, 100, 5 );
 	gridsize.LinkCvar( "touch_grid_count", CMenuEditable::CVAR_VALUE );
 
@@ -347,15 +347,15 @@ void CMenuTouchOptions::_Init( void )
 	acceleration.SetNameAndStatus( L( "Enable acceleration" ), L( "Nonlinear looking (touch_nonlinear_look)" ) );
 	acceleration.LinkCvar( "touch_nonlinear_look" );
 
-	power.SetNameAndStatus( L( "Power factor" ), L( "Power acceleration factor (touch_pow_factor)" ) );
+	power.SetNameAndStatus( L( "Power factor" ), "Power acceleration factor (touch_pow_factor)" );
 	power.Setup( 1, 1.7, 0.05 );
 	power.LinkCvar( "touch_pow_factor" );
 
-	multiplier.SetNameAndStatus( L( "Power multiplier" ), L( "Pre-multiplier for pow (touch_pow_mult)" ) );
+	multiplier.SetNameAndStatus( L( "Power multiplier" ), "Pre-multiplier for pow (touch_pow_mult)" );
 	multiplier.Setup( 100, 1000, 1 );
 	multiplier.LinkCvar( "touch_pow_mult" );
 
-	exponent.SetNameAndStatus( L( "Exponent" ), L( "Exponent factor, more aggressive (touch_exp_mult)" ) );
+	exponent.SetNameAndStatus( L( "Exponent" ), "Exponent factor, more aggressive (touch_exp_mult)" );
 	exponent.Setup( 0, 100, 1 );
 	exponent.LinkCvar( "touch_exp_mult" );
 

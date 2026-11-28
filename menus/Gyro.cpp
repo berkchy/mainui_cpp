@@ -151,15 +151,15 @@ void CMenuGyro::_Init( void )
 	sensitivity_label.szName = L( "Sensitivity" );
 
 	pitch.Setup( 0.0f, 20.0f, 0.1f );
-	pitch.SetNameAndStatus( L( "Pitch" ), L( "Vertical gyro sensitivity" ) );
+	pitch.SetNameAndStatus( L( "Pitch" ), "Vertical gyro sensitivity" );
 	invPitch.SetNameAndStatus( L( "Invert" ), L( "Invert vertical gyro axis" ) );
 
 	yaw.Setup( 0.0f, 20.0f, 0.1f );
-	yaw.SetNameAndStatus( L( "Yaw" ), L( "Horizontal gyro sensitivity" ) );
+	yaw.SetNameAndStatus( L( "Yaw" ), "Horizontal gyro sensitivity" );
 	invYaw.SetNameAndStatus( L( "Invert" ), L( "Invert horizontal gyro axis" ) );
 
 	roll.Setup( 0.0f, 20.0f, 0.1f );
-	roll.SetNameAndStatus( L( "Roll" ), L( "Sideways tilt gyro sensitivity" ) );
+	roll.SetNameAndStatus( L( "Roll" ), "Sideways tilt gyro sensitivity" );
 	invRoll.SetNameAndStatus( L( "Invert" ), L( "Invert roll gyro axis" ) );
 
 	deadzone_label.eTextAlignment = QM_CENTER;
@@ -168,13 +168,13 @@ void CMenuGyro::_Init( void )
 	deadzone_label.szName = L( "Deadzones" );
 
 	dPitch.Setup( 0.0f, 10.0f, 0.1f );
-	dPitch.SetNameAndStatus( L( "Pitch" ), L( "Gyro pitch deadzone" ) );
+	dPitch.SetNameAndStatus( L( "Pitch" ), "Gyro pitch deadzone" );
 
 	dYaw.Setup( 0.0f, 10.0f, 0.1f );
-	dYaw.SetNameAndStatus( L( "Yaw" ), L( "Gyro yaw deadzone" ) );
+	dYaw.SetNameAndStatus( L( "Yaw" ), "Gyro yaw deadzone" );
 
 	dRoll.Setup( 0.0f, 10.0f, 0.1f );
-	dRoll.SetNameAndStatus( L( "Roll" ), L( "Gyro roll deadzone" ) );
+	dRoll.SetNameAndStatus( L( "Roll" ), "Gyro roll deadzone" );
 
 	AddItem( banner );
 	AddButton( "Done", nullptr, PC_DONE, VoidCb( &CMenuGyro::SaveAndPopMenu ) );
