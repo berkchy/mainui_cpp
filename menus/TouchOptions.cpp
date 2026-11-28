@@ -378,7 +378,7 @@ void CMenuTouchOptions::_Init( void )
 	apply.SetPicture( PC_ACTIVATE );
 	apply.onReleased = VoidCb( &CMenuTouchOptions::Apply );
 
-	save.SetNameAndStatus( "GameUI_Save", "Save new profile" );
+	save.SetNameAndStatus( "Save", "Save new profile" );
 	save.SetPicture( PC_TOUCH_SAVE );
 	save.onReleased = VoidCb( &CMenuTouchOptions::Save );
 

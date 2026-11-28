@@ -318,7 +318,7 @@ void CMenuScriptConfig::_Init( void )
 {
 	AddItem( banner );
 	AddButton( "Done", nullptr, PC_DONE, VoidCb( &CMenuScriptConfig::SaveAndPopMenu ) );
-	AddButton( "GameUI_Cancel", nullptr, PC_CANCEL, VoidCb( &CMenuScriptConfig::Hide ) );
+	AddButton( "Cancel", nullptr, PC_CANCEL, VoidCb( &CMenuScriptConfig::Hide ) );
 
 	if( !m_pVars )
 		return;

@@ -63,7 +63,7 @@ void CMenuMultiplayer::_Init( void )
 	AddButton( "Internet game", "View a list of Counter-Strike game servers and join the one of your choice.", PC_INET_GAME, UI_InternetGames_Menu, QMF_NOTIFY );
 	// AddButton( "Spectate game", "Spectate internet games", PC_SPECTATE_GAMES, NoopCb, QMF_GRAYED | QMF_NOTIFY );
 	AddButton( "LAN game", "Set up a Counter-Strike game on a local area network.", PC_LAN_GAME, UI_LanGame_Menu, QMF_NOTIFY );
-	AddButton( "GameUI_GameMenu_Customize", "Choose your player name, and select visual options for your character", PC_CUSTOMIZE, UI_PlayerSetup_Menu, QMF_NOTIFY );
+	AddButton( "Customize Player", "Choose your player name, and select visual options for your character", PC_CUSTOMIZE, UI_PlayerSetup_Menu, QMF_NOTIFY );
 	AddButton( "Done", "Go back to the Main Menu.", PC_DONE, VoidCb( &CMenuMultiplayer::Hide ), QMF_NOTIFY );
 }
 

@@ -178,7 +178,7 @@ void CMenuGyro::_Init( void )
 
 	AddItem( banner );
 	AddButton( "Done", nullptr, PC_DONE, VoidCb( &CMenuGyro::SaveAndPopMenu ) );
-	AddButton( "GameUI_Cancel", nullptr, PC_CANCEL, VoidCb( &CMenuFramework::Hide ) );
+	AddButton( "Cancel", nullptr, PC_CANCEL, VoidCb( &CMenuFramework::Hide ) );
 
 	AddItem( enable );
 	AddItem( sensitivity_label );

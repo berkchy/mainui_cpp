@@ -171,7 +171,7 @@ void CMenuMain::_Init( void )
 	else bCustomGame = false;
 
 	// console
-	console.SetNameAndStatus( "GameUI_Console", NULL );
+	console.SetNameAndStatus( "Console", NULL );
 	console.iFlags |= QMF_NOTIFY;
 	console.SetPicture( PC_CONSOLE );
 	console.SetVisibility( gpGlobals->developer );
@@ -181,33 +181,33 @@ void CMenuMain::_Init( void )
 		EngFuncs::KEY_SetDest( KEY_CONSOLE );
 	});
 
-	resumeGame.SetNameAndStatus( "GameUI_GameMenu_ResumeGame", "StringsList_188" );
+	resumeGame.SetNameAndStatus( "Resume Game", "Return to the current game" );
 	resumeGame.SetPicture( PC_RESUME_GAME );
 	resumeGame.iFlags |= QMF_NOTIFY;
 	resumeGame.onReleased = UI_CloseMenu;
 
-	disconnect.SetNameAndStatus( "GameUI_GameMenu_Disconnect", "Disconnect from server." );
+	disconnect.SetNameAndStatus( "Disconnect", "Disconnect from server." );
 	disconnect.SetPicture( PC_DISCONNECT );
 	disconnect.iFlags |= QMF_NOTIFY;
 	disconnect.onReleased = VoidCb( &CMenuMain::DisconnectDialogCb );
 
-	newGame.SetNameAndStatus( "GameUI_NewGame", "StringsList_189" );
+	newGame.SetNameAndStatus( "New Game", "Start a new game" );
 	newGame.SetPicture( PC_NEW_GAME );
 	newGame.iFlags |= QMF_NOTIFY;
 	newGame.onReleased = UI_NewGame_Menu;
 
-	hazardCourse.SetNameAndStatus( "GameUI_TrainingRoom", "StringsList_190" );
+	hazardCourse.SetNameAndStatus( "Hazard Course", "Practice your skills in the Hazard Course" );
 	hazardCourse.SetPicture( PC_HAZARD_COURSE );
 	hazardCourse.iFlags |= QMF_NOTIFY;
 	hazardCourse.onReleasedClActive = VoidCb( &CMenuMain::HazardCourseDialogCb );
 	hazardCourse.onReleased = VoidCb( &CMenuMain::HazardCourseCb );
 
-	multiPlayer.SetNameAndStatus( "GameUI_Multiplayer", "StringsList_198" );
+	multiPlayer.SetNameAndStatus( "Multiplayer", "Play a multiplayer game" );
 	multiPlayer.SetPicture( PC_MULTIPLAYER );
 	multiPlayer.iFlags |= QMF_NOTIFY;
 	multiPlayer.onReleased = UI_MultiPlayer_Menu;
 
-	configuration.SetNameAndStatus( "GameUI_Options", "StringsList_193" );
+	configuration.SetNameAndStatus( "Options", "Change game options" );
 	configuration.SetPicture( PC_CONFIG );
 	configuration.iFlags |= QMF_NOTIFY;
 	configuration.onReleased = UI_Options_Menu;
@@ -216,22 +216,22 @@ void CMenuMain::_Init( void )
 
 	if( UI_IsCZDS( ))
 	{
-		worldMap.SetNameAndStatus( "CZERO_WorldMap", "Choose a mission" );
+		worldMap.SetNameAndStatus( "World Map", "Choose a mission" );
 		worldMap.iFlags |= QMF_NOTIFY;
 		worldMap.onReleased = UI_WorldMap_Menu;
 	}
 
-	customGame.SetNameAndStatus( "GameUI_ChangeGame", "StringsList_530" );
+	customGame.SetNameAndStatus( "Change Game", "Select a custom game" );
 	customGame.SetPicture( PC_CUSTOM_GAME );
 	customGame.iFlags |= QMF_NOTIFY;
 	customGame.onReleased = UI_CustomGame_Menu;
 
 	// TODO: add readme screen later
-	readme.SetNameAndStatus( "View Readme", "StringsList_194" );
+	readme.SetNameAndStatus( "View Readme", "View the readme file" );
 	readme.SetPicture( PC_VIEW_README );
 	readme.iFlags |= QMF_NOTIFY;
 
-	quit.SetNameAndStatus( "GameUI_GameMenu_Quit", "GameUI_QuitConfirmationText" );
+	quit.SetNameAndStatus( "Quit", "Exit the game" );
 	quit.SetPicture( PC_QUIT );
 	quit.iFlags |= QMF_NOTIFY;
 	quit.onReleased = VoidCb( &CMenuMain::QuitDialogCb );
@@ -363,13 +363,13 @@ void CMenuMain::VidInit( bool connected )
 
 	if( connected && single )
 	{
-		saveRestore.SetNameAndStatus( "Save\\Load Game", "StringsList_192" );
+		saveRestore.SetNameAndStatus( "Save\\Load Game", "Save or load a game" );
 		saveRestore.SetPicture( PC_SAVE_LOAD_GAME );
 		saveRestore.onReleased = UI_SaveLoad_Menu;
 	}
 	else
 	{
-		saveRestore.SetNameAndStatus( "GameUI_LoadGame", "StringsList_191" );
+		saveRestore.SetNameAndStatus( "Load Game", "Load a previously saved game" );
 		saveRestore.SetPicture( PC_LOAD_GAME );
 		saveRestore.onReleased = UI_LoadGame_Menu;
 	}

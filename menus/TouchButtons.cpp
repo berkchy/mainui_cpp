@@ -447,7 +447,7 @@ void CMenuTouchButtons::_Init( void )
 	done.onReleased = ExitMenuCb;
 	done.onReleased.pExtra = (void*)"touch_writeconfig\n";
 
-	cancel.szName = "GameUI_Cancel";
+	cancel.szName = "Cancel";
 	cancel.SetPicture( PC_CANCEL );
 	cancel.onReleased = ExitMenuCb;
 	cancel.onReleased.pExtra = (void*)"touch_reloadconfig\n";
@@ -504,7 +504,7 @@ void CMenuTouchButtons::_Init( void )
 	latch.onChanged.pExtra = &curflags;
 	latch.onChanged = CMenuCheckBox::BitMaskCb;
 
-	save.SetNameAndStatus( "GameUI_Save", "Save as new button" );
+	save.SetNameAndStatus( "Save", "Save as new button" );
 	save.SetPicture( PC_TOUCH_SAVE );
 	save.onReleased = VoidCb( &CMenuTouchButtons::SaveButton );
 
@@ -668,7 +668,7 @@ void CMenuCommandPickerDialog::_Init()
 	list.SetupColumn( 0, L( "GameUI_Action" ), 0.6f );
 	list.SetupColumn( 1, L( "Command" ), 0.4f );
 
-	ok.szName = "GameUI_OK";
+	ok.szName = "OK";
 	ok.SetPicture( PC_OK );
 	ok.SetRect( 720 / 2 - UI_BUTTONS_WIDTH / 2 - 8, 480 - 56, UI_BUTTONS_WIDTH / 2, UI_BUTTONS_HEIGHT );
 	SET_EVENT_MULTI( ok.onReleased,
@@ -676,7 +676,7 @@ void CMenuCommandPickerDialog::_Init()
 		((CMenuCommandPickerDialog *)pSelf->Parent())->Confirm();
 	});
 
-	cancel.szName = "GameUI_Cancel";
+	cancel.szName = "Cancel";
 	cancel.SetPicture( PC_CANCEL );
 	cancel.SetRect( 720 / 2 + 8, 480 - 56, UI_BUTTONS_WIDTH / 2, UI_BUTTONS_HEIGHT );
 	SET_EVENT_MULTI( cancel.onReleased,

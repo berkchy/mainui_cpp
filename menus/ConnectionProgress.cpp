@@ -220,7 +220,7 @@ void CMenuConnectionProgress::_Init( void )
 	background.colorBase = uiPromptBgColor;
 
 	consoleButton.SetPicture( PC_CONSOLE );
-	consoleButton.szName = "GameUI_Console";
+	consoleButton.szName = "Console";
 	SET_EVENT_MULTI( consoleButton.onReleased,
 	{
 		CMenuConnectionProgress *parent = (CMenuConnectionProgress *)pSelf->Parent();
@@ -233,7 +233,7 @@ void CMenuConnectionProgress::_Init( void )
 	consoleButton.bEnableTransitions = false;
 
 	disconnectButton.SetPicture( PC_DISCONNECT );
-	disconnectButton.szName = "GameUI_GameMenu_Disconnect";
+	disconnectButton.szName = "Disconnect";
 	disconnectButton.onReleased = VoidCb( &CMenuConnectionProgress::Disconnect );
 	disconnectButton.bEnableTransitions = false;
 

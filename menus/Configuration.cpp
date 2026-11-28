@@ -57,9 +57,9 @@ void CMenuOptions::_Init( void )
 	AddItem( banner );
 	AddButton( "Controls", "Change keyboard, mouse, touch and joystick settings.",
 		PC_CONTROLS, UI_Controls_Menu, QMF_NOTIFY );
-	AddButton( "GameUI_Audio", "Change sound volume and quality.",
+	AddButton( "Audio", "Change sound volume and quality.",
 		PC_AUDIO, UI_Audio_Menu, QMF_NOTIFY );
-	AddButton( "GameUI_Video", "Change screen size, video mode, gamme and glare reduction.",
+	AddButton( "Video", "Change screen size, video mode, gamme and glare reduction.",
 		PC_VIDEO, UI_Video_Menu, QMF_NOTIFY );
 	AddButton( "Done", "Go back to the Main Menu.",
 		PC_DONE, VoidCb( &CMenuOptions::Hide ), QMF_NOTIFY );

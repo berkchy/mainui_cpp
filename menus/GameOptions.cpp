@@ -173,7 +173,7 @@ void CMenuGameOptions::_Init( void )
 
 	AddItem( banner );
 	AddButton( "Done", nullptr, PC_DONE, VoidCb( &CMenuGameOptions::SaveCb ) );
-	AddButton( "GameUI_Cancel", nullptr, PC_CANCEL, VoidCb( &CMenuGameOptions::RestoreCb ) );
+	AddButton( "Cancel", nullptr, PC_CANCEL, VoidCb( &CMenuGameOptions::RestoreCb ) );
 
 	AddItem( maxFPS );
 	//AddItem( hand );

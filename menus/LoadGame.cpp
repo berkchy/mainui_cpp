@@ -329,12 +329,12 @@ UI_LoadGame_Init
 */
 void CMenuLoadGame::_Init( void )
 {
-	save.szName = "GameUI_Save";
+	save.szName = "Save";
 	save.SetPicture( PC_SAVE_GAME );
 	save.onReleased = VoidCb( &CMenuLoadGame::SaveGame );
 	save.SetCoord( 72, 230 );
 
-	load.szName = "GameUI_Load";
+	load.szName = "Load";
 	load.SetPicture( PC_LOAD_GAME );
 	load.onReleased = VoidCb( &CMenuLoadGame::LoadGame );
 	load.SetCoord( 72, 230 );
@@ -344,7 +344,7 @@ void CMenuLoadGame::_Init( void )
 	remove.onReleased = msgBox.MakeOpenEvent();
 	remove.SetCoord( 72, 280 );
 
-	cancel.szName = "GameUI_Cancel";
+	cancel.szName = "Cancel";
 	cancel.SetPicture( PC_CANCEL );
 	cancel.onReleased = VoidCb( &CMenuLoadGame::Hide );
 	cancel.SetCoord( 72, 330 );

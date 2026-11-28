@@ -159,12 +159,12 @@ void CMenuCrosshair::_Init()
 	crosshair.SetRect( 72, 350, 880, 466 );
 	xhair.SetRect( 72, 350, 880, 466 );
 
-	cancel.szName = "GameUI_Cancel";
+	cancel.szName = "Cancel";
 	cancel.SetCoord( 72, 280 );
 	cancel.SetPicture( PC_CANCEL );
 	cancel.onReleased = VoidCb( &CMenuCrosshair::Hide );
 
-	done.szName = "GameUI_OK";
+	done.szName = "OK";
 	done.SetCoord( 222, 280 );
 	done.SetPicture( PC_DONE );
 	done.onReleased = VoidCb( &CMenuCrosshair::SaveAndPopMenu );

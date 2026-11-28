@@ -358,11 +358,11 @@ void CMenuWorldMapSelect::_Init()
 		AddItem( item );
 	}
 
-	InitButton( m_Cancel, "CZERO_Cancel", 614, 656, 176, 35 );
+	InitButton( m_Cancel, "Cancel", 614, 656, 176, 35 );
 	m_Cancel.onReleased = VoidCb( &CMenuWorldMapSelect::Hide );
 	AddItem( m_Cancel );
 
-	InitButton( m_Ok, "CZERO_Okay", 816, 656, 160, 35 );
+	InitButton( m_Ok, "OK", 816, 656, 160, 35 );
 	m_Ok.onReleased = VoidCb( &CMenuWorldMapSelect::StartMission );
 	AddItem( m_Ok );
 }
@@ -575,7 +575,7 @@ void CMenuWorldMap::_Init()
 	InitLabel( m_InfoBrief, 224, 627, 480, 112, CHAR_MEDIUM, s_ColorText, QM_TOPLEFT );
 	AddItem( m_InfoBrief );
 
-	InitButton( m_Resume, "CZERO_Resume", 806, 699, 128, 41 );
+	InitButton( m_Resume, "Resume", 806, 699, 128, 41 );
 	m_Resume.onReleased = UI_CloseMenu;
 	AddItem( m_Resume );
 }
